@@ -1,0 +1,27 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      description: "List Tillo brands and float balances, and issue digital gift cards."
+      security: {
+        in: "header"
+        name: "API-Key"
+        prefix: ""
+        scheme: "apiKeyAuth"
+        type: "apiKey"
+      }
+      servers: [
+        {
+          url: "https://app.tillo.io"
+        }
+      ]
+      summary: "List Tillo brands and float balances, and issue digital gift cards."
+      title: "Tillo Rewards API"
+      version: "2.0.0"
+      website: "https://app.tillo.io"
+    }
+  }
+}
+

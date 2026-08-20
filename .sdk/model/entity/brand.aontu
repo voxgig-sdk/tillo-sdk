@@ -1,0 +1,47 @@
+# Entity: brand
+
+main: kit: entity: brand: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "currency"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "name"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "slug"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "brand"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          method: "GET"
+          orig: "/brands"
+          parts: [
+            "brands"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

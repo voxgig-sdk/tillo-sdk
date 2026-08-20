@@ -1,0 +1,28 @@
+# BasicCheckFloatFlow
+
+main: kit: flow: BasicCheckFloatFlow:
+{
+  entity: "check_float",
+  kind: "basic",
+  name: "BasicCheckFloatFlow",
+  step: [
+    {
+      input: {
+        ref: "check_float_ref01",
+        srcdatavar: "check_float_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-check_float_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicCheckFloatFlow"
+}

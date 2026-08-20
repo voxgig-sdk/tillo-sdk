@@ -1,0 +1,26 @@
+{
+  "existing": {
+    "float": {
+      "FLOAT00": {
+        "balance": 20,
+        "currency": "s15"
+      },
+      "FLOAT01": {
+        "balance": 40,
+        "currency": "s29"
+      },
+      "FLOAT02": {
+        "balance": 60,
+        "currency": "s3d"
+      }
+    }
+  },
+  "new": {
+    "float": {
+      "float_ref01": {
+        "balance": 80,
+        "currency": "s51"
+      }
+    }
+  }
+}

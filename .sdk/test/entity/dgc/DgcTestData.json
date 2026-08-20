@@ -1,0 +1,41 @@
+{
+  "existing": {
+    "dgc": {
+      "DGC00": {
+        "brand": "s32",
+        "client_request_id": "CLIENT_REQUEST01",
+        "delivery_method": "s34",
+        "face_value": {},
+        "sector": "s36",
+        "id": "DGC00"
+      },
+      "DGC01": {
+        "brand": "s64",
+        "client_request_id": "CLIENT_REQUEST01",
+        "delivery_method": "s66",
+        "face_value": {},
+        "sector": "s68",
+        "id": "DGC01"
+      },
+      "DGC02": {
+        "brand": "s96",
+        "client_request_id": "CLIENT_REQUEST01",
+        "delivery_method": "s98",
+        "face_value": {},
+        "sector": "s9a",
+        "id": "DGC02"
+      }
+    }
+  },
+  "new": {
+    "dgc": {
+      "dgc_ref01": {
+        "brand": "sc8",
+        "client_request_id": "CLIENT_REQUEST01",
+        "delivery_method": "sca",
+        "face_value": {},
+        "sector": "scc"
+      }
+    }
+  }
+}

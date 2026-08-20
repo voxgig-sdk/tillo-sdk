@@ -1,0 +1,25 @@
+{
+  "existing": {
+    "check_float": {
+      "CHECK_FLOAT00": {
+        "floats": [],
+        "id": "CHECK_FLOAT00"
+      },
+      "CHECK_FLOAT01": {
+        "floats": [],
+        "id": "CHECK_FLOAT01"
+      },
+      "CHECK_FLOAT02": {
+        "floats": [],
+        "id": "CHECK_FLOAT02"
+      }
+    }
+  },
+  "new": {
+    "check_float": {
+      "check_float_ref01": {
+        "floats": []
+      }
+    }
+  }
+}

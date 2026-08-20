@@ -1,0 +1,22 @@
+# BasicFloatFlow
+
+main: kit: flow: BasicFloatFlow:
+{
+  entity: "float",
+  kind: "basic",
+  name: "BasicFloatFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "float_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFloatFlow"
+}

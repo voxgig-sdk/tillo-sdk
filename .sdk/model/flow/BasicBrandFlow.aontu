@@ -1,0 +1,22 @@
+# BasicBrandFlow
+
+main: kit: flow: BasicBrandFlow:
+{
+  entity: "brand",
+  kind: "basic",
+  name: "BasicBrandFlow",
+  step: [
+    {
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "brand_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicBrandFlow"
+}

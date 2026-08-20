@@ -1,0 +1,30 @@
+{
+  "existing": {
+    "brand": {
+      "BRAND00": {
+        "currency": "s1e",
+        "name": "s1f",
+        "slug": "s20"
+      },
+      "BRAND01": {
+        "currency": "s3c",
+        "name": "s3d",
+        "slug": "s3e"
+      },
+      "BRAND02": {
+        "currency": "s5a",
+        "name": "s5b",
+        "slug": "s5c"
+      }
+    }
+  },
+  "new": {
+    "brand": {
+      "brand_ref01": {
+        "currency": "s78",
+        "name": "s79",
+        "slug": "s7a"
+      }
+    }
+  }
+}

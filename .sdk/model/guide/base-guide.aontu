@@ -1,0 +1,26 @@
+# Guide
+
+guide: {
+  metrics: count: entity: 3
+  metrics: count: path: 3
+  metrics: count: method: 3
+
+  entity: brand: {
+    path: "/brands": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: dgc: {
+    path: "/digital/issue": {
+      op: create: method: *POST
+    }
+  }
+
+  entity: float: {
+    path: "/check-floats": {
+      op: list: method: *GET
+    }
+  }
+
+}

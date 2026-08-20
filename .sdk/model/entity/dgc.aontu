@@ -1,0 +1,58 @@
+# Entity: dgc
+
+main: kit: entity: dgc: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "brand"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "client_request_id"
+      req: true
+      type: "`$STRING`"
+    }
+    {
+      name: "delivery_method"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "face_value"
+      req: true
+      type: "`$OBJECT`"
+    }
+    {
+      name: "sector"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "dgc"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/digital/issue"
+          parts: [
+            "digital"
+            "issue"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

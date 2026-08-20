@@ -1,0 +1,18 @@
+# BasicDgcFlow
+
+main: kit: flow: BasicDgcFlow:
+{
+  entity: "dgc",
+  kind: "basic",
+  name: "BasicDgcFlow",
+  step: [
+    {
+      input: {
+        ref: "dgc_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicDgcFlow"
+}

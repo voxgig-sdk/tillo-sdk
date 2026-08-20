@@ -1,0 +1,42 @@
+# Entity: float
+
+main: kit: entity: float: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "balance"
+      req: false
+      type: "`$NUMBER`"
+    }
+    {
+      name: "currency"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "float"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          method: "GET"
+          orig: "/check-floats"
+          parts: [
+            "check-floats"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}
