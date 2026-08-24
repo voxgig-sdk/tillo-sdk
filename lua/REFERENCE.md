@@ -1,0 +1,275 @@
+# Tillo Lua SDK Reference
+
+Complete API reference for the Tillo Lua SDK.
+
+
+## TilloSDK
+
+### Constructor
+
+```lua
+local sdk = require("tillo_sdk")
+local client = sdk.new(options)
+```
+
+Create a new SDK client instance.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `options` | `table` | SDK configuration options. |
+| `options.apikey` | `string` | API key for authentication. |
+| `options.base` | `string` | Base URL for API requests. |
+| `options.prefix` | `string` | URL prefix appended after base. |
+| `options.suffix` | `string` | URL suffix appended after path. |
+| `options.headers` | `table` | Custom headers for all requests. |
+| `options.feature` | `table` | Feature configuration. |
+| `options.system` | `table` | System overrides (e.g. custom fetch). |
+
+
+### Static Methods
+
+#### `sdk.test(testopts?, sdkopts?)`
+
+Create a test client with mock features active. Both arguments are optional.
+
+```lua
+local client = sdk.test()
+```
+
+
+### Instance Methods
+
+#### `Brand(data)`
+
+Create a new `Brand` entity instance. Pass `nil` for no initial data.
+
+#### `Dgc(data)`
+
+Create a new `Dgc` entity instance. Pass `nil` for no initial data.
+
+#### `Float(data)`
+
+Create a new `Float` entity instance. Pass `nil` for no initial data.
+
+#### `options_map() -> table`
+
+Return a deep copy of the current SDK options.
+
+#### `get_utility() -> Utility`
+
+Return a copy of the SDK utility object.
+
+#### `direct(fetchargs) -> table, err`
+
+Make a direct HTTP request to any API endpoint.
+
+**Parameters:**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `fetchargs.path` | `string` | URL path with optional `{param}` placeholders. |
+| `fetchargs.method` | `string` | HTTP method (default: `"GET"`). |
+| `fetchargs.params` | `table` | Path parameter values for `{param}` substitution. |
+| `fetchargs.query` | `table` | Query string parameters. |
+| `fetchargs.headers` | `table` | Request headers (merged with defaults). |
+| `fetchargs.body` | `any` | Request body (tables are JSON-serialized). |
+| `fetchargs.ctrl` | `table` | Control options (e.g. `{ explain = true }`). |
+
+**Returns:** `table, err`
+
+#### `prepare(fetchargs) -> table, err`
+
+Prepare a fetch definition without sending the request. Accepts the
+same parameters as `direct()`.
+
+**Returns:** `table, err`
+
+
+---
+
+## BrandEntity
+
+```lua
+local brand = client:Brand(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `currency` | `string` | No |  |
+| `name` | `string` | No |  |
+| `slug` | `string` | No |  |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> any, err`
+
+List entities matching the given criteria. Returns an array.
+
+```lua
+local results, err = client:Brand():list()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `BrandEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DgcEntity
+
+```lua
+local dgc = client:Dgc(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes |  |
+| `client_request_id` | `string` | Yes |  |
+| `delivery_method` | `string` | No |  |
+| `face_value` | `table` | Yes |  |
+| `sector` | `string` | No |  |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:Dgc():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  face_value = --[[ table ]],
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DgcEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## FloatEntity
+
+```lua
+local float = client:Float(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `balance` | `number` | No |  |
+| `currency` | `string` | No |  |
+
+### Operations
+
+#### `list(reqmatch, ctrl) -> any, err`
+
+List entities matching the given criteria. Returns an array.
+
+```lua
+local results, err = client:Float():list()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `FloatEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## Features
+
+| Feature | Version | Description |
+| --- | --- | --- |
+| `test` | 0.0.1 | In-memory mock transport for testing without a live server |
+
+
+Features are activated via the `feature` option:
+
+```lua
+local client = sdk.new({
+  feature = {
+    test = { active = true },
+  },
+})
+```
+
