@@ -1,15 +1,6 @@
 {
-  "NAME": "TILLO",
-  "Name": "Tillo",
   "def": "tillo-brands-floats-dgc-only.json",
   "main": {
-    "api": {
-      "entity": {},
-      "guide": {}
-    },
-    "custom": {
-      "plurals": {}
-    },
     "def": {
       "desc": ""
     },
@@ -948,8 +939,5 @@
     }
   },
   "name": "tillo",
-  "name-": "tillo",
-  "name_": "tillo",
-  "name__orig": "tillo",
   "origin": "voxgig-sdk"
 }
