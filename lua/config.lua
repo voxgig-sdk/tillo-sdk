@@ -60,13 +60,18 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/brands",
-                ["parts"] = {
-                  "brands",
+                ["segments"] = {
+                  {
+                    ["lit"] = "brands",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "brands",
                 },
               },
             },
@@ -113,14 +118,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/digital/issue",
-                ["parts"] = {
-                  "digital",
-                  "issue",
+                ["segments"] = {
+                  {
+                    ["lit"] = "digital",
+                  },
+                  {
+                    ["lit"] = "issue",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "digital",
+                  "issue",
                 },
               },
             },
@@ -152,13 +165,18 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/check-floats",
-                ["parts"] = {
-                  "check-floats",
+                ["segments"] = {
+                  {
+                    ["lit"] = "check-floats",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "check-floats",
                 },
               },
             },

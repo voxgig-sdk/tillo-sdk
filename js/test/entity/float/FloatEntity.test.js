@@ -5,7 +5,7 @@ require('dotenv').config({ quiet: true, path: [envlocal] })
 const Path = require('node:path')
 const Fs = require('node:fs')
 
-const { test, describe } = require('node:test')
+const { test, describe, afterEach } = require('node:test')
 const assert = require('node:assert')
 
 
@@ -13,6 +13,8 @@ const { TilloSDK, BaseFeature, stdutil, config } = require('../../..')
 
 const {
   envOverride,
+  liveClientOptions,
+  liveDelay,
   makeCtrl,
   makeMatch,
   makeReqdata,
@@ -22,6 +24,10 @@ const {
 
 
 describe('FloatEntity', async () => {
+
+  // Per-test live pacing. Delay is read from sdk-test-control.json's
+  // `test.live.delayMs`; only sleeps when TILLO_TEST_LIVE=TRUE.
+  afterEach(liveDelay('TILLO_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = TilloSDK.test()
@@ -88,17 +94,24 @@ function basicSetup(extra) {
     'TILLO_TEST_FLOAT_ENTID': idmap,
     'TILLO_TEST_LIVE': 'FALSE',
     'TILLO_TEST_EXPLAIN': 'FALSE',
-    'TILLO_APIKEY': 'NONE',
+    'TILLO_APIKEY': '',
   })
 
   idmap = env['TILLO_TEST_FLOAT_ENTID']
 
   if ('TRUE' === env.TILLO_TEST_LIVE) {
     client = new TilloSDK(merge([
+      // FIRST, so the generated fields below win: sdk-test-control.json's
+      // test.client.options adds to the live client, it does not redirect it.
+      liveClientOptions(),
       {
         apikey: env.TILLO_APIKEY,
       },
-      extra
+      // 'extra || {}', not a bare 'extra': struct.merge returns UNDEFINED when
+      // the last entry is undefined, and basicSetup is normally called with no
+      // argument at all - so a bare 'extra' silently discarded the apikey and
+      // server values above and handed the SDK undefined.
+      extra || {}
     ]))
   }
 

@@ -25,8 +25,10 @@ main: kit: entity: float: {
         {
           method: "GET"
           orig: "/check-floats"
-          parts: [
-            "check-floats"
+          segments: [
+            {
+              lit: "check-floats"
+            }
           ]
           transform: {
             req: "`reqdata`"

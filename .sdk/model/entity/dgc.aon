@@ -40,9 +40,13 @@ main: kit: entity: dgc: {
         {
           method: "POST"
           orig: "/digital/issue"
-          parts: [
-            "digital"
-            "issue"
+          segments: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "issue"
+            }
           ]
           transform: {
             req: "`reqdata`"

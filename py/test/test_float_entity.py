@@ -125,7 +125,7 @@ def _float_basic_setup(extra):
         "TILLO_TEST_FLOAT_ENTID": idmap,
         "TILLO_TEST_LIVE": "FALSE",
         "TILLO_TEST_EXPLAIN": "FALSE",
-        "TILLO_APIKEY": "NONE",
+        "TILLO_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
@@ -135,6 +135,10 @@ def _float_basic_setup(extra):
 
     if env.get("TILLO_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
+            # FIRST, so the generated fields below win: sdk-test-control.json's
+            # test.client.options adds to the live client, it does not
+            # redirect it.
+            runner.live_client_options(),
             {
                 "apikey": env.get("TILLO_APIKEY"),
             },

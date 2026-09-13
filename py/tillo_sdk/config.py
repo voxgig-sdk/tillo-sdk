@@ -1,6 +1,14 @@
 # Tillo SDK configuration
 
 
+# The sekreto plugin DEFINITIONS the model selected per feature, imported
+# above by name from the modules the catalogue's active `plugin.def`
+# entries declare. Handed to each feature (secrets builds its Sekreto
+# with them): a provider kind not listed here is unknown to that SDK.
+FEATURE_PLUGINS = {
+}
+
+
 _shared_config = None
 
 
@@ -81,14 +89,19 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/brands",
-                "parts": [
-                  "brands",
+                "segments": [
+                  {
+                    "lit": "brands",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "brands",
+                ],
               },
             ],
           },
@@ -134,15 +147,23 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/digital/issue",
-                "parts": [
-                  "digital",
-                  "issue",
+                "segments": [
+                  {
+                    "lit": "digital",
+                  },
+                  {
+                    "lit": "issue",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "digital",
+                  "issue",
+                ],
               },
             ],
           },
@@ -173,14 +194,19 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/check-floats",
-                "parts": [
-                  "check-floats",
+                "segments": [
+                  {
+                    "lit": "check-floats",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "check-floats",
+                ],
               },
             ],
           },

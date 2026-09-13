@@ -30,8 +30,10 @@ main: kit: entity: brand: {
         {
           method: "GET"
           orig: "/brands"
-          parts: [
-            "brands"
+          segments: [
+            {
+              lit: "brands"
+            }
           ]
           transform: {
             req: "`reqdata`"
