@@ -38,6 +38,12 @@ main: kit: entity: dgc: {
       name: "create"
       points: [
         {
+          contract: {
+            id: "POST /digital/issue"
+            json: "{\"operationId\":\"issueDigitalGiftCard\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"brand\":{\"type\":\"string\"},\"client_request_id\":{\"type\":\"string\"},\"delivery_method\":{\"type\":\"string\"},\"face_value\":{\"properties\":{\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"}},\"type\":\"object\"},\"sector\":{\"type\":\"string\"}},\"required\":[\"client_request_id\",\"brand\",\"face_value\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"201\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"brand\":{\"type\":\"string\"},\"client_request_id\":{\"type\":\"string\"},\"code\":{\"type\":\"string\"},\"status\":{\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"The issued gift card order\"}},\"security\":[{\"apiKeyAuth\":[]}],\"securitySchemes\":{\"apiKeyAuth\":{\"in\":\"header\",\"name\":\"API-Key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "POST"
           orig: "/digital/issue"
           segments: [

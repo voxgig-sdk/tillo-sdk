@@ -23,6 +23,12 @@ main: kit: entity: float: {
       name: "list"
       points: [
         {
+          contract: {
+            id: "GET /check-floats"
+            json: "{\"operationId\":\"listFloats\",\"parameters\":[],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"items\":{\"properties\":{\"balance\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"}}},\"description\":\"Floats\"}},\"security\":[{\"apiKeyAuth\":[]}],\"securitySchemes\":{\"apiKeyAuth\":{\"in\":\"header\",\"name\":\"API-Key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "GET"
           orig: "/check-floats"
           segments: [

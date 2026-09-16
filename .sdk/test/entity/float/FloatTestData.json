@@ -22,5 +22,51 @@
         "currency": "s51"
       }
     }
+  },
+  "requests": {
+    "GET /check-floats": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "listFloats",
+        "parameters": [],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "balance": {
+                        "type": "number"
+                      },
+                      "currency": {
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Floats"
+          }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "securitySchemes": {
+          "apiKeyAuth": {
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
   }
 }

@@ -4,7 +4,14 @@ declare(strict_types=1);
 // Tillo SDK feature factory
 
 require_once __DIR__ . '/feature/BaseFeature.php';
+require_once __DIR__ . '/feature/DebugFeature.php';
+require_once __DIR__ . '/feature/IdempotencyFeature.php';
+require_once __DIR__ . '/feature/MetricsFeature.php';
+require_once __DIR__ . '/feature/PagingFeature.php';
+require_once __DIR__ . '/feature/RatelimitFeature.php';
+require_once __DIR__ . '/feature/RetryFeature.php';
 require_once __DIR__ . '/feature/TestFeature.php';
+require_once __DIR__ . '/feature/TimeoutFeature.php';
 
 
 class TilloFeatures
@@ -14,8 +21,22 @@ class TilloFeatures
         switch ($name) {
             case "base":
                 return new TilloBaseFeature();
+            case "debug":
+                return new TilloDebugFeature();
+            case "idempotency":
+                return new TilloIdempotencyFeature();
+            case "metrics":
+                return new TilloMetricsFeature();
+            case "paging":
+                return new TilloPagingFeature();
+            case "ratelimit":
+                return new TilloRatelimitFeature();
+            case "retry":
+                return new TilloRetryFeature();
             case "test":
                 return new TilloTestFeature();
+            case "timeout":
+                return new TilloTimeoutFeature();
             default:
                 return new TilloBaseFeature();
         }
@@ -31,7 +52,14 @@ class TilloFeatures
     {
         switch ($name) {
             case "base":
+            case "debug":
+            case "idempotency":
+            case "metrics":
+            case "paging":
+            case "ratelimit":
+            case "retry":
             case "test":
+            case "timeout":
                 return true;
             default:
                 return false;

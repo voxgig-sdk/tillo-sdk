@@ -1,12 +1,14 @@
 
 const envlocal = __dirname + '/../../../.env.local'
-require('dotenv').config({ quiet: true, path: [envlocal] })
+require('../../utility').loadEnvLocal(envlocal)
 
 const Path = require('node:path')
 const Fs = require('node:fs')
 
 const { test, describe, afterEach } = require('node:test')
 const assert = require('node:assert')
+const { createLiveTransport } = require('../../live-runner')
+const { runLiveEntity } = require('../../live-entity')
 
 
 const { TilloSDK, BaseFeature, stdutil, config } = require('../../..')
@@ -36,9 +38,13 @@ describe('DgcEntity', async () => {
   })
 
 
-  test('basic', async () => {
+  test('basic', async (t) => {
 
+    
     const setup = basicSetup()
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":[{"active":true,"name":"brand","req":true,"type":"`$STRING`","index$":0},{"active":true,"name":"client_request_id","req":true,"type":"`$STRING`","index$":1},{"active":true,"name":"delivery_method","req":false,"type":"`$STRING`","index$":2},{"active":true,"name":"face_value","req":true,"type":"`$OBJECT`","index$":3},{"active":true,"name":"sector","req":false,"type":"`$STRING`","index$":4}],"name":"dgc","op":{"create":{"input":"data","name":"create","points":[{"active":true,"args":{},"contract":{"id":"POST /digital/issue","json":"{\"operationId\":\"issueDigitalGiftCard\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"brand\":{\"type\":\"string\"},\"client_request_id\":{\"type\":\"string\"},\"delivery_method\":{\"type\":\"string\"},\"face_value\":{\"properties\":{\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"}},\"type\":\"object\"},\"sector\":{\"type\":\"string\"}},\"required\":[\"client_request_id\",\"brand\",\"face_value\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"201\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"brand\":{\"type\":\"string\"},\"client_request_id\":{\"type\":\"string\"},\"code\":{\"type\":\"string\"},\"status\":{\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"The issued gift card order\"}},\"security\":[{\"apiKeyAuth\":[]}],\"securitySchemes\":{\"apiKeyAuth\":{\"in\":\"header\",\"name\":\"API-Key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}","source":"openapi3","version":1},"kind":"http","method":"POST","orig":"/digital/issue","segments":[{"lit":"digital"},{"lit":"issue"}],"select":{},"transform":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"dgc","name__orig":"dgc","Name":"Dgc","name_":"dgc","name-":"dgc","NAME":"DGC","index$":1}, {"active":true,"entity":"dgc","key$":"BasicDgcFlow","kind":"basic","name":"BasicDgcFlow","param":{},"step":[{"active":true,"data":{},"input":{"ref":"dgc_ref01"},"match":{},"op":"create","spec":[],"valid":[],"index$":0}]}, 'Dgc')
+    }
     const client = setup.client
     const struct = setup.struct
 
@@ -99,7 +105,14 @@ function basicSetup(extra) {
 
   idmap = env['TILLO_TEST_DGC_ENTID']
 
-  if ('TRUE' === env.TILLO_TEST_LIVE) {
+  const live = 'TRUE' === env.TILLO_TEST_LIVE
+  const transport = createLiveTransport()
+  if (live) {
+    const rawIds = process.env['TILLO_TEST_DGC_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
     client = new TilloSDK(merge([
       // FIRST, so the generated fields below win: sdk-test-control.json's
       // test.client.options adds to the live client, it does not redirect it.
@@ -111,7 +124,8 @@ function basicSetup(extra) {
       // the last entry is undefined, and basicSetup is normally called with no
       // argument at all - so a bare 'extra' silently discarded the apikey and
       // server values above and handed the SDK undefined.
-      extra || {}
+      extra || {},
+      { system: { fetch: transport.fetch } }
     ]))
   }
 
@@ -123,6 +137,8 @@ function basicSetup(extra) {
     struct,
     data: entityData,
     explain: 'TRUE' === env.TILLO_TEST_EXPLAIN,
+    live,
+    transport,
     now: Date.now(),
   }
 
