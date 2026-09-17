@@ -255,9 +255,43 @@ func (e *FloatEntity) Stream(action string, args map[string]any, callopts map[st
 	return out
 }
 
-func (e *FloatEntity) Load(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("load", e.name)
+
+func (e *FloatEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+	utility := e.utility
+	ctx := utility.MakeContext(map[string]any{
+		"opname":   "load",
+		"ctrl":     ctrl,
+		"match":    e.match,
+		"data":     e.data,
+		"reqmatch": reqmatch,
+	}, e.entctx)
+
+	return e.runOp(ctx, func() {
+		if ctx.Result != nil {
+			if ctx.Result.Resmatch != nil {
+				e.match = ctx.Result.Resmatch
+			}
+			if ctx.Result.Resdata != nil {
+				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
+				if e.data == nil {
+					e.data = map[string]any{}
+				}
+			}
+		}
+	})
 }
+
+// LoadTyped is the statically-typed variant of Load: it takes an
+// FloatLoadMatch and returns an Float. It delegates to the untyped
+// Load (identical runtime) and converts at the typed boundary.
+func (e *FloatEntity) LoadTyped(reqmatch FloatLoadMatch, ctrl map[string]any) (Float, error) {
+	res, err := e.Load(asMap(reqmatch), ctrl)
+	if err != nil {
+		return Float{}, err
+	}
+	return typedFrom[Float](res), nil
+}
+
 
 
 
@@ -293,9 +327,40 @@ func (e *FloatEntity) ListTyped(reqmatch FloatListMatch, ctrl map[string]any) ([
 
 
 
-func (e *FloatEntity) Create(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("create", e.name)
+
+func (e *FloatEntity) Create(reqdata map[string]any, ctrl map[string]any) (any, error) {
+	utility := e.utility
+	ctx := utility.MakeContext(map[string]any{
+		"opname":  "create",
+		"ctrl":    ctrl,
+		"match":   e.match,
+		"data":    e.data,
+		"reqdata": reqdata,
+	}, e.entctx)
+
+	return e.runOp(ctx, func() {
+		if ctx.Result != nil {
+			if ctx.Result.Resdata != nil {
+				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
+				if e.data == nil {
+					e.data = map[string]any{}
+				}
+			}
+		}
+	})
 }
+
+// CreateTyped is the statically-typed variant of Create: it takes an
+// FloatCreateData and returns an Float. It delegates to the untyped
+// Create (identical runtime) and converts at the typed boundary.
+func (e *FloatEntity) CreateTyped(reqdata FloatCreateData, ctrl map[string]any) (Float, error) {
+	res, err := e.Create(asMap(reqdata), ctrl)
+	if err != nil {
+		return Float{}, err
+	}
+	return typedFrom[Float](res), nil
+}
+
 
 
 func (e *FloatEntity) Update(_ map[string]any, _ map[string]any) (any, error) {

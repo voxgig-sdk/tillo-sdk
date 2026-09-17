@@ -28,13 +28,13 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)('function' === typeof sdk.direct);
         (0, node_assert_1.default)('function' === typeof sdk.prepare);
     });
-    (0, node_test_1.test)('direct-list-brand', async (t) => {
+    (0, node_test_1.test)('direct-load-brand', async (t) => {
         if (liveScenariosActive()) {
             t.skip('Covered by live operation scenarios');
             return;
         }
-        const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }]);
-        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-list-brand', setup.live))
+        const setup = directSetup({ id: 'direct01' });
+        if ((0, utility_1.maybeSkipControl)(t, 'direct', 'direct-load-brand', setup.live))
             return;
         const { client, calls } = setup;
         const params = {};
@@ -56,15 +56,13 @@ const utility_1 = require("../../utility");
             // could not pass against any real API, including this project's own.
             (0, node_assert_1.default)(result.ok === true, 'Live request failed: HTTP ' + result.status);
             (0, node_assert_1.default)(result.status >= 200 && result.status < 300);
-            (0, node_assert_1.default)(Array.isArray(unwrapListData(result.data)), 'Expected live list response');
+            (0, node_assert_1.default)(null != result.data);
         }
         else {
             (0, node_assert_1.default)(result.ok === true);
             (0, node_assert_1.default)(result.status === 200);
             (0, node_assert_1.default)(null != result.data);
-            const listArr = unwrapListData(result.data);
-            (0, node_assert_1.default)(Array.isArray(listArr));
-            (0, node_assert_1.default)(listArr.length === 2);
+            (0, node_assert_1.default)(result.data.id === 'direct01');
             (0, node_assert_1.default)(calls.length === 1);
             (0, node_assert_1.default)(calls[0].init.method === 'GET');
         }

@@ -34,12 +34,15 @@ describe('BrandDirect', async () => {
   })
 
 
-  test('direct-list-brand', async (t) => {
+  test('direct-load-brand', async (t) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
-    const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }])
+    const setup = directSetup({ id: 'direct01' })
     const { client, calls } = setup
 
     const params = {}
+    if (!setup.live) {
+
+    }
 
     const result = await client.direct({
       path: 'brands',
@@ -49,10 +52,10 @@ describe('BrandDirect', async () => {
 
     assert(result.ok === true)
     assert(setup.live ? result.status >= 200 && result.status < 300 : result.status === 200)
-    assert(Array.isArray(result.data))
+    assert(null != result.data)
 
     if (!setup.live) {
-      assert(result.data.length === 2)
+      assert(result.data.id === 'direct01')
       assert(calls.length === 1)
       assert(calls[0].init.method === 'GET')
     }

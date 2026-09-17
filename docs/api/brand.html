@@ -1,14 +1,25 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Brand | Tillo Rewards API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Brand | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><a class="skip" href="#content">Skip to content</a>
-<header class="site-header"><a class="site-title" href="../index.html">Tillo Rewards API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
 <div class="site-notice" role="note"></div>
-<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo Rewards API</a></details>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
 <details open><summary>API</summary><a href="../api/index.html">API overview</a>
 <a aria-current="page" href="../api/brand.html">Brand</a><div class="nav-sections"><a class="nav-section" href="#get-brands">GET /brands</a></div>
-<a href="../api/dgc.html">Dgc</a>
-<a href="../api/float.html">Float</a></details>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a href="../api/digital_gift_card.html">DigitalGiftCard</a>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a href="../api/float.html">Float</a>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a href="../api/physical_order_card.html">PhysicalOrderCard</a>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a href="../api/template.html">Template</a></details>
 <details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
 <a href="../guides/first-call.html">Make your first API call</a>
 <a href="../guides/errors.html">Handle errors</a>
@@ -44,8 +55,8 @@
 <tr>
 <td><code>GET</code></td>
 <td><a href="#get-brands"><code>/brands</code></a></td>
-<td><code>list</code></td>
-<td>Brands</td>
+<td><code>load</code></td>
+<td>List of brands with optional filtering and detail</td>
 </tr>
 </tbody>
 </table>
@@ -61,31 +72,33 @@
 </thead>
 <tbody>
 <tr>
-<td><code>currency</code></td>
-<td><code>string</code></td>
+<td><code>brands</code></td>
+<td><code>any</code></td>
 <td>No</td>
 <td></td>
 </tr>
 <tr>
-<td><code>name</code></td>
-<td><code>string</code></td>
-<td>No</td>
-<td></td>
-</tr>
-<tr>
-<td><code>slug</code></td>
+<td><code>last_refreshed_at</code></td>
 <td><code>string</code></td>
 <td>No</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h2 id="list">list</h2>
+<h2 id="load">load</h2>
 <h3 id="get-brands" class="operation" data-method="get"><code>GET</code> /brands</h3>
-<p>Operation ID: <code>listBrands</code>.</p>
-<p>Authentication: API key in the header (<code>apiKeyAuth</code>).</p>
+<p>Operation ID: <code>getBrands</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>brand</code> | <code>query</code> | <code>string</code> | No | Filter by a specific brand slug |
+| <code>detail</code> | <code>query</code> | <code>boolean</code> | No | Include detailed brand information |
+| <code>country</code> | <code>query</code> | <code>string</code> | No | Filter brands based on the country, provide the two-character ISO 3166-1 alpha-2 country code (eg. GB, FR, US). Must be uppercase |
+| <code>currency</code> | <code>query</code> | <code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code> | No | Filter brands based on the currency, please provide the three-character ISO 4217 currency code (eg. GBP, EUR, USD). Must be uppercase |
+| <code>category</code> | <code>query</code> | <code>enum: baby, beauty, books, cars, charity, craft, ...</code> | No | Filter brands based on the category slug (eg. fashion, gaming) |</p>
 <h4 id="responses">Responses</h4>
-<h5 id="200-brands" class="status" data-status="2xx">200: Brands</h5>
+<h5 id="200-list-of-brands-with-optional-filtering-and-detail" class="status" data-status="2xx">200: List of brands with optional filtering and detail</h5>
 <p><code>application/json</code></p>
 <table>
 <thead>
@@ -98,24 +111,77 @@
 </thead>
 <tbody>
 <tr>
-<td><code>[].currency</code></td>
+<td><code>code</code></td>
 <td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.brands</code></td>
+<td><code>object or array of object</code></td>
 <td>No</td>
 <td></td>
 </tr>
 <tr>
-<td><code>[].name</code></td>
-<td><code>string</code></td>
+<td><code>data.last_refreshed_at</code></td>
+<td><code>string (date-time)</code></td>
 <td>No</td>
 <td></td>
 </tr>
 <tr>
-<td><code>[].slug</code></td>
+<td><code>message</code></td>
 <td><code>string</code></td>
-<td>No</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<h5 id="401-authentication-failed-invalid-api-key-signature-or-timestamp" class="status" data-status="4xx">401: Authentication failed. Invalid API key, signature, or timestamp</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-unprocessable-entity" class="status" data-status="4xx">422: Unprocessable Entity</h5>
+<p><code>application/json</code></p>
+<p>The response is <code>any</code>.</p>
 </main></div>
 <script src="../assets/search.js" defer></script></body></html>

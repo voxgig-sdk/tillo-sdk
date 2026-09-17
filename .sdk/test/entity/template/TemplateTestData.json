@@ -1,0 +1,336 @@
+{
+  "existing": {
+    "template": {
+      "TEMPLATE00": {
+        "last_refreshed_at": "s14",
+        "templates": {},
+        "id": "TEMPLATE00"
+      },
+      "TEMPLATE01": {
+        "last_refreshed_at": "s28",
+        "templates": {},
+        "id": "TEMPLATE01"
+      },
+      "TEMPLATE02": {
+        "last_refreshed_at": "s3c",
+        "templates": {},
+        "id": "TEMPLATE02"
+      }
+    }
+  },
+  "new": {
+    "template": {
+      "template_ref01": {
+        "last_refreshed_at": "s50",
+        "templates": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /templates": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "getTemplates",
+        "parameters": [
+          {
+            "description": "Brand identifier/slug. Required if template parameter is provided. If omitted, returns templates for all brands accessible to the partner.",
+            "example": "fixed-async-uk",
+            "in": "query",
+            "name": "brand",
+            "required": false,
+            "schema": {
+              "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+              "example": "fixed-async-uk",
+              "maxLength": 255,
+              "minLength": 1,
+              "pattern": "^[a-z0-9-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Template variant name (e.g., 'standard', 'premium').  If provided, brand parameter is required. Input is case-insensitive and normalized to lowercase.",
+            "example": "standard",
+            "in": "query",
+            "name": "template",
+            "required": false,
+            "schema": {
+              "pattern": "^[a-zA-Z0-9_-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "list_all_templates": {
+                    "description": "Response when listing templates for all accessible brands",
+                    "summary": "List all templates",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "last_refreshed_at": "2025-11-26T09:45:00+00:00",
+                        "templates": {
+                          "example-brand-one": {
+                            "standard": "2025-12-31"
+                          },
+                          "example-brand-two": {
+                            "standard": "2024-01-26",
+                            "winter": "2024-02-17"
+                          }
+                        }
+                      },
+                      "message": "Template information",
+                      "status": "success"
+                    }
+                  },
+                  "list_template_for_brand": {
+                    "description": "Response when listing a specific template for a specific brand",
+                    "summary": "List specific template for specific brand",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "last_refreshed_at": "2018-11-26T09:11:17+00:00",
+                        "templates": {
+                          "example-brand-three": {
+                            "standard": "2025-12-31"
+                          }
+                        }
+                      },
+                      "message": "Template information for [example-brand-three] with version [standard]",
+                      "status": "success"
+                    }
+                  },
+                  "list_templates_for_brand": {
+                    "description": "Response when listing templates for a specific brand",
+                    "summary": "List templates for specific brand",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "last_refreshed_at": "2023-01-19T08:30:00+00:00",
+                        "templates": {
+                          "example-brand-one": {
+                            "standard": "2025-12-31"
+                          }
+                        }
+                      },
+                      "message": "Template information for [example brand one]",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "last_refreshed_at": {
+                          "description": "ISO 8601 timestamp of when the template data was last refreshed",
+                          "example": "2024-01-15T10:30:00+00:00",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "templates": {
+                          "additionalProperties": {
+                            "additionalProperties": {
+                              "description": "Version string for the template variant",
+                              "example": "2024-01-15",
+                              "type": "string"
+                            },
+                            "type": "object"
+                          },
+                          "description": "Object mapping brand slugs to their template variants and versions. Each brand slug maps to an object where keys are variant names (e.g., 'standard') and values are version strings.",
+                          "example": {
+                            "fixed-async-uk": {
+                              "standard": "2024-01-15"
+                            },
+                            "sync-open-code-uk": {
+                              "premium": "2024-02-10",
+                              "standard": "2024-03-20"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "templates",
+                        "last_refreshed_at"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Template information",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successfully retrieved template list"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "unauthorized_no_template_access": {
+                    "description": "Error when partner does not have access to HTML email templates for the brand",
+                    "summary": "No template access for brand",
+                    "value": {
+                      "code": "717",
+                      "message": "Template for brand [amazon-de] is not available for this partner",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed or insufficient permissions."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "validation_error_brand_not_found": {
+                    "description": "Error when the specified brand does not exist",
+                    "summary": "Brand not found",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The requested brand is not available."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_brand_required_with_template": {
+                    "description": "Error when template is provided without brand parameter",
+                    "summary": "Brand required when template provided",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The brand field is required when template is present."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_invalid_template_format": {
+                    "description": "Error when template parameter has invalid format",
+                    "summary": "Invalid template format",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "template": [
+                          "The template must only contain lowercase letters, numbers, hyphens, and underscores."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/401/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/401/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "502": {
+            "description": "Bad Gateway. No response body is returned."
+          },
+          "504": {
+            "description": "Gateway Timeout. No response body is returned."
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

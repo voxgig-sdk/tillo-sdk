@@ -19,15 +19,15 @@ make build
 export TILLO_APIKEY=sk_live_xxx
 
 # 4. Each command line is ONE boru expression, run against the API:
-./tillo-cli list brand
-./tillo-cli list dgc
+./tillo-cli load 1 brand            # {id:1} shorthand
+./tillo-cli load '{id:1}' brand       # explicit match map
 
 # 5. Override the API base URL for a single call
-TILLO_BASE=https://api.example.com ./tillo-cli list brand
+TILLO_BASE=https://api.example.com ./tillo-cli load 1 brand
 
 # 6. No arguments -> interactive REPL
 ./tillo-cli
-tillo> list brand
+tillo> load 1 brand
 tillo> /quit
 ```
 
@@ -53,7 +53,7 @@ tillo> /quit
    arguments to open the REPL):
 
    ```sh
-   ./dist/*/tillo-cli list brand
+   ./dist/*/tillo-cli load 1 brand
    ```
 
 4. **Go interactive.** Run the binary with no arguments to open the REPL, then
@@ -63,14 +63,15 @@ That is the whole loop: *build → set key → evaluate boru expressions*.
 
 ## How-to guides
 
-### List the records of an entity
+### Load a single record
 
 ```sh
-./tillo-cli list brand
+./tillo-cli load 1 brand          # scalar shorthand for {id:1}
+./tillo-cli load '{id:1}' brand     # explicit match map
 ```
 
-`list <entity>` returns the first page of records. `<entity>` is a bareword —
-it is auto-quoted as an boru atom, so no quotes are needed.
+The query is either a **scalar** (`1`, treated as `{id:1}`) or a **match map**
+(`{id:1}`, `{slug:"acme"}`). Quote the map so your shell passes it through intact.
 
 ### Authenticate and choose an environment
 
@@ -79,7 +80,7 @@ Configuration is read from the environment — nothing is written to disk:
 ```sh
 export TILLO_APIKEY=sk_live_xxx            # API key
 export TILLO_BASE=https://api.example.com  # optional: override the API base URL
-./tillo-cli list brand
+./tillo-cli load 1 brand
 ```
 
 Both are injectable by a secrets vault, so the key never has to be typed inline.
@@ -91,7 +92,7 @@ evaluated as its own boru expression:
 
 ```text
 $ ./tillo-cli
-tillo> list brand
+tillo> load 1 brand
 tillo> /help
 tillo> /quit
 ```
@@ -106,7 +107,7 @@ make build-all   # linux/darwin/windows x amd64/arm64, under dist/<os>-<arch>/
 ### Discover the available entities
 
 `/help` in the REPL prints the full entity list, or see [Entities](#entities)
-below — this SDK exposes 3 entities.
+below — this SDK exposes 14 entities.
 
 ## Reference
 
@@ -117,6 +118,7 @@ The CLI registers these boru words, each bound to the SDK:
 | Word     | Signatures                                    | Returns                        |
 |----------|-----------------------------------------------|--------------------------------|
 | `list`   | `list <entity>` · `list <query> <entity>`     | First page of records          |
+| `load`   | `load <entity>` · `load <query> <entity>`     | A single record                |
 
 - `<entity>` is a bareword, auto-quoted as an boru atom (e.g. `brand`).
 - `<query>` is either a **Map** (`{id:1}`) or a **Scalar** (`1`, treated as
@@ -159,9 +161,9 @@ Meta-commands use the `/` prefix (everything else on a line is evaluated as boru
 
 ### Entities
 
-The 3 entities this SDK exposes (any is valid as `<entity>`):
+The 14 entities this SDK exposes (any is valid as `<entity>`):
 
-brand dgc float
+brand brand_template digital_gift_card digital_issue_delete digital_issue_post digital_order_card digital_order_status digital_top_up_post float physical_gift_card physical_order_card physical_order_status promotion template
 
 ## Explanation
 

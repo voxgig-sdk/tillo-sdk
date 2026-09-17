@@ -4,7 +4,7 @@
 
 The PHP SDK for the Tillo API — an entity-oriented client using PHP conventions.
 
-The SDK exposes the API as capitalised, semantic **Entities** — for example `$client->Brand()` — with named operations (`list`/`create`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
+The SDK exposes the API as capitalised, semantic **Entities** — for example `$client->Brand()` — with named operations (`list`/`load`/`create`/`remove`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
 
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
@@ -33,16 +33,13 @@ $client = new TilloSDK([
 ]);
 ```
 
-### 2. List brand records
+### 3. Load a brand
 
 ```php
 try {
-    // list() returns entity instances; data_get() reads each record.
-    $brands = $client->Brand()->list();
-    foreach ($brands as $record) {
-        $item = $record->data_get();
-        echo $item["currency"] . "\n";
-    }
+    // load() returns the ENTITY — call data_get() for the Brand record (throws on error).
+    $brand = $client->Brand()->load();
+    print_r($brand->data_get());
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -56,7 +53,7 @@ Entity operations throw a `\Throwable` on failure, so wrap them in
 
 ```php
 try {
-    $brands = $client->Brand()->list();
+    $promotion = $client->Promotion()->load();
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -128,10 +125,10 @@ Create a mock client for unit testing — no server required:
 ```php
 $client = TilloSDK::test();
 
-// list() returns entity instances (throws on error);
+// Entity ops return the ENTITY (throws on error);
 // call data_get() for the mock record.
-$brand = $client->Brand()->list();
-print_r(array_map(fn($item) => $item->data_get(), $brand));
+$promotion = $client->Promotion()->load();
+print_r($promotion->data_get());
 ```
 
 ### Use a custom fetch function
@@ -213,8 +210,19 @@ Creates a test-mode client with mock transport. Both arguments may be `null`.
 | `prepare` | `(array $fetchargs): array` | Build an HTTP request definition without sending. |
 | `direct` | `(array $fetchargs): array` | Build and send an HTTP request. |
 | `Brand` | `($data): BrandEntity` | Create a Brand entity instance. |
-| `Dgc` | `($data): DgcEntity` | Create a Dgc entity instance. |
+| `BrandTemplate` | `($data): BrandTemplateEntity` | Create a BrandTemplate entity instance. |
+| `DigitalGiftCard` | `($data): DigitalGiftCardEntity` | Create a DigitalGiftCard entity instance. |
+| `DigitalIssueDelete` | `($data): DigitalIssueDeleteEntity` | Create a DigitalIssueDelete entity instance. |
+| `DigitalIssuePost` | `($data): DigitalIssuePostEntity` | Create a DigitalIssuePost entity instance. |
+| `DigitalOrderCard` | `($data): DigitalOrderCardEntity` | Create a DigitalOrderCard entity instance. |
+| `DigitalOrderStatus` | `($data): DigitalOrderStatusEntity` | Create a DigitalOrderStatus entity instance. |
+| `DigitalTopUpPost` | `($data): DigitalTopUpPostEntity` | Create a DigitalTopUpPost entity instance. |
 | `Float` | `($data): FloatEntity` | Create a Float entity instance. |
+| `PhysicalGiftCard` | `($data): PhysicalGiftCardEntity` | Create a PhysicalGiftCard entity instance. |
+| `PhysicalOrderCard` | `($data): PhysicalOrderCardEntity` | Create a PhysicalOrderCard entity instance. |
+| `PhysicalOrderStatus` | `($data): PhysicalOrderStatusEntity` | Create a PhysicalOrderStatus entity instance. |
+| `Promotion` | `($data): PromotionEntity` | Create a Promotion entity instance. |
+| `Template` | `($data): TemplateEntity` | Create a Template entity instance. |
 
 ### Entity interface
 
@@ -222,8 +230,10 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
+| `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
 | `list` | `(?array $reqmatch = null, $ctrl): array` | List entities matching the criteria (call with no argument to list all). |
 | `create` | `($reqdata, $ctrl): array` | Create a new entity. |
+| `remove` | `($reqmatch, $ctrl): array` | Remove an entity. |
 | `data_get` | `(): array` | Get entity data. |
 | `data_set` | `($data): void` | Set entity data. |
 | `match_get` | `(): array` | Get entity match criteria. |
@@ -255,38 +265,244 @@ On error, `ok` is `false` and `$err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `currency` |  |
-| `name` |  |
-| `slug` |  |
+| `brands` |  |
+| `last_refreshed_at` |  |
 
-Operations: List.
+Operations: Load.
 
 API path: `/brands`
 
-#### Dgc
+#### BrandTemplate
 
 | Field | Description |
 | --- | --- |
-| `brand` |  |
-| `client_request_id` |  |
-| `delivery_method` |  |
+
+Operations: Load.
+
+API path: `/template`
+
+#### DigitalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `data` |  |
 | `face_value` |  |
-| `sector` |  |
+| `message` |  |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | Gift card PIN. |
+| `reference` | This is the `reference` you received when making the original issuance request. |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | The serial number is a required parameter for any Sainsburys brand |
+| `status` |  |
+
+Operations: Create, Load.
+
+API path: `/digital/check-balance`
+
+#### DigitalIssueDelete
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `face_value` |  |
+| `float_balance` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create, Remove.
+
+API path: `/digital/reverse`
+
+#### DigitalIssuePost
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code (for code-delivery brands) |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `pin` | Gift card PIN (for code-delivery brands). |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
 
 Operations: Create.
 
 API path: `/digital/issue`
 
+#### DigitalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/order-card`
+
+#### DigitalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | Unique reference for this transaction |
+| `security_code` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | The current status of the order |
+| `url` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+Operations: Load.
+
+API path: `/digital/order-status`
+
+#### DigitalTopUpPost
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `face_value` |  |
+| `float_balance` |  |
+| `pin` | Gift card PIN. |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/top-up`
+
 #### Float
 
 | Field | Description |
 | --- | --- |
-| `balance` |  |
-| `currency` |  |
+| `floats` | Float balances grouped by currency code |
+| `last_refreshed_at` | ISO 8601 timestamp of when the float data was last refreshed |
 
-Operations: List.
+Operations: Create, List, Load.
 
-API path: `/check-floats`
+API path: `/float/request-payment-transfer`
+
+#### PhysicalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilled_at` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
+
+Operations: Create, Remove.
+
+API path: `/physical/activate`
+
+#### PhysicalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | the face value amount of the gift card. |
+| `float_balance` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` |  |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | Shipping method identifier. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/physical/order-card`
+
+#### PhysicalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `references` | Array of order references to check. |
+
+Operations: Create.
+
+API path: `/physical/order-status`
+
+#### Promotion
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | Standard promotions grouped by brand slug. |
+
+Operations: Load.
+
+API path: `/promotions`
+
+#### Template
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | Object mapping brand slugs to their template variants and versions. |
+
+Operations: Load.
+
+API path: `/templates`
 
 
 
@@ -301,27 +517,130 @@ Create an instance: `$brand = $client->Brand();`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `currency` | `string` |  |
-| `name` | `string` |  |
-| `slug` | `string` |  |
+| `brands` | `mixed` |  |
+| `last_refreshed_at` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```php
-// list() returns an array of Brand records (throws on error).
-$brands = $client->Brand()->list();
+// load() returns the ENTITY — call data_get() for the Brand record (throws on error).
+$brand = $client->Brand()->load();
 ```
 
 
-### Dgc
+### BrandTemplate
 
-Create an instance: `$dgc = $client->Dgc();`
+Create an instance: `$brand_template = $client->BrandTemplate();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the BrandTemplate record (throws on error).
+$brand_template = $client->BrandTemplate()->load(["brand" => "brand"]);
+```
+
+
+### DigitalGiftCard
+
+Create an instance: `$digital_gift_card = $client->DigitalGiftCard();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `data` | `array` |  |
+| `face_value` | `array` |  |
+| `message` | `string` |  |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | This is the `reference` you received when making the original issuance request. |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `string` |  |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the DigitalGiftCard record (throws on error).
+$digital_gift_card = $client->DigitalGiftCard()->load();
+```
+
+#### Example: Create
+
+```php
+$digital_gift_card = $client->DigitalGiftCard()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "face_value" => null, // array
+    "sector" => null, // string
+]);
+```
+
+
+### DigitalIssueDelete
+
+Create an instance: `$digital_issue_delete = $client->DigitalIssueDelete();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `face_value` | `array` |  |
+| `float_balance` | `array` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `string` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```php
+$digital_issue_delete = $client->DigitalIssueDelete()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "face_value" => null, // array
+    "float_balance" => null, // array
+    "original_client_request_id" => null, // string
+    "reference" => null, // string
+    "sector" => null, // string
+]);
+```
+
+
+### DigitalIssuePost
+
+Create an instance: `$digital_issue_post = $client->DigitalIssuePost();`
 
 #### Operations
 
@@ -333,19 +652,170 @@ Create an instance: `$dgc = $client->Dgc();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `brand` | `string` |  |
-| `client_request_id` | `string` |  |
+| `barcode` | `array` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code (for code-delivery brands) |
+| `cost_value` | `array` |  |
 | `delivery_method` | `string` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
 | `face_value` | `array` |  |
-| `sector` | `string` |  |
+| `float_balance` | `array` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `array` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `array` |  |
+| `pin` | `string` | Gift card PIN (for code-delivery brands). |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
 
 #### Example: Create
 
 ```php
-$dgc = $client->Dgc()->create([
+$digital_issue_post = $client->DigitalIssuePost()->create([
+    "barcode" => null, // array
     "brand" => null, // string
     "client_request_id" => null, // string
+    "cost_value" => null, // array
+    "delivery_method" => null, // string
+    "discount" => null, // float
     "face_value" => null, // array
+    "float_balance" => null, // array
+    "fulfilment_by" => null, // string
+    "fulfilment_parameters" => null, // array
+    "personalisation" => null, // array
+    "reference" => null, // string
+    "sector" => null, // string
+]);
+```
+
+
+### DigitalOrderCard
+
+Create an instance: `$digital_order_card = $client->DigitalOrderCard();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `array` |  |
+| `delivery_method` | `string` |  |
+| `face_value` | `array` |  |
+| `float_balance` | `array` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `array` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `array` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```php
+$digital_order_card = $client->DigitalOrderCard()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "cost_value" => null, // array
+    "delivery_method" => null, // string
+    "face_value" => null, // array
+    "float_balance" => null, // array
+    "fulfilment_by" => null, // string
+    "fulfilment_parameters" => null, // array
+    "personalisation" => null, // array
+    "reference" => null, // string
+    "sector" => null, // string
+]);
+```
+
+
+### DigitalOrderStatus
+
+Create an instance: `$digital_order_status = $client->DigitalOrderStatus();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `barcode` | `array` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `string` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `array` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `array` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `string` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `string` | Unique reference for this transaction |
+| `security_code` | `string` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `string` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `string` | The current status of the order |
+| `url` | `string` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the DigitalOrderStatus record (throws on error).
+$digital_order_status = $client->DigitalOrderStatus()->load();
+```
+
+
+### DigitalTopUpPost
+
+Create an instance: `$digital_top_up_post = $client->DigitalTopUpPost();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `cost_value` | `array` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `face_value` | `array` |  |
+| `float_balance` | `array` |  |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```php
+$digital_top_up_post = $client->DigitalTopUpPost()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "code" => null, // string
+    "cost_value" => null, // array
+    "discount" => null, // float
+    "face_value" => null, // array
+    "float_balance" => null, // array
+    "reference" => null, // string
+    "sector" => null, // string
 ]);
 ```
 
@@ -358,20 +828,213 @@ Create an instance: `$float = $client->Float();`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `balance` | `float` |  |
-| `currency` | `string` |  |
+| `floats` | `array` | Float balances grouped by currency code |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the float data was last refreshed |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the Float record (throws on error).
+$float = $client->Float()->load();
+```
 
 #### Example: List
 
 ```php
 // list() returns an array of Float records (throws on error).
 $floats = $client->Float()->list();
+```
+
+#### Example: Create
+
+```php
+$float = $client->Float()->create([
+    "floats" => null, // array
+    "last_refreshed_at" => null, // string
+]);
+```
+
+
+### PhysicalGiftCard
+
+Create an instance: `$physical_gift_card = $client->PhysicalGiftCard();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `array` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `array` |  |
+| `float_balance` | `array` |  |
+| `fulfilled_at` | `string` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
+
+#### Example: Create
+
+```php
+$physical_gift_card = $client->PhysicalGiftCard()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "code" => null, // string
+    "cost_value" => null, // array
+    "discount" => null, // float
+    "face_value" => null, // array
+    "float_balance" => null, // array
+    "original_client_request_id" => null, // string
+    "reference" => null, // string
+    "sector" => null, // string
+]);
+```
+
+
+### PhysicalOrderCard
+
+Create an instance: `$physical_order_card = $client->PhysicalOrderCard();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `array` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `array` | the face value amount of the gift card. |
+| `float_balance` | `array` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `string` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `array` |  |
+| `personalisation` | `array` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `string` | Shipping method identifier. |
+| `tags` | `array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```php
+$physical_order_card = $client->PhysicalOrderCard()->create([
+    "brand" => null, // string
+    "client_request_id" => null, // string
+    "cost_value" => null, // array
+    "discount" => null, // float
+    "face_value" => null, // array
+    "float_balance" => null, // array
+    "fulfilment_by" => null, // string
+    "fulfilment_parameters" => null, // array
+    "personalisation" => null, // array
+    "reference" => null, // string
+    "sector" => null, // string
+    "shipping_method" => null, // string
+]);
+```
+
+
+### PhysicalOrderStatus
+
+Create an instance: `$physical_order_status = $client->PhysicalOrderStatus();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `references` | `array` | Array of order references to check. |
+
+#### Example: Create
+
+```php
+$physical_order_status = $client->PhysicalOrderStatus()->create([
+    "references" => null, // array
+]);
+```
+
+
+### Promotion
+
+Create an instance: `$promotion = $client->Promotion();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `array` | Standard promotions grouped by brand slug. |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the Promotion record (throws on error).
+$promotion = $client->Promotion()->load();
+```
+
+
+### Template
+
+Create an instance: `$template = $client->Template();`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `array` | Object mapping brand slugs to their template variants and versions. |
+
+#### Example: Load
+
+```php
+// load() returns the ENTITY — call data_get() for the Template record (throws on error).
+$template = $client->Template()->load();
 ```
 
 ## Features
@@ -576,6 +1239,7 @@ Use `Helpers::to_map()` to safely validate that a value is an array.
 php/
 ├── tillo_sdk.php          -- Main SDK class
 ├── config.php                     -- Configuration
+├── schema.php                     -- Generated option + entity specs
 ├── features.php                   -- Feature factory
 ├── core/                          -- Core types and context
 ├── entity/                        -- Entity implementations
@@ -590,15 +1254,15 @@ when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$brand = $client->Brand();
-$brand->list();
+$promotion = $client->Promotion();
+$promotion->load();
 
-// $brand->data_get() now returns the brand data from the last list
-// $brand->match_get() returns the last match criteria
+// $promotion->data_get() now returns the promotion data from the last load
+// $promotion->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

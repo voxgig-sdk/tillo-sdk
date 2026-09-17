@@ -16,7 +16,7 @@ import type {
 
 import type {
   Brand,
-  BrandListMatch,
+  BrandLoadMatch,
 } from '../TilloTypes'
 
 // TODO: needs Entity superclass
@@ -36,8 +36,7 @@ class BrandEntity extends TilloEntityBase<Brand> {
 
 
 
-
-  async list(this: any, reqmatch?: BrandListMatch, ctrl?: Control): Promise<BrandEntity[]> {
+  async load(this: any, reqmatch?: BrandLoadMatch, ctrl?: Control): Promise<BrandEntity> {
 
     const utility = this._utility
 
@@ -57,7 +56,7 @@ class BrandEntity extends TilloEntityBase<Brand> {
     let fres: Promise<any> | undefined = undefined
 
     let ctx: Context = makeContext({
-      opname: 'list',
+      opname: 'load',
       ctrl,
       match: this._match,
       data: this._data,
@@ -123,9 +122,21 @@ class BrandEntity extends TilloEntityBase<Brand> {
         if (null != ctx.result.resmatch) {
           this._match = ctx.result.resmatch
         }
+
+        if (null != ctx.result.resdata) {
+          this._data = ctx.result.resdata
+        }
       }
 
-      return done(ctx)
+      const out = done(ctx)
+
+      // An operation resolves to the ENTITY, not the raw data — the record
+      // has just been absorbed into this instance and is reached through
+      // data(). `done` still runs: it completes the pipeline and raises on
+      // failure, and when throwing is disabled it hands back the error
+      // payload, which passes through unchanged. See AGENTS.md "Entity
+      // operations return ENTITIES".
+      return (ctx.result && ctx.result.ok) ? this : out
     }
     catch (err: any) {
 
@@ -139,11 +150,12 @@ class BrandEntity extends TilloEntityBase<Brand> {
       }
       else {
         // Off-happy-path (throw disabled): typed as any so the method's
-        // Promise<Brand[]> return stays clean under strict null checks.
+        // Promise<Brand> return stays clean under strict null checks.
         return undefined as any
       }
     }
   }
+
 
 
 

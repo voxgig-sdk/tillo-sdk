@@ -1,0 +1,28 @@
+# BasicBrandTemplateFlow
+
+main: kit: flow: BasicBrandTemplateFlow:
+{
+  entity: "brand_template",
+  kind: "basic",
+  name: "BasicBrandTemplateFlow",
+  step: [
+    {
+      input: {
+        ref: "brand_template_ref01",
+        srcdatavar: "brand_template_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-brand_template_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicBrandTemplateFlow"
+}

@@ -148,43 +148,95 @@ func MakeConfig() map[string]any {
 			},
 		},
 		"options": map[string]any{
-			"base": "https://app.tillo.io",
+			"base": "https://sandbox.tillo.dev/api/v2",
 			"auth": map[string]any{
 				"prefix": "",
+				"name": "API-Key",
 			},
 			"headers": map[string]any{
 				"content-type": "application/json",
 			},
 			"entity": map[string]any{
 				"brand": map[string]any{},
-				"dgc": map[string]any{},
+				"brand_template": map[string]any{},
+				"digital_gift_card": map[string]any{},
+				"digital_issue_delete": map[string]any{},
+				"digital_issue_post": map[string]any{},
+				"digital_order_card": map[string]any{},
+				"digital_order_status": map[string]any{},
+				"digital_top_up_post": map[string]any{},
 				"float": map[string]any{},
+				"physical_gift_card": map[string]any{},
+				"physical_order_card": map[string]any{},
+				"physical_order_status": map[string]any{},
+				"promotion": map[string]any{},
+				"template": map[string]any{},
 			},
 		},
 		"entity": map[string]any{
 			"brand": map[string]any{
 				"fields": []any{
 					map[string]any{
-						"name": "currency",
-						"type": "`$STRING`",
+						"name": "brands",
+						"type": "`$ANY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 0,
+						},
 					},
 					map[string]any{
-						"name": "name",
-						"type": "`$STRING`",
-					},
-					map[string]any{
-						"name": "slug",
+						"format": "date-time",
+						"name": "last_refreshed_at",
 						"type": "`$STRING`",
 					},
 				},
 				"name": "brand",
 				"op": map[string]any{
-					"list": map[string]any{
+					"load": map[string]any{
 						"input": "data",
-						"name": "list",
+						"name": "load",
 						"points": []any{
 							map[string]any{
-								"args": map[string]any{},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "mock-brand",
+											"kind": "query",
+											"name": "brand",
+											"orig": "brand",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "food-and-drink",
+											"kind": "query",
+											"name": "category",
+											"orig": "category",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "GB",
+											"kind": "query",
+											"name": "country",
+											"orig": "country",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "GBP",
+											"kind": "query",
+											"name": "currency",
+											"orig": "currency",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": true,
+											"kind": "query",
+											"name": "detail",
+											"orig": "detail",
+											"type": "`$BOOLEAN`",
+										},
+									},
+								},
 								"kind": "http",
 								"method": "GET",
 								"orig": "/brands",
@@ -193,10 +245,18 @@ func MakeConfig() map[string]any {
 										"lit": "brands",
 									},
 								},
-								"select": map[string]any{},
+								"select": map[string]any{
+									"exist": []any{
+										"brand",
+										"category",
+										"country",
+										"currency",
+										"detail",
+									},
+								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"parts": []any{
 									"brands",
@@ -209,20 +269,381 @@ func MakeConfig() map[string]any {
 					"ancestors": []any{},
 				},
 			},
-			"dgc": map[string]any{
+			"brand_template": map[string]any{
+				"fields": []any{},
+				"name": "brand_template",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "fixed-async-uk",
+											"kind": "query",
+											"name": "brand",
+											"orig": "brand",
+											"reqd": true,
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "standard",
+											"kind": "query",
+											"name": "template",
+											"orig": "template",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "2024-01-15",
+											"kind": "query",
+											"name": "version",
+											"orig": "version",
+											"type": "`$STRING`",
+										},
+									},
+								},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/template",
+								"segments": []any{
+									map[string]any{
+										"lit": "template",
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"brand",
+										"template",
+										"version",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"parts": []any{
+									"template",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"digital_gift_card": map[string]any{
 				"fields": []any{
 					map[string]any{
 						"name": "brand",
 						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
 						"type": "`$STRING`",
 					},
 					map[string]any{
 						"name": "client_request_id",
 						"req": true,
+						"short": "Unique identifier for this request.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
+						"name": "code",
+						"short": "Gift card code",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "data",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "message",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "original_client_request_id",
+						"short": "This field will be the `client_request_id` provided in the original transaction.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "pin",
+						"short": "Gift card PIN.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"short": "This is the `reference` you received when making the original issuance request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "serial_number",
+						"short": "The serial number is a required parameter for any Sainsburys brand",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "status",
+						"type": "`$STRING`",
+					},
+				},
+				"name": "digital_gift_card",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/digital/check-balance",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "check-balance",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"check-balance",
+								},
+							},
+						},
+					},
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "example-brand",
+											"kind": "query",
+											"name": "brand",
+											"orig": "brand",
+											"type": "`$STRING`",
+										},
+									},
+								},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/check-stock",
+								"segments": []any{
+									map[string]any{
+										"lit": "check-stock",
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"brand",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"check-stock",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"digital_issue_delete": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"type": "`$OBJECT`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 2,
+						},
+					},
+					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"short": "Your remaining balance on the float used for this cancellation transaction.",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "original_client_request_id",
+						"req": true,
+						"short": "This field will be the `client_request_id` provided in the original transaction.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference (UUID) for the cancellation transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+				},
+				"name": "digital_issue_delete",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/digital/reverse",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "reverse",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"reverse",
+								},
+							},
+						},
+					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/digital/issue",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "issue",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"issue",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"digital_issue_post": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "barcode",
+						"req": true,
+						"short": "Some brands provide a barcode alongside a code delivery.",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "code",
+						"short": "Gift card code (for code-delivery brands)",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
 						"name": "delivery_method",
+						"req": true,
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "float",
+						"name": "discount",
+						"req": true,
+						"short": "The discount percentage used on this transaction",
+						"type": "`$NUMBER`",
+					},
+					map[string]any{
+						"format": "date-time",
+						"name": "expiration_date",
+						"short": "The expiration date for this gift card.",
 						"type": "`$STRING`",
 					},
 					map[string]any{
@@ -231,11 +652,73 @@ func MakeConfig() map[string]any {
 						"type": "`$OBJECT`",
 					},
 					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "fulfilment_by",
+						"req": true,
+						"short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "fulfilment_parameters",
+						"req": true,
+						"short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "personalisation",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "pin",
+						"short": "Gift card PIN (for code-delivery brands).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
 						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "security_code",
+						"short": "Gift card security code (for code-delivery brands).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "serial_number",
+						"short": "Gift card serial number.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+					map[string]any{
+						"format": "uri",
+						"name": "url",
+						"short": "Gift card URL (for URL-delivery brands)",
 						"type": "`$STRING`",
 					},
 				},
-				"name": "dgc",
+				"name": "digital_issue_post",
 				"op": map[string]any{
 					"create": map[string]any{
 						"input": "data",
@@ -257,7 +740,7 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"parts": []any{
 									"digital",
@@ -271,25 +754,525 @@ func MakeConfig() map[string]any {
 					"ancestors": []any{},
 				},
 			},
-			"float": map[string]any{
+			"digital_order_card": map[string]any{
 				"fields": []any{
 					map[string]any{
-						"name": "balance",
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "delivery_method",
+						"req": true,
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "fulfilment_by",
+						"req": true,
+						"short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "fulfilment_parameters",
+						"req": true,
+						"short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "personalisation",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+				},
+				"name": "digital_order_card",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/digital/order-card",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "order-card",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"order-card",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"digital_order_status": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "barcode",
+						"req": true,
+						"short": "Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS')",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "brand",
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "code",
+						"short": "Gift card code (for code-delivery brands, only present when status is 'SUCCESS')",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"short": "Cost value of the gift card (only present when status is 'SUCCESS')",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "float",
+						"name": "discount",
+						"short": "The discount percentage used on this transaction",
 						"type": "`$NUMBER`",
 					},
 					map[string]any{
-						"name": "currency",
+						"format": "date-time",
+						"name": "expiration_date",
+						"short": "The expiration date for this gift card.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"short": "Face value of the gift card (only present when status is 'SUCCESS')",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "pin",
+						"short": "Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "security_code",
+						"short": "Gift card security code (only present when status is 'SUCCESS' and brand provides one)",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "serial_number",
+						"short": "Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "status",
+						"req": true,
+						"short": "The current status of the order",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uri",
+						"name": "url",
+						"short": "Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS')",
+						"type": "`$STRING`",
+					},
+				},
+				"name": "digital_order_status",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "req-12345-67890",
+											"kind": "query",
+											"name": "original_client_request_id",
+											"orig": "original_client_request_id",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "019ade93-d513-776b-92a2-b6323329b661",
+											"kind": "query",
+											"name": "reference",
+											"orig": "reference",
+											"type": "`$STRING`",
+										},
+									},
+								},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/digital/order-status",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "order-status",
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"original_client_request_id",
+										"reference",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"order-status",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"digital_top_up_post": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "code",
+						"op": map[string]any{
+							"create": map[string]any{
+								"type": "`$STRING`",
+							},
+						},
+						"req": true,
+						"short": "Gift card code",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "float",
+						"name": "discount",
+						"req": true,
+						"short": "The discount percentage used on this transaction",
+						"type": "`$NUMBER`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "pin",
+						"short": "Gift card PIN.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"op": map[string]any{
+							"create": map[string]any{
+								"type": "`$STRING`",
+							},
+						},
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "serial_number",
+						"short": "Gift card serial number.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+				},
+				"name": "digital_top_up_post",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/digital/top-up",
+								"segments": []any{
+									map[string]any{
+										"lit": "digital",
+									},
+									map[string]any{
+										"lit": "top-up",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"digital",
+									"top-up",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"float": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "floats",
+						"req": true,
+						"short": "Float balances grouped by currency code",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "date-time",
+						"name": "last_refreshed_at",
+						"req": true,
+						"short": "ISO 8601 timestamp of when the float data was last refreshed",
 						"type": "`$STRING`",
 					},
 				},
 				"name": "float",
 				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/float/request-payment-transfer",
+								"segments": []any{
+									map[string]any{
+										"lit": "float",
+									},
+									map[string]any{
+										"lit": "request-payment-transfer",
+									},
+								},
+								"select": map[string]any{
+									"$action": "request_payment_transfer",
+								},
+								"transform": map[string]any{
+									"req": map[string]any{
+										"float": "`reqdata`",
+									},
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"float",
+									"request-payment-transfer",
+								},
+							},
+						},
+					},
 					"list": map[string]any{
 						"input": "data",
 						"name": "list",
 						"points": []any{
 							map[string]any{
-								"args": map[string]any{},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "GBP",
+											"kind": "query",
+											"name": "currency",
+											"orig": "currency",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "2025-10-16",
+											"kind": "query",
+											"name": "end_date",
+											"orig": "end_date",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "universal-float",
+											"kind": "query",
+											"name": "float",
+											"orig": "float",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "BUYER-PROVIDED-REF",
+											"kind": "query",
+											"name": "payment_reference",
+											"orig": "payment_reference",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "2025-10-12",
+											"kind": "query",
+											"name": "start_date",
+											"orig": "start_date",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "pending",
+											"kind": "query",
+											"name": "status",
+											"orig": "status",
+											"type": "`$STRING`",
+										},
+									},
+								},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/float/transfer-requests",
+								"segments": []any{
+									map[string]any{
+										"lit": "float",
+									},
+									map[string]any{
+										"lit": "transfer-requests",
+									},
+								},
+								"select": map[string]any{
+									"$action": "transfer_request",
+									"exist": []any{
+										"currency",
+										"end_date",
+										"float",
+										"payment_reference",
+										"start_date",
+										"status",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"float",
+									"transfer-requests",
+								},
+							},
+						},
+					},
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "GBP",
+											"kind": "query",
+											"name": "currency",
+											"orig": "currency",
+											"type": "`$STRING`",
+										},
+									},
+								},
 								"kind": "http",
 								"method": "GET",
 								"orig": "/check-floats",
@@ -298,13 +1281,597 @@ func MakeConfig() map[string]any {
 										"lit": "check-floats",
 									},
 								},
-								"select": map[string]any{},
+								"select": map[string]any{
+									"exist": []any{
+										"currency",
+									},
+								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.data`",
 								},
 								"parts": []any{
 									"check-floats",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"physical_gift_card": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "code",
+						"op": map[string]any{
+							"create": map[string]any{
+								"type": "`$STRING`",
+							},
+						},
+						"req": true,
+						"short": "The long card number on the physical gift card you wish to cash out",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "float",
+						"name": "discount",
+						"req": true,
+						"short": "The discount percentage used on this transaction",
+						"type": "`$NUMBER`",
+					},
+					map[string]any{
+						"format": "date-time",
+						"name": "expiration_date",
+						"short": "The expiration date for this gift card.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "date-time",
+						"name": "fulfilled_at",
+						"short": "The date for which this this gift card was fulfilled.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "original_client_request_id",
+						"req": true,
+						"short": "This field will be the `client_request_id` provided in the original transaction.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "pin",
+						"short": "The pin number (only applies to certain brands which provide pin) on the physical gift card",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "security_code",
+						"short": "Gift card security code (for code-delivery brands).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "serial_number",
+						"short": "Gift card serial number.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+					map[string]any{
+						"format": "uri",
+						"name": "url",
+						"short": "Gift card URL (for URL-delivery brands)",
+						"type": "`$STRING`",
+					},
+				},
+				"name": "physical_gift_card",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/activate",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "activate",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"activate",
+								},
+							},
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/cash-out-original-transaction",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "cash-out-original-transaction",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"cash-out-original-transaction",
+								},
+							},
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/check-balance",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "check-balance",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"check-balance",
+								},
+							},
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/fulfil-order",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "fulfil-order",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"fulfil-order",
+								},
+							},
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/top-up",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "top-up",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"top-up",
+								},
+							},
+						},
+					},
+					"remove": map[string]any{
+						"input": "data",
+						"name": "remove",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/physical/activate",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "activate",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"activate",
+								},
+							},
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "DELETE",
+								"orig": "/physical/top-up",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "top-up",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"top-up",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"physical_order_card": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "brand",
+						"req": true,
+						"short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "client_request_id",
+						"req": true,
+						"short": "Unique identifier for this request.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "cost_value",
+						"req": true,
+						"short": "The amount you actually paid (once the discount has been taken into consideration)",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "float",
+						"name": "discount",
+						"req": true,
+						"short": "The discount percentage used on this transaction",
+						"type": "`$NUMBER`",
+					},
+					map[string]any{
+						"format": "date-time",
+						"name": "expiration_date",
+						"short": "The expiration date for this gift card.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "face_value",
+						"req": true,
+						"short": "the face value amount of the gift card.",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "float_balance",
+						"req": true,
+						"short": "Your remaining balance on the float used to make this transaction",
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "fulfilment_by",
+						"req": true,
+						"short": "When ordering a physical gift card, this must be set to `rewardcloud`",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "fulfilment_parameters",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"name": "personalisation",
+						"req": true,
+						"type": "`$OBJECT`",
+					},
+					map[string]any{
+						"format": "uuid",
+						"name": "reference",
+						"req": true,
+						"short": "Unique reference for this transaction",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "sector",
+						"req": true,
+						"short": "Must match one of the sectors configured for your buyer account.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "shipping_method",
+						"req": true,
+						"short": "Shipping method identifier.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "tags",
+						"short": "Optional meta data associated with the issuance.",
+						"type": "`$ARRAY`",
+						"union": map[string]any{
+							"branches": 2,
+							"count": 1,
+							"depth": 1,
+						},
+					},
+				},
+				"name": "physical_order_card",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/order-card",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "order-card",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"order-card",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"physical_order_status": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"name": "references",
+						"req": true,
+						"short": "Array of order references to check.",
+						"type": "`$ARRAY`",
+					},
+				},
+				"name": "physical_order_status",
+				"op": map[string]any{
+					"create": map[string]any{
+						"input": "data",
+						"name": "create",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "POST",
+								"orig": "/physical/order-status",
+								"segments": []any{
+									map[string]any{
+										"lit": "physical",
+									},
+									map[string]any{
+										"lit": "order-status",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"physical",
+									"order-status",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"promotion": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"format": "date-time",
+						"name": "last_refreshed_at",
+						"req": true,
+						"short": "ISO 8601 timestamp of when promotion data was last refreshed.",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "standard",
+						"req": true,
+						"short": "Standard promotions grouped by brand slug.",
+						"type": "`$OBJECT`",
+					},
+				},
+				"name": "promotion",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/promotions",
+								"segments": []any{
+									map[string]any{
+										"lit": "promotions",
+									},
+								},
+								"select": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"promotions",
+								},
+							},
+						},
+					},
+				},
+				"relations": map[string]any{
+					"ancestors": []any{},
+				},
+			},
+			"template": map[string]any{
+				"fields": []any{
+					map[string]any{
+						"format": "date-time",
+						"name": "last_refreshed_at",
+						"req": true,
+						"short": "ISO 8601 timestamp of when the template data was last refreshed",
+						"type": "`$STRING`",
+					},
+					map[string]any{
+						"name": "templates",
+						"req": true,
+						"short": "Object mapping brand slugs to their template variants and versions.",
+						"type": "`$OBJECT`",
+					},
+				},
+				"name": "template",
+				"op": map[string]any{
+					"load": map[string]any{
+						"input": "data",
+						"name": "load",
+						"points": []any{
+							map[string]any{
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"example": "fixed-async-uk",
+											"kind": "query",
+											"name": "brand",
+											"orig": "brand",
+											"type": "`$STRING`",
+										},
+										map[string]any{
+											"example": "standard",
+											"kind": "query",
+											"name": "template",
+											"orig": "template",
+											"type": "`$STRING`",
+										},
+									},
+								},
+								"kind": "http",
+								"method": "GET",
+								"orig": "/templates",
+								"segments": []any{
+									map[string]any{
+										"lit": "templates",
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"brand",
+										"template",
+									},
+								},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body.data`",
+								},
+								"parts": []any{
+									"templates",
 								},
 							},
 						},

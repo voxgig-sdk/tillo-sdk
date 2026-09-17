@@ -1,0 +1,36 @@
+# BasicDigitalGiftCardFlow
+
+main: kit: flow: BasicDigitalGiftCardFlow:
+{
+  entity: "digital_gift_card",
+  kind: "basic",
+  name: "BasicDigitalGiftCardFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_gift_card_ref01"
+      }
+
+      op: "create"
+    }
+
+    {
+      input: {
+        ref: "digital_gift_card_ref01",
+        srcdatavar: "digital_gift_card_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-digital_gift_card_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicDigitalGiftCardFlow"
+}

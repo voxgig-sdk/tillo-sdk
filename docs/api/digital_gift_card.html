@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DigitalGiftCard | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/brand.html">Brand</a>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a aria-current="page" href="../api/digital_gift_card.html">DigitalGiftCard</a><div class="nav-sections"><a class="nav-section" href="#post-digitalcheck-balance">POST /digital/check-balance</a>
+<a class="nav-section" href="#get-check-stock">GET /check-stock</a></div>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a href="../api/float.html">Float</a>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a href="../api/physical_order_card.html">PhysicalOrderCard</a>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a href="../api/template.html">Template</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/js.html">JavaScript</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
+<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
+<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
+<a href="../features/paging.html">Pagination signals for list operations</a>
+<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
+<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
+<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
+<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="digitalgiftcard">DigitalGiftCard</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-digitalcheck-balance"><code>/digital/check-balance</code></a></td>
+<td><code>create</code></td>
+<td>Successful response</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-check-stock"><code>/check-stock</code></a></td>
+<td><code>load</code></td>
+<td>Successfully retrieved stock levels</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brand</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Brand identifier/slug (lowercase letters, numbers, hyphens only).</td>
+</tr>
+<tr>
+<td><code>client_request_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Unique identifier for this request.</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Gift card code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>original_client_request_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>This field will be the <code>client_request_id</code> provided in the original transaction.</td>
+</tr>
+<tr>
+<td><code>pin</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Gift card PIN.</td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>This is the <code>reference</code> you received when making the original issuance request.</td>
+</tr>
+<tr>
+<td><code>sector</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Must match one of the sectors configured for your buyer account.</td>
+</tr>
+<tr>
+<td><code>serial_number</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The serial number is a required parameter for any Sainsburys brand</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-digitalcheck-balance" class="operation" data-method="post"><code>POST</code> /digital/check-balance</h3>
+<p>Operation ID: <code>postDigitalCheckBalance</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brand</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.</td>
+</tr>
+<tr>
+<td><code>client_request_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Unique identifier for this request. Also acts as an idempotency key</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Gift card code</td>
+</tr>
+<tr>
+<td><code>face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>face_value.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>original_client_request_id</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>This field will be the <code>client_request_id</code> provided in the original transaction. For example, if you are performing some form of cancellation, then this would be the <code>client_request_id</code> you provided when making the original issuance request</td>
+</tr>
+<tr>
+<td><code>pin</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>Gift card PIN. This field is optional and only some brands will require this to be added.</td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td><code>string (uuid)</code></td>
+<td>No</td>
+<td>This is the <code>reference</code> you received when making the original issuance request.</td>
+</tr>
+<tr>
+<td><code>sector</code></td>
+<td><code>enum: affiliate-marketing, aggregator, b2c-marketplace, cashback, cash-out, charity, ...</code></td>
+<td>Yes</td>
+<td>Must match one of the sectors configured for your buyer account.</td>
+</tr>
+<tr>
+<td><code>serial_number</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The serial number is a required parameter for any Sainsburys brand</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="200-successful-response" class="status" data-status="2xx">200: Successful response</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.face_value.amount</code></td>
+<td><code>number (float)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.face_value.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional additional error details</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-authentication-failed-invalid-api-key-signature-or-timestamp" class="status" data-status="4xx">401: Authentication failed. Invalid API key, signature, or timestamp</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error-request-data-failed-validation-rules" class="status" data-status="4xx">422: Validation error. Request data failed validation rules</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Validation error code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional detailed validation errors by field</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="429-too-many-requests-rate-limit-exceeded" class="status" data-status="4xx">429: Too many requests. Rate limit exceeded</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="500-internal-server-error" class="status" data-status="5xx">500: Internal Server Error</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$ref</code></td>
+<td><code>any</code></td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="502-bad-gateway-no-response-body-is-returned" class="status" data-status="5xx">502: Bad Gateway No response body is returned.</h5>
+<h5 id="504-gateway-timeout-no-response-body-is-returned" class="status" data-status="5xx">504: Gateway Timeout No response body is returned</h5>
+<h2 id="load">load</h2>
+<h3 id="get-check-stock" class="operation" data-method="get"><code>GET</code> /check-stock</h3>
+<p>Operation ID: <code>getCheckStock</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>brand</code> | <code>query</code> | <code>string</code> | No | Brand identifier/slug |</p>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-successfully-retrieved-stock-levels" class="status" data-status="2xx">200: Successfully retrieved stock levels</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Response code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Stock levels grouped by brand slug. Each brand contains denominations as key-value pairs where the key is the denomination amount as a decimal string (for example, &quot;10.00&quot;, &quot;25.00&quot;) and the value is the stock status (for example, &quot;OUT&quot; for out of stock, or a quantity number as a string).</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable response message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-invalid-or-missing-required-parameters" class="status" data-status="4xx">400: Bad request. Invalid or missing required parameters</h5>
+<p><code>application/json</code></p>
+<p>The response is <code>any</code>.</p>
+<h5 id="401-unauthorized-invalid-authentication-or-brand-access-denied" class="status" data-status="4xx">401: Unauthorized. Invalid authentication or brand access denied</h5>
+<p><code>application/json</code></p>
+<p>The response is <code>any</code>.</p>
+<h5 id="422-validation-error-request-data-failed-validation-rules-1" class="status" data-status="4xx">422: Validation error. Request data failed validation rules</h5>
+<p><code>application/json</code></p>
+<p>The response is <code>any</code>.</p>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

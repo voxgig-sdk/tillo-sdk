@@ -4,23 +4,115 @@
 main: {
   kit: {
     info: {
-      description: "List Tillo brands and float balances, and issue digital gift cards."
+      contact: {
+        email: "support@tillo.io"
+        name: "Tillo Support"
+        url: "https://tillo.tech"
+      }
+      description: `This version of our API is intended to be an incremental improvement from v1, keeping core concepts the same so that the transition path is as straightforward as possible. To learn more about Tillo and our platform, visit [tillo.com](https://tillo.com).
+
+## Authentication & Signature Generation
+
+All API requests require HMAC-SHA256 signature authentication using the following headers:
+
+- \`API-Key\`: Your API key
+- \`Signature\`: HMAC-SHA256 signature of the request
+- \`Timestamp\`: Unix timestamp in milliseconds
+
+The signature is generated using a standard algorithm: concatenate components with hyphens, then compute HMAC-SHA256.
+
+**Signature Components (in order):**
+
+1. **API Key** (always)
+2. **HTTP Method** (always)
+3. **Transaction Type** - derived from URL path without \`/api/v2/\` (always)
+4. **Request Parameters** - only included if present in request (conditional)
+5. **Timestamp** in milliseconds (always)
+
+**GET Request Format:**
+
+\`\`\`
+{API_KEY}-{HTTP_METHOD}-{TRANSACTION_TYPE}-{BRAND?}-{TIMESTAMP}
+\`\`\`
+
+- \`TRANSACTION_TYPE\`: Derived from URL path (e.g., "brands", "check-stock")
+- \`BRAND\`: Only included if present as query parameter
+
+Examples - Without brand: \`abc123-GET-brands-1533025425488\`
+
+Examples - With brand: \`abc123-GET-check-stock-mock-brand-1533025425488\`
+
+**POST/PUT/DELETE Request Formats:**
+
+The API accepts two signature formats (both are valid):
+
+Simplified Format (recommended):
+\`\`\`
+{API_KEY}-{HTTP_METHOD}-{TRANSACTION_TYPE}-{CLIENT_REQUEST_ID}-{BRAND}-{TIMESTAMP}
+\`\`\`
+
+Full Format (also accepted):
+\`\`\`
+{API_KEY}-{HTTP_METHOD}-{TRANSACTION_TYPE}-{CLIENT_REQUEST_ID}-{BRAND}-{CURRENCY}-{AMOUNT}-{TIMESTAMP}
+\`\`\`
+
+Parameter Definitions:
+- \`CLIENT_REQUEST_ID\`: Unique 5-50 character alphanumeric string per request
+- \`BRAND\`: Brand slug from request body (optional - omit if not present)
+- \`CURRENCY\`: ISO currency code (optional - only in full format)
+- \`AMOUNT\`: Face value amount (optional - only in full format)
+
+**Important:** Parameters are only included if they exist in the request. Missing parameters are omitted entirely (not added as empty strings).
+
+Examples - Simplified: \`abc123-POST-digital-issue-xyz789randomid123456789-amazon-1533025425488\`
+
+Examples - Full format: \`abc123-POST-digital-issue-xyz789randomid123456789-amazon-GBP-25.00-1533025425488\`
+
+Examples - No optional params: \`abc123-POST-float-request-payment-transfer-1533025425488\`
+
+**Transaction Type Extraction:**
+
+Remove \`/api/v2/\` from the path and join remaining segments with hyphens:
+- \`/api/v2/brands\` → \`brands\`
+- \`/api/v2/digital/issue\` → \`digital-issue\`
+- \`/api/v2/float/request-payment-transfer\` → \`float-request-payment-transfer\`
+
+**Final Step:**
+
+Hash the concatenated string using HMAC-SHA256:
+\`\`\`javascript
+const signature = CryptoJS.HmacSHA256(signatureString, secretKey).toString();
+\`\`\`
+
+---
+
+For additional information including authentication, managing credentials, and other details, please visit [https://tillo.tech/v2_docs/](https://tillo.tech/v2_docs/)
+
+For v1 documentation, visit [https://tillo.tech/v1/index.html](https://tillo.tech/v1/index.html)
+
+For error codes, visit [https://tillo.tech/error_codes/](https://tillo.tech/error_codes/)
+`
+      license: {
+        name: "Proprietary"
+        url: "https://tillo.tech/terms"
+      }
       security: {
         in: "header"
         name: "API-Key"
         prefix: ""
-        scheme: "apiKeyAuth"
+        scheme: "APIKey"
         type: "apiKey"
       }
       servers: [
         {
-          url: "https://app.tillo.io"
+          description: "Sandbox"
+          url: "https://sandbox.tillo.dev/api/v2"
         }
       ]
-      summary: "List Tillo brands and float balances, and issue digital gift cards."
-      title: "Tillo Rewards API"
+      summary: "This version of our API is intended to be an incremental improvement from v1, keeping core concepts the same so that the transition path is as straightforward as possible."
+      title: "Tillo API v2"
       version: "2.0.0"
-      website: "https://app.tillo.io"
+      website: "https://sandbox.tillo.dev"
     }
   }
 }

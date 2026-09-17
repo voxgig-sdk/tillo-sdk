@@ -1,0 +1,299 @@
+{
+  "existing": {
+    "brand_template": {
+      "BRAND_TEMPLATE00": {
+        "id": "BRAND_TEMPLATE00"
+      },
+      "BRAND_TEMPLATE01": {
+        "id": "BRAND_TEMPLATE01"
+      },
+      "BRAND_TEMPLATE02": {
+        "id": "BRAND_TEMPLATE02"
+      }
+    }
+  },
+  "new": {
+    "brand_template": {
+      "brand_template_ref01": {}
+    }
+  },
+  "requests": {
+    "GET /template": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "getTemplate",
+        "parameters": [
+          {
+            "description": "Brand identifier/slug for which to download the template",
+            "example": "fixed-async-uk",
+            "in": "query",
+            "name": "brand",
+            "required": true,
+            "schema": {
+              "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+              "example": "fixed-async-uk",
+              "maxLength": 255,
+              "minLength": 1,
+              "pattern": "^[a-z0-9-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Template variant name (e.g., 'standard', 'premium').  Defaults to 'standard' if not provided. Input is case-insensitive and normalized to lowercase.",
+            "example": "standard",
+            "in": "query",
+            "name": "template",
+            "required": false,
+            "schema": {
+              "pattern": "^[a-zA-Z0-9_-]+$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Specific template version to download. If omitted, downloads the latest version. Version strings are typically date-based (e.g., '2024-01-15') but can be any string.",
+            "example": "2024-01-15",
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/zip": {
+                "schema": {
+                  "description": "ZIP file containing the email template and associated assets",
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Template ZIP file download",
+            "headers": {
+              "Content-Disposition": {
+                "description": "Indicates the file should be downloaded with the specified filename",
+                "example": "attachment; filename=\"template-standard-2024-01-15.zip\"",
+                "schema": {
+                  "pattern": "^attachment; filename=\".+\\.zip\"$",
+                  "type": "string"
+                }
+              },
+              "Content-Type": {
+                "description": "MIME type of the response",
+                "schema": {
+                  "const": "application/zip",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "template_not_found": {
+                    "description": "Error when the requested template variant or version does not exist",
+                    "summary": "Template not found",
+                    "value": {
+                      "code": "716",
+                      "message": "The requested template was not found",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad request. Invalid or missing required parameters."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "unauthorized_invalid_brand": {
+                    "description": "Error when the brand is valid but not accessible to the partner",
+                    "summary": "Invalid brand for partner",
+                    "value": {
+                      "code": "072",
+                      "message": "Brand [amazon-de] is not available for partner [partner-slug]",
+                      "status": "error"
+                    }
+                  },
+                  "unauthorized_no_template_access": {
+                    "description": "Error when partner does not have access to HTML email templates for the brand",
+                    "summary": "No template access",
+                    "value": {
+                      "code": "717",
+                      "message": "Template for brand [example-brand] is not available for this partner",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "properties": {
+                          "code": {
+                            "description": "Internal error code (3-digit string)",
+                            "example": "434",
+                            "type": "string"
+                          },
+                          "message": {
+                            "description": "Human-readable error message",
+                            "example": "Authentication failed",
+                            "type": "string"
+                          },
+                          "status": {
+                            "const": "error",
+                            "description": "Status of the response",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "status",
+                          "message"
+                        ],
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "description": "Authentication failed. Invalid API key, signature, or timestamp."
+                }
+              }
+            },
+            "description": "Authentication failed or insufficient permissions."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "validation_error_brand_not_found": {
+                    "description": "Error when the specified brand does not exist",
+                    "summary": "Brand not found",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The requested brand is not available."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_brand_required": {
+                    "description": "Error when brand parameter is missing",
+                    "summary": "Brand required",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The brand field is required."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_invalid_template_format": {
+                    "description": "Error when template parameter has invalid format",
+                    "summary": "Invalid template format",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "template": [
+                          "The template must only contain lowercase letters, numbers, hyphens, and underscores."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "502": {
+            "description": "Bad Gateway No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

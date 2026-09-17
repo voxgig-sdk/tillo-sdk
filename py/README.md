@@ -5,7 +5,7 @@
 The Python SDK for the Tillo API — an entity-oriented client following Pythonic conventions.
 
 The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Brand()` — each
-carrying a small, uniform set of operations (`list`, `create`) instead of raw URL
+carrying a small, uniform set of operations (`list`, `load`, `create`, `remove`) instead of raw URL
 paths and query strings. You work with named resources and verbs, which
 keeps the cognitive load low.
 
@@ -39,18 +39,16 @@ client = TilloSDK({
 })
 ```
 
-### 2. List brand records
+### 3. Load a brand
 
-`list()` returns a `list` of records (each a `dict`) and raises on
-error — iterate it directly.
+`load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
-    brands = client.Brand().list()
-    for brand in brands:
-        print(brand)
+    brand = client.Brand().load()
+    print(brand)
 except Exception as err:
-    print(f"list failed: {err}")
+    print(f"load failed: {err}")
 ```
 
 
@@ -60,10 +58,10 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    brands = client.Brand().list()
-    print(brands)
+    promotion = client.Promotion().load()
+    print(promotion)
 except Exception as err:
-    print(f"list failed: {err}")
+    print(f"load failed: {err}")
 ```
 
 `direct()` does **not** raise — it returns the result envelope. Branch
@@ -129,8 +127,8 @@ client = TilloSDK.test()
 
 # Entity ops return the ENTITY and raises on error;
 # call data_get() for the record.
-brand = client.Brand().list()
-# brand contains the mock response record
+promotion = client.Promotion().load()
+# promotion contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -209,8 +207,19 @@ Creates a test-mode client with mock transport. Both arguments may be `None`.
 | `prepare` | `(fetchargs) -> dict` | Build an HTTP request definition without sending. Raises on error. |
 | `direct` | `(fetchargs) -> dict` | Build and send an HTTP request. Returns a result dict (branch on `ok`). |
 | `Brand` | `(data) -> BrandEntity` | Create a Brand entity instance. |
-| `Dgc` | `(data) -> DgcEntity` | Create a Dgc entity instance. |
+| `BrandTemplate` | `(data) -> BrandTemplateEntity` | Create a BrandTemplate entity instance. |
+| `DigitalGiftCard` | `(data) -> DigitalGiftCardEntity` | Create a DigitalGiftCard entity instance. |
+| `DigitalIssueDelete` | `(data) -> DigitalIssueDeleteEntity` | Create a DigitalIssueDelete entity instance. |
+| `DigitalIssuePost` | `(data) -> DigitalIssuePostEntity` | Create a DigitalIssuePost entity instance. |
+| `DigitalOrderCard` | `(data) -> DigitalOrderCardEntity` | Create a DigitalOrderCard entity instance. |
+| `DigitalOrderStatus` | `(data) -> DigitalOrderStatusEntity` | Create a DigitalOrderStatus entity instance. |
+| `DigitalTopUpPost` | `(data) -> DigitalTopUpPostEntity` | Create a DigitalTopUpPost entity instance. |
 | `Float` | `(data) -> FloatEntity` | Create a Float entity instance. |
+| `PhysicalGiftCard` | `(data) -> PhysicalGiftCardEntity` | Create a PhysicalGiftCard entity instance. |
+| `PhysicalOrderCard` | `(data) -> PhysicalOrderCardEntity` | Create a PhysicalOrderCard entity instance. |
+| `PhysicalOrderStatus` | `(data) -> PhysicalOrderStatusEntity` | Create a PhysicalOrderStatus entity instance. |
+| `Promotion` | `(data) -> PromotionEntity` | Create a Promotion entity instance. |
+| `Template` | `(data) -> TemplateEntity` | Create a Template entity instance. |
 
 ### Entity interface
 
@@ -218,8 +227,10 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
+| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
 | `list` | `(reqmatch, ctrl) -> list` | List entities matching the criteria. Raises on error. |
 | `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
+| `remove` | `(reqmatch, ctrl) -> any` | Remove an entity. Raises on error. |
 | `data_get` | `() -> dict` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> dict` | Get entity match criteria. |
@@ -251,38 +262,244 @@ On error, `ok` is `False` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `currency` |  |
-| `name` |  |
-| `slug` |  |
+| `brands` |  |
+| `last_refreshed_at` |  |
 
-Operations: List.
+Operations: Load.
 
 API path: `/brands`
 
-#### Dgc
+#### BrandTemplate
 
 | Field | Description |
 | --- | --- |
-| `brand` |  |
-| `client_request_id` |  |
-| `delivery_method` |  |
+
+Operations: Load.
+
+API path: `/template`
+
+#### DigitalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `data` |  |
 | `face_value` |  |
-| `sector` |  |
+| `message` |  |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | Gift card PIN. |
+| `reference` | This is the `reference` you received when making the original issuance request. |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | The serial number is a required parameter for any Sainsburys brand |
+| `status` |  |
+
+Operations: Create, Load.
+
+API path: `/digital/check-balance`
+
+#### DigitalIssueDelete
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `face_value` |  |
+| `float_balance` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create, Remove.
+
+API path: `/digital/reverse`
+
+#### DigitalIssuePost
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code (for code-delivery brands) |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `pin` | Gift card PIN (for code-delivery brands). |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
 
 Operations: Create.
 
 API path: `/digital/issue`
 
+#### DigitalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/order-card`
+
+#### DigitalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | Unique reference for this transaction |
+| `security_code` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | The current status of the order |
+| `url` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+Operations: Load.
+
+API path: `/digital/order-status`
+
+#### DigitalTopUpPost
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `face_value` |  |
+| `float_balance` |  |
+| `pin` | Gift card PIN. |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/top-up`
+
 #### Float
 
 | Field | Description |
 | --- | --- |
-| `balance` |  |
-| `currency` |  |
+| `floats` | Float balances grouped by currency code |
+| `last_refreshed_at` | ISO 8601 timestamp of when the float data was last refreshed |
 
-Operations: List.
+Operations: Create, List, Load.
 
-API path: `/check-floats`
+API path: `/float/request-payment-transfer`
+
+#### PhysicalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilled_at` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
+
+Operations: Create, Remove.
+
+API path: `/physical/activate`
+
+#### PhysicalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | the face value amount of the gift card. |
+| `float_balance` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` |  |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | Shipping method identifier. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/physical/order-card`
+
+#### PhysicalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `references` | Array of order references to check. |
+
+Operations: Create.
+
+API path: `/physical/order-status`
+
+#### Promotion
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | Standard promotions grouped by brand slug. |
+
+Operations: Load.
+
+API path: `/promotions`
+
+#### Template
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | Object mapping brand slugs to their template variants and versions. |
+
+Operations: Load.
+
+API path: `/templates`
 
 
 
@@ -297,26 +514,127 @@ Create an instance: `brand = client.Brand()`
 
 | Method | Description |
 | --- | --- |
-| `list()` | List entities, optionally matching the given criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `currency` | `str` |  |
-| `name` | `str` |  |
-| `slug` | `str` |  |
+| `brands` | `Any` |  |
+| `last_refreshed_at` | `str` |  |
 
-#### Example: List
+#### Example: Load
 
 ```python
-brands = client.Brand().list()
+brand = client.Brand().load()
 ```
 
 
-### Dgc
+### BrandTemplate
 
-Create an instance: `dgc = client.Dgc()`
+Create an instance: `brand_template = client.BrandTemplate()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```python
+brand_template = client.BrandTemplate().load({"brand": "brand"})
+```
+
+
+### DigitalGiftCard
+
+Create an instance: `digital_gift_card = client.DigitalGiftCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `code` | `str` | Gift card code |
+| `data` | `dict` |  |
+| `face_value` | `dict` |  |
+| `message` | `str` |  |
+| `original_client_request_id` | `str` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `str` | Gift card PIN. |
+| `reference` | `str` | This is the `reference` you received when making the original issuance request. |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `str` | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `str` |  |
+
+#### Example: Load
+
+```python
+digital_gift_card = client.DigitalGiftCard().load()
+```
+
+#### Example: Create
+
+```python
+digital_gift_card = client.DigitalGiftCard().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "face_value": {},  # dict
+    "sector": "example_sector",  # str
+})
+```
+
+
+### DigitalIssueDelete
+
+Create an instance: `digital_issue_delete = client.DigitalIssueDelete()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `face_value` | `dict` |  |
+| `float_balance` | `dict` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `str` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `str` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```python
+digital_issue_delete = client.DigitalIssueDelete().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "original_client_request_id": "example_original_client_request_id",  # str
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
+})
+```
+
+
+### DigitalIssuePost
+
+Create an instance: `digital_issue_post = client.DigitalIssuePost()`
 
 #### Operations
 
@@ -328,19 +646,169 @@ Create an instance: `dgc = client.Dgc()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `brand` | `str` |  |
-| `client_request_id` | `str` |  |
+| `barcode` | `dict` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `code` | `str` | Gift card code (for code-delivery brands) |
+| `cost_value` | `dict` |  |
 | `delivery_method` | `str` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `str` | The expiration date for this gift card. |
 | `face_value` | `dict` |  |
-| `sector` | `str` |  |
+| `float_balance` | `dict` |  |
+| `fulfilment_by` | `str` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `dict` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `dict` |  |
+| `pin` | `str` | Gift card PIN (for code-delivery brands). |
+| `reference` | `str` | Unique reference for this transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `str` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `str` | Gift card serial number. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+| `url` | `str` | Gift card URL (for URL-delivery brands) |
 
 #### Example: Create
 
 ```python
-dgc = client.Dgc().create({
+digital_issue_post = client.DigitalIssuePost().create({
+    "barcode": {},  # dict
     "brand": "example_brand",  # str
     "client_request_id": "example_client_request_id",  # str
+    "cost_value": {},  # dict
+    "delivery_method": "example_delivery_method",  # str
+    "discount": 1,  # float
     "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "fulfilment_by": "example_fulfilment_by",  # str
+    "fulfilment_parameters": {},  # dict
+    "personalisation": {},  # dict
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
+})
+```
+
+
+### DigitalOrderCard
+
+Create an instance: `digital_order_card = client.DigitalOrderCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `cost_value` | `dict` |  |
+| `delivery_method` | `str` |  |
+| `face_value` | `dict` |  |
+| `float_balance` | `dict` |  |
+| `fulfilment_by` | `str` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `dict` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `dict` |  |
+| `reference` | `str` | Unique reference for this transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```python
+digital_order_card = client.DigitalOrderCard().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "cost_value": {},  # dict
+    "delivery_method": "example_delivery_method",  # str
+    "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "fulfilment_by": "example_fulfilment_by",  # str
+    "fulfilment_parameters": {},  # dict
+    "personalisation": {},  # dict
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
+})
+```
+
+
+### DigitalOrderStatus
+
+Create an instance: `digital_order_status = client.DigitalOrderStatus()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `barcode` | `dict` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `str` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `dict` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `str` | The expiration date for this gift card. |
+| `face_value` | `dict` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `str` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `str` | Unique reference for this transaction |
+| `security_code` | `str` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `str` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `str` | The current status of the order |
+| `url` | `str` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+#### Example: Load
+
+```python
+digital_order_status = client.DigitalOrderStatus().load()
+```
+
+
+### DigitalTopUpPost
+
+Create an instance: `digital_top_up_post = client.DigitalTopUpPost()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `code` | `str` | Gift card code |
+| `cost_value` | `dict` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `face_value` | `dict` |  |
+| `float_balance` | `dict` |  |
+| `pin` | `str` | Gift card PIN. |
+| `reference` | `str` | Unique reference for this transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `str` | Gift card serial number. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```python
+digital_top_up_post = client.DigitalTopUpPost().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "code": "example_code",  # str
+    "cost_value": {},  # dict
+    "discount": 1,  # float
+    "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
 })
 ```
 
@@ -353,19 +821,209 @@ Create an instance: `float = client.Float()`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list()` | List entities, optionally matching the given criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `balance` | `float` |  |
-| `currency` | `str` |  |
+| `floats` | `dict` | Float balances grouped by currency code |
+| `last_refreshed_at` | `str` | ISO 8601 timestamp of when the float data was last refreshed |
+
+#### Example: Load
+
+```python
+float = client.Float().load()
+```
 
 #### Example: List
 
 ```python
 floats = client.Float().list()
+```
+
+#### Example: Create
+
+```python
+float = client.Float().create({
+    "floats": {},  # dict
+    "last_refreshed_at": "example_last_refreshed_at",  # str
+})
+```
+
+
+### PhysicalGiftCard
+
+Create an instance: `physical_gift_card = client.PhysicalGiftCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `code` | `str` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `dict` |  |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `str` | The expiration date for this gift card. |
+| `face_value` | `dict` |  |
+| `float_balance` | `dict` |  |
+| `fulfilled_at` | `str` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `str` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `str` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `str` | Unique reference for this transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `str` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `str` | Gift card serial number. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+| `url` | `str` | Gift card URL (for URL-delivery brands) |
+
+#### Example: Create
+
+```python
+physical_gift_card = client.PhysicalGiftCard().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "code": "example_code",  # str
+    "cost_value": {},  # dict
+    "discount": 1,  # float
+    "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "original_client_request_id": "example_original_client_request_id",  # str
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
+})
+```
+
+
+### PhysicalOrderCard
+
+Create an instance: `physical_order_card = client.PhysicalOrderCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `str` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `str` | Unique identifier for this request. |
+| `cost_value` | `dict` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `float` | The discount percentage used on this transaction |
+| `expiration_date` | `str` | The expiration date for this gift card. |
+| `face_value` | `dict` | the face value amount of the gift card. |
+| `float_balance` | `dict` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `str` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `dict` |  |
+| `personalisation` | `dict` |  |
+| `reference` | `str` | Unique reference for this transaction |
+| `sector` | `str` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `str` | Shipping method identifier. |
+| `tags` | `list` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```python
+physical_order_card = client.PhysicalOrderCard().create({
+    "brand": "example_brand",  # str
+    "client_request_id": "example_client_request_id",  # str
+    "cost_value": {},  # dict
+    "discount": 1,  # float
+    "face_value": {},  # dict
+    "float_balance": {},  # dict
+    "fulfilment_by": "example_fulfilment_by",  # str
+    "fulfilment_parameters": {},  # dict
+    "personalisation": {},  # dict
+    "reference": "example_reference",  # str
+    "sector": "example_sector",  # str
+    "shipping_method": "example_shipping_method",  # str
+})
+```
+
+
+### PhysicalOrderStatus
+
+Create an instance: `physical_order_status = client.PhysicalOrderStatus()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `references` | `list` | Array of order references to check. |
+
+#### Example: Create
+
+```python
+physical_order_status = client.PhysicalOrderStatus().create({
+    "references": [],  # list
+})
+```
+
+
+### Promotion
+
+Create an instance: `promotion = client.Promotion()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `str` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `dict` | Standard promotions grouped by brand slug. |
+
+#### Example: Load
+
+```python
+promotion = client.Promotion().load()
+```
+
+
+### Template
+
+Create an instance: `template = client.Template()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `str` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `dict` | Object mapping brand slugs to their template variants and versions. |
+
+#### Example: Load
+
+```python
+template = client.Template().load()
 ```
 
 ## Features
@@ -570,6 +1228,7 @@ Use `helpers.to_map()` to safely validate that a value is a dict.
 py/
 ├── tillo_sdk.py         -- Main SDK module
 ├── config.py                    -- Configuration
+├── schema.py                    -- Generated option + entity specs
 ├── features.py                  -- Feature factory
 ├── core/                        -- Core types and context
 ├── entity/                      -- Entity implementations
@@ -583,15 +1242,15 @@ Import entity or utility modules directly only when needed.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-brand = client.Brand()
-brand.list()
+promotion = client.Promotion()
+promotion.load()
 
-# brand.data_get() now returns the brand data from the last list
-# brand.match_get() returns the last match criteria
+# promotion.data_get() now returns the promotion data from the last load
+# promotion.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

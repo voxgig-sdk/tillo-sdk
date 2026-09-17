@@ -14,46 +14,396 @@ import (
 
 // Brand is the typed data model for the brand entity.
 type Brand struct {
-	Currency *string `json:"currency,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Slug *string `json:"slug,omitempty"`
+	Brands *any `json:"brands,omitempty"`
+	LastRefreshedAt *string `json:"last_refreshed_at,omitempty"`
 }
 
-// BrandListMatch is the typed request payload for Brand.ListTyped.
-type BrandListMatch struct {
+// BrandLoadMatch is the typed request payload for Brand.LoadTyped.
+type BrandLoadMatch struct {
+	Brand *string `json:"brand,omitempty"`
+	Category *string `json:"category,omitempty"`
+	Country *string `json:"country,omitempty"`
 	Currency *string `json:"currency,omitempty"`
-	Name *string `json:"name,omitempty"`
-	Slug *string `json:"slug,omitempty"`
+	Detail *bool `json:"detail,omitempty"`
 }
 
-// Dgc is the typed data model for the dgc entity.
-type Dgc struct {
+// BrandTemplate is the typed data model for the brand_template entity.
+type BrandTemplate struct {
+}
+
+// BrandTemplateLoadMatch is the typed request payload for BrandTemplate.LoadTyped.
+type BrandTemplateLoadMatch struct {
+	Brand string `json:"brand"`
+	Template *string `json:"template,omitempty"`
+	Version *string `json:"version,omitempty"`
+}
+
+// DigitalGiftCard is the typed data model for the digital_gift_card entity.
+type DigitalGiftCard struct {
 	Brand string `json:"brand"`
 	ClientRequestId string `json:"client_request_id"`
-	DeliveryMethod *string `json:"delivery_method,omitempty"`
+	Code *string `json:"code,omitempty"`
+	Data *map[string]any `json:"data,omitempty"`
 	FaceValue map[string]any `json:"face_value"`
-	Sector *string `json:"sector,omitempty"`
+	Message *string `json:"message,omitempty"`
+	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
+	Pin *string `json:"pin,omitempty"`
+	Reference *string `json:"reference,omitempty"`
+	Sector string `json:"sector"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Status *string `json:"status,omitempty"`
 }
 
-// DgcCreateData is the typed request payload for Dgc.CreateTyped.
-type DgcCreateData struct {
+// DigitalGiftCardLoadMatch is the typed request payload for DigitalGiftCard.LoadTyped.
+type DigitalGiftCardLoadMatch struct {
+	Brand *string `json:"brand,omitempty"`
+}
+
+// DigitalGiftCardCreateData is the typed request payload for DigitalGiftCard.CreateTyped.
+type DigitalGiftCardCreateData struct {
 	Brand string `json:"brand"`
 	ClientRequestId string `json:"client_request_id"`
-	DeliveryMethod *string `json:"delivery_method,omitempty"`
+	Code *string `json:"code,omitempty"`
+	Data *map[string]any `json:"data,omitempty"`
 	FaceValue map[string]any `json:"face_value"`
+	Message *string `json:"message,omitempty"`
+	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
+	Pin *string `json:"pin,omitempty"`
+	Reference *string `json:"reference,omitempty"`
+	Sector string `json:"sector"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Status *string `json:"status,omitempty"`
+}
+
+// DigitalIssueDelete is the typed data model for the digital_issue_delete entity.
+type DigitalIssueDelete struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	OriginalClientRequestId string `json:"original_client_request_id"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalIssueDeleteCreateData is the typed request payload for DigitalIssueDelete.CreateTyped.
+type DigitalIssueDeleteCreateData struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	OriginalClientRequestId string `json:"original_client_request_id"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalIssueDeleteRemoveMatch is the typed request payload for DigitalIssueDelete.RemoveTyped.
+type DigitalIssueDeleteRemoveMatch struct {
+	Brand *string `json:"brand,omitempty"`
+	ClientRequestId *string `json:"client_request_id,omitempty"`
+	FaceValue *map[string]any `json:"face_value,omitempty"`
+	FloatBalance *map[string]any `json:"float_balance,omitempty"`
+	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
+	Reference *string `json:"reference,omitempty"`
 	Sector *string `json:"sector,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalIssuePost is the typed data model for the digital_issue_post entity.
+type DigitalIssuePost struct {
+	Barcode map[string]any `json:"barcode"`
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code *string `json:"code,omitempty"`
+	CostValue map[string]any `json:"cost_value"`
+	DeliveryMethod string `json:"delivery_method"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	Url *string `json:"url,omitempty"`
+}
+
+// DigitalIssuePostCreateData is the typed request payload for DigitalIssuePost.CreateTyped.
+type DigitalIssuePostCreateData struct {
+	Barcode map[string]any `json:"barcode"`
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code *string `json:"code,omitempty"`
+	CostValue map[string]any `json:"cost_value"`
+	DeliveryMethod string `json:"delivery_method"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	Url *string `json:"url,omitempty"`
+}
+
+// DigitalOrderCard is the typed data model for the digital_order_card entity.
+type DigitalOrderCard struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	CostValue map[string]any `json:"cost_value"`
+	DeliveryMethod string `json:"delivery_method"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalOrderCardCreateData is the typed request payload for DigitalOrderCard.CreateTyped.
+type DigitalOrderCardCreateData struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	CostValue map[string]any `json:"cost_value"`
+	DeliveryMethod string `json:"delivery_method"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalOrderStatus is the typed data model for the digital_order_status entity.
+type DigitalOrderStatus struct {
+	Barcode map[string]any `json:"barcode"`
+	Brand *string `json:"brand,omitempty"`
+	Code *string `json:"code,omitempty"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount *float64 `json:"discount,omitempty"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Status string `json:"status"`
+	Url *string `json:"url,omitempty"`
+}
+
+// DigitalOrderStatusLoadMatch is the typed request payload for DigitalOrderStatus.LoadTyped.
+type DigitalOrderStatusLoadMatch struct {
+	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
+	Reference *string `json:"reference,omitempty"`
+}
+
+// DigitalTopUpPost is the typed data model for the digital_top_up_post entity.
+type DigitalTopUpPost struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code string `json:"code"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// DigitalTopUpPostCreateData is the typed request payload for DigitalTopUpPost.CreateTyped.
+type DigitalTopUpPostCreateData struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code string `json:"code"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
 }
 
 // Float is the typed data model for the float entity.
 type Float struct {
-	Balance *float64 `json:"balance,omitempty"`
+	Floats map[string]any `json:"floats"`
+	LastRefreshedAt string `json:"last_refreshed_at"`
+}
+
+// FloatLoadMatch is the typed request payload for Float.LoadTyped.
+type FloatLoadMatch struct {
 	Currency *string `json:"currency,omitempty"`
 }
 
 // FloatListMatch is the typed request payload for Float.ListTyped.
 type FloatListMatch struct {
-	Balance *float64 `json:"balance,omitempty"`
 	Currency *string `json:"currency,omitempty"`
+	EndDate *string `json:"end_date,omitempty"`
+	Float *string `json:"float,omitempty"`
+	PaymentReference *string `json:"payment_reference,omitempty"`
+	StartDate *string `json:"start_date,omitempty"`
+	Status *string `json:"status,omitempty"`
+}
+
+// FloatCreateData is the typed request payload for Float.CreateTyped.
+type FloatCreateData struct {
+	Floats map[string]any `json:"floats"`
+	LastRefreshedAt string `json:"last_refreshed_at"`
+}
+
+// PhysicalGiftCard is the typed data model for the physical_gift_card entity.
+type PhysicalGiftCard struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code string `json:"code"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilledAt *string `json:"fulfilled_at,omitempty"`
+	OriginalClientRequestId string `json:"original_client_request_id"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	Url *string `json:"url,omitempty"`
+}
+
+// PhysicalGiftCardCreateData is the typed request payload for PhysicalGiftCard.CreateTyped.
+type PhysicalGiftCardCreateData struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	Code string `json:"code"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilledAt *string `json:"fulfilled_at,omitempty"`
+	OriginalClientRequestId string `json:"original_client_request_id"`
+	Pin *string `json:"pin,omitempty"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	Url *string `json:"url,omitempty"`
+}
+
+// PhysicalGiftCardRemoveMatch is the typed request payload for PhysicalGiftCard.RemoveTyped.
+type PhysicalGiftCardRemoveMatch struct {
+	Brand *string `json:"brand,omitempty"`
+	ClientRequestId *string `json:"client_request_id,omitempty"`
+	Code *string `json:"code,omitempty"`
+	CostValue *map[string]any `json:"cost_value,omitempty"`
+	Discount *float64 `json:"discount,omitempty"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue *map[string]any `json:"face_value,omitempty"`
+	FloatBalance *map[string]any `json:"float_balance,omitempty"`
+	FulfilledAt *string `json:"fulfilled_at,omitempty"`
+	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
+	Pin *string `json:"pin,omitempty"`
+	Reference *string `json:"reference,omitempty"`
+	Sector *string `json:"sector,omitempty"`
+	SecurityCode *string `json:"security_code,omitempty"`
+	SerialNumber *string `json:"serial_number,omitempty"`
+	Tags *[]any `json:"tags,omitempty"`
+	Url *string `json:"url,omitempty"`
+}
+
+// PhysicalOrderCard is the typed data model for the physical_order_card entity.
+type PhysicalOrderCard struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	ShippingMethod string `json:"shipping_method"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// PhysicalOrderCardCreateData is the typed request payload for PhysicalOrderCard.CreateTyped.
+type PhysicalOrderCardCreateData struct {
+	Brand string `json:"brand"`
+	ClientRequestId string `json:"client_request_id"`
+	CostValue map[string]any `json:"cost_value"`
+	Discount float64 `json:"discount"`
+	ExpirationDate *string `json:"expiration_date,omitempty"`
+	FaceValue map[string]any `json:"face_value"`
+	FloatBalance map[string]any `json:"float_balance"`
+	FulfilmentBy string `json:"fulfilment_by"`
+	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
+	Personalisation map[string]any `json:"personalisation"`
+	Reference string `json:"reference"`
+	Sector string `json:"sector"`
+	ShippingMethod string `json:"shipping_method"`
+	Tags *[]any `json:"tags,omitempty"`
+}
+
+// PhysicalOrderStatus is the typed data model for the physical_order_status entity.
+type PhysicalOrderStatus struct {
+	References []any `json:"references"`
+}
+
+// PhysicalOrderStatusCreateData is the typed request payload for PhysicalOrderStatus.CreateTyped.
+type PhysicalOrderStatusCreateData struct {
+	References []any `json:"references"`
+}
+
+// Promotion is the typed data model for the promotion entity.
+type Promotion struct {
+	LastRefreshedAt string `json:"last_refreshed_at"`
+	Standard map[string]any `json:"standard"`
+}
+
+// PromotionLoadMatch is the typed request payload for Promotion.LoadTyped.
+type PromotionLoadMatch struct {
+	LastRefreshedAt *string `json:"last_refreshed_at,omitempty"`
+	Standard *map[string]any `json:"standard,omitempty"`
+}
+
+// Template is the typed data model for the template entity.
+type Template struct {
+	LastRefreshedAt string `json:"last_refreshed_at"`
+	Templates map[string]any `json:"templates"`
+}
+
+// TemplateLoadMatch is the typed request payload for Template.LoadTyped.
+type TemplateLoadMatch struct {
+	Brand *string `json:"brand,omitempty"`
+	Template *string `json:"template,omitempty"`
 }
 
 // asMap turns a typed request/data struct into the map[string]any the

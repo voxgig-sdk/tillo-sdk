@@ -1,0 +1,18 @@
+# BasicPhysicalOrderStatusFlow
+
+main: kit: flow: BasicPhysicalOrderStatusFlow:
+{
+  entity: "physical_order_status",
+  kind: "basic",
+  name: "BasicPhysicalOrderStatusFlow",
+  step: [
+    {
+      input: {
+        ref: "physical_order_status_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicPhysicalOrderStatusFlow"
+}

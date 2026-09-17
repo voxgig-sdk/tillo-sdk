@@ -255,16 +255,11 @@ func (e *BrandEntity) Stream(action string, args map[string]any, callopts map[st
 	return out
 }
 
-func (e *BrandEntity) Load(_ map[string]any, _ map[string]any) (any, error) {
-	return core.UnsupportedOp("load", e.name)
-}
 
-
-
-func (e *BrandEntity) List(reqmatch map[string]any, ctrl map[string]any) (any, error) {
+func (e *BrandEntity) Load(reqmatch map[string]any, ctrl map[string]any) (any, error) {
 	utility := e.utility
 	ctx := utility.MakeContext(map[string]any{
-		"opname":   "list",
+		"opname":   "load",
 		"ctrl":     ctrl,
 		"match":    e.match,
 		"data":     e.data,
@@ -276,21 +271,32 @@ func (e *BrandEntity) List(reqmatch map[string]any, ctrl map[string]any) (any, e
 			if ctx.Result.Resmatch != nil {
 				e.match = ctx.Result.Resmatch
 			}
+			if ctx.Result.Resdata != nil {
+				e.data = core.ToMapAny(vs.Clone(ctx.Result.Resdata))
+				if e.data == nil {
+					e.data = map[string]any{}
+				}
+			}
 		}
 	})
 }
 
-// ListTyped is the statically-typed variant of List: it takes an
-// BrandListMatch and returns []Brand. It delegates to the untyped
-// List (identical runtime) and converts at the typed boundary.
-func (e *BrandEntity) ListTyped(reqmatch BrandListMatch, ctrl map[string]any) ([]Brand, error) {
-	res, err := e.List(asMap(reqmatch), ctrl)
+// LoadTyped is the statically-typed variant of Load: it takes an
+// BrandLoadMatch and returns an Brand. It delegates to the untyped
+// Load (identical runtime) and converts at the typed boundary.
+func (e *BrandEntity) LoadTyped(reqmatch BrandLoadMatch, ctrl map[string]any) (Brand, error) {
+	res, err := e.Load(asMap(reqmatch), ctrl)
 	if err != nil {
-		return nil, err
+		return Brand{}, err
 	}
-	return typedSliceFrom[Brand](res), nil
+	return typedFrom[Brand](res), nil
 }
 
+
+
+func (e *BrandEntity) List(_ map[string]any, _ map[string]any) (any, error) {
+	return core.UnsupportedOp("list", e.name)
+}
 
 
 func (e *BrandEntity) Create(_ map[string]any, _ map[string]any) (any, error) {

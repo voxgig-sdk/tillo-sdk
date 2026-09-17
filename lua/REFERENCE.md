@@ -45,13 +45,57 @@ local client = sdk.test()
 
 Create a new `Brand` entity instance. Pass `nil` for no initial data.
 
-#### `Dgc(data)`
+#### `BrandTemplate(data)`
 
-Create a new `Dgc` entity instance. Pass `nil` for no initial data.
+Create a new `BrandTemplate` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalGiftCard(data)`
+
+Create a new `DigitalGiftCard` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalIssueDelete(data)`
+
+Create a new `DigitalIssueDelete` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalIssuePost(data)`
+
+Create a new `DigitalIssuePost` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalOrderCard(data)`
+
+Create a new `DigitalOrderCard` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalOrderStatus(data)`
+
+Create a new `DigitalOrderStatus` entity instance. Pass `nil` for no initial data.
+
+#### `DigitalTopUpPost(data)`
+
+Create a new `DigitalTopUpPost` entity instance. Pass `nil` for no initial data.
 
 #### `Float(data)`
 
 Create a new `Float` entity instance. Pass `nil` for no initial data.
+
+#### `PhysicalGiftCard(data)`
+
+Create a new `PhysicalGiftCard` entity instance. Pass `nil` for no initial data.
+
+#### `PhysicalOrderCard(data)`
+
+Create a new `PhysicalOrderCard` entity instance. Pass `nil` for no initial data.
+
+#### `PhysicalOrderStatus(data)`
+
+Create a new `PhysicalOrderStatus` entity instance. Pass `nil` for no initial data.
+
+#### `Promotion(data)`
+
+Create a new `Promotion` entity instance. Pass `nil` for no initial data.
+
+#### `Template(data)`
+
+Create a new `Template` entity instance. Pass `nil` for no initial data.
 
 #### `options_map() -> table`
 
@@ -99,18 +143,17 @@ local brand = client:Brand(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `currency` | `string` | No |  |
-| `name` | `string` | No |  |
-| `slug` | `string` | No |  |
+| `brands` | `any` | No |  |
+| `last_refreshed_at` | `string` | No |  |
 
 ### Operations
 
-#### `list(reqmatch, ctrl) -> any, err`
+#### `load(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+Load a single entity matching the given criteria.
 
 ```lua
-local results, err = client:Brand():list()
+local result, err = client:Brand():load()
 ```
 
 ### Common Methods
@@ -143,21 +186,74 @@ Return the entity name.
 
 ---
 
-## DgcEntity
+## BrandTemplateEntity
 
 ```lua
-local dgc = client:Dgc(nil)
+local brand_template = client:BrandTemplate(nil)
+```
+
+### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:BrandTemplate():load({ brand = "brand" })
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `BrandTemplateEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalGiftCardEntity
+
+```lua
+local digital_gift_card = client:DigitalGiftCard(nil)
 ```
 
 ### Fields
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `brand` | `string` | Yes |  |
-| `client_request_id` | `string` | Yes |  |
-| `delivery_method` | `string` | No |  |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | No | Gift card code |
+| `data` | `table` | No |  |
 | `face_value` | `table` | Yes |  |
-| `sector` | `string` | No |  |
+| `message` | `string` | No |  |
+| `original_client_request_id` | `string` | No | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | No | Gift card PIN. |
+| `reference` | `string` | No | This is the `reference` you received when making the original issuance request. |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | No | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `string` | No |  |
 
 ### Operations
 
@@ -166,10 +262,179 @@ local dgc = client:Dgc(nil)
 Create a new entity with the given data.
 
 ```lua
-local result, err = client:Dgc():create({
+local result, err = client:DigitalGiftCard():create({
   brand = --[[ string ]],
   client_request_id = --[[ string ]],
   face_value = --[[ table ]],
+  sector = --[[ string ]],
+})
+```
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:DigitalGiftCard():load()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DigitalGiftCardEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalIssueDeleteEntity
+
+```lua
+local digital_issue_delete = client:DigitalIssueDelete(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `face_value` | `table` | Yes |  |
+| `float_balance` | `table` | Yes | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `string` | Yes | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `string` | Yes | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:DigitalIssueDelete():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  original_client_request_id = --[[ string ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
+})
+```
+
+#### `remove(reqmatch, ctrl) -> any, err`
+
+Remove the entity matching the given criteria.
+
+```lua
+local result, err = client:DigitalIssueDelete():remove()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DigitalIssueDeleteEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalIssuePostEntity
+
+```lua
+local digital_issue_post = client:DigitalIssuePost(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `barcode` | `table` | Yes | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | No | Gift card code (for code-delivery brands) |
+| `cost_value` | `table` | Yes |  |
+| `delivery_method` | `string` | Yes |  |
+| `discount` | `number` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `table` | Yes |  |
+| `float_balance` | `table` | Yes |  |
+| `fulfilment_by` | `string` | Yes | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `table` | Yes | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `table` | Yes |  |
+| `pin` | `string` | No | Gift card PIN (for code-delivery brands). |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | No | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands) |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:DigitalIssuePost():create({
+  barcode = --[[ table ]],
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  cost_value = --[[ table ]],
+  delivery_method = --[[ string ]],
+  discount = --[[ number ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  fulfilment_by = --[[ string ]],
+  fulfilment_parameters = --[[ table ]],
+  personalisation = --[[ table ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
 })
 ```
 
@@ -193,7 +458,236 @@ Set the entity match criteria.
 
 #### `make() -> Entity`
 
-Create a new `DgcEntity` instance with the same client and
+Create a new `DigitalIssuePostEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalOrderCardEntity
+
+```lua
+local digital_order_card = client:DigitalOrderCard(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `cost_value` | `table` | Yes |  |
+| `delivery_method` | `string` | Yes |  |
+| `face_value` | `table` | Yes |  |
+| `float_balance` | `table` | Yes |  |
+| `fulfilment_by` | `string` | Yes | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `table` | Yes | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `table` | Yes |  |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:DigitalOrderCard():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  cost_value = --[[ table ]],
+  delivery_method = --[[ string ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  fulfilment_by = --[[ string ]],
+  fulfilment_parameters = --[[ table ]],
+  personalisation = --[[ table ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DigitalOrderCardEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalOrderStatusEntity
+
+```lua
+local digital_order_status = client:DigitalOrderStatus(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `barcode` | `table` | Yes | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `string` | No | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `string` | No | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `table` | Yes | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `number` | No | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `table` | Yes | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `string` | No | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `security_code` | `string` | No | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `string` | No | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `string` | Yes | The current status of the order |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:DigitalOrderStatus():load()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DigitalOrderStatusEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## DigitalTopUpPostEntity
+
+```lua
+local digital_top_up_post = client:DigitalTopUpPost(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | Yes | Gift card code |
+| `cost_value` | `table` | Yes |  |
+| `discount` | `number` | Yes | The discount percentage used on this transaction |
+| `face_value` | `table` | Yes |  |
+| `float_balance` | `table` | Yes |  |
+| `pin` | `string` | No | Gift card PIN. |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+
+### Field Usage by Operation
+
+| Field | create |
+| --- | --- |
+| `brand` | - |
+| `client_request_id` | - |
+| `code` | Yes |
+| `cost_value` | - |
+| `discount` | - |
+| `face_value` | - |
+| `float_balance` | - |
+| `pin` | - |
+| `reference` | Yes |
+| `sector` | - |
+| `serial_number` | - |
+| `tags` | - |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:DigitalTopUpPost():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  code = --[[ string ]],
+  cost_value = --[[ table ]],
+  discount = --[[ number ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `DigitalTopUpPostEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`
@@ -213,10 +707,21 @@ local float = client:Float(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `balance` | `number` | No |  |
-| `currency` | `string` | No |  |
+| `floats` | `table` | Yes | Float balances grouped by currency code |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when the float data was last refreshed |
 
 ### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:Float():create({
+  floats = --[[ table ]],
+  last_refreshed_at = --[[ string ]],
+})
+```
 
 #### `list(reqmatch, ctrl) -> any, err`
 
@@ -224,6 +729,14 @@ List entities matching the given criteria. Returns an array.
 
 ```lua
 local results, err = client:Float():list()
+```
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:Float():load()
 ```
 
 ### Common Methods
@@ -247,6 +760,353 @@ Set the entity match criteria.
 #### `make() -> Entity`
 
 Create a new `FloatEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalGiftCardEntity
+
+```lua
+local physical_gift_card = client:PhysicalGiftCard(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | Yes | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `table` | Yes |  |
+| `discount` | `number` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `table` | Yes |  |
+| `float_balance` | `table` | Yes |  |
+| `fulfilled_at` | `string` | No | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `string` | Yes | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | No | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | No | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands) |
+
+### Field Usage by Operation
+
+| Field | create | remove |
+| --- | --- | --- |
+| `brand` | - | - |
+| `client_request_id` | - | - |
+| `code` | Yes | - |
+| `cost_value` | - | - |
+| `discount` | - | - |
+| `expiration_date` | - | - |
+| `face_value` | - | - |
+| `float_balance` | - | - |
+| `fulfilled_at` | - | - |
+| `original_client_request_id` | - | - |
+| `pin` | - | - |
+| `reference` | - | - |
+| `sector` | - | - |
+| `security_code` | - | - |
+| `serial_number` | - | - |
+| `tags` | - | - |
+| `url` | - | - |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:PhysicalGiftCard():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  code = --[[ string ]],
+  cost_value = --[[ table ]],
+  discount = --[[ number ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  original_client_request_id = --[[ string ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
+})
+```
+
+#### `remove(reqmatch, ctrl) -> any, err`
+
+Remove the entity matching the given criteria.
+
+```lua
+local result, err = client:PhysicalGiftCard():remove()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `PhysicalGiftCardEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalOrderCardEntity
+
+```lua
+local physical_order_card = client:PhysicalOrderCard(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `cost_value` | `table` | Yes | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `number` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `table` | Yes | the face value amount of the gift card. |
+| `float_balance` | `table` | Yes | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `string` | Yes | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `table` | Yes |  |
+| `personalisation` | `table` | Yes |  |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `string` | Yes | Shipping method identifier. |
+| `tags` | `table` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:PhysicalOrderCard():create({
+  brand = --[[ string ]],
+  client_request_id = --[[ string ]],
+  cost_value = --[[ table ]],
+  discount = --[[ number ]],
+  face_value = --[[ table ]],
+  float_balance = --[[ table ]],
+  fulfilment_by = --[[ string ]],
+  fulfilment_parameters = --[[ table ]],
+  personalisation = --[[ table ]],
+  reference = --[[ string ]],
+  sector = --[[ string ]],
+  shipping_method = --[[ string ]],
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `PhysicalOrderCardEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalOrderStatusEntity
+
+```lua
+local physical_order_status = client:PhysicalOrderStatus(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `references` | `table` | Yes | Array of order references to check. |
+
+### Operations
+
+#### `create(reqdata, ctrl) -> any, err`
+
+Create a new entity with the given data.
+
+```lua
+local result, err = client:PhysicalOrderStatus():create({
+  references = --[[ table ]],
+})
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `PhysicalOrderStatusEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## PromotionEntity
+
+```lua
+local promotion = client:Promotion(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `table` | Yes | Standard promotions grouped by brand slug. |
+
+### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:Promotion():load()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `PromotionEntity` instance with the same client and
+options.
+
+#### `get_name() -> string`
+
+Return the entity name.
+
+
+---
+
+## TemplateEntity
+
+```lua
+local template = client:Template(nil)
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `table` | Yes | Object mapping brand slugs to their template variants and versions. |
+
+### Operations
+
+#### `load(reqmatch, ctrl) -> any, err`
+
+Load a single entity matching the given criteria.
+
+```lua
+local result, err = client:Template():load()
+```
+
+### Common Methods
+
+#### `data_get() -> table`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set(data)`
+
+Set the entity data.
+
+#### `match_get() -> table`
+
+Get the entity match criteria.
+
+#### `match_set(match)`
+
+Set the entity match criteria.
+
+#### `make() -> Entity`
+
+Create a new `TemplateEntity` instance with the same client and
 options.
 
 #### `get_name() -> string`

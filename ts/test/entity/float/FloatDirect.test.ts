@@ -43,6 +43,68 @@ describe('FloatDirect', async () => {
   })
 
 
+  test('direct-load-float', async (t: any) => {
+    if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
+    const setup = directSetup({ id: 'direct01' })
+    if (maybeSkipControl(t, 'direct', 'direct-load-float', setup.live)) return
+    const { client, calls } = setup
+
+    const params: any = {}
+    const query: any = {}
+    if (setup.live) {
+      const listResult: any = await client.direct({
+        path: 'float/transfer-requests',
+        method: 'GET',
+        params: {
+
+        },
+      })
+      assert(listResult.ok && listResult.status >= 200 && listResult.status < 300,
+        'Live list discovery failed')
+      const listArr = unwrapListData(listResult.data)
+      if (null == listArr || listArr.length === 0) {
+        throw new Error('Live load blocked: discovery returned no entities')
+      }
+      const candidateId = listArr[0]?.id ?? listArr[0]?.id
+      if (null == candidateId) {
+        throw new Error('Live load blocked: discovery returned no usable identity')
+      }
+      params.id = candidateId
+
+    } else {
+
+    }
+
+    const result: any = await client.direct({
+      path: 'check-floats',
+      method: 'GET',
+      params,
+      query,
+    })
+
+    if (setup.live) {
+      // STRICT live mode: a non-2xx is a real failure - this project owns
+      // the server it points at, so there is nothing to be lenient about.
+      //
+      // What is NOT asserted here is the MOCK's own fixtures. `direct01`
+      // is a scripted id and `calls` records the mock transport; neither
+      // exists on a live run, so asserting them made strict mode mean
+      // "compare the live server against the mock's script" - a suite that
+      // could not pass against any real API, including this project's own.
+      assert(result.ok === true,
+        'Live request failed: HTTP ' + result.status)
+      assert(result.status >= 200 && result.status < 300)
+      assert(null != result.data)
+    } else {
+      assert(result.ok === true)
+      assert(result.status === 200)
+      assert(null != result.data)
+      assert(result.data.id === 'direct01')
+      assert(calls.length === 1)
+      assert(calls[0].init.method === 'GET')
+    }
+  })
+
   test('direct-list-float', async (t: any) => {
     if (liveScenariosActive()) { t.skip('Covered by live operation scenarios'); return }
     const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }])
@@ -53,7 +115,7 @@ describe('FloatDirect', async () => {
     const query: any = {}
 
     const result: any = await client.direct({
-      path: 'check-floats',
+      path: 'float/transfer-requests',
       method: 'GET',
       params,
       query,

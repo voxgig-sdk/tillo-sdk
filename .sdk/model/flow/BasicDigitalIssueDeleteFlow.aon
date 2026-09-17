@@ -1,0 +1,27 @@
+# BasicDigitalIssueDeleteFlow
+
+main: kit: flow: BasicDigitalIssueDeleteFlow:
+{
+  entity: "digital_issue_delete",
+  kind: "basic",
+  name: "BasicDigitalIssueDeleteFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_issue_delete_ref01"
+      }
+
+      op: "create"
+    }
+
+    {
+      input: {
+        ref: "digital_issue_delete_ref01",
+        suffix: "_rm0"
+      }
+
+      op: "remove"
+    }
+  ],
+  "key$": "BasicDigitalIssueDeleteFlow"
+}

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Template | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/brand.html">Brand</a>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a href="../api/digital_gift_card.html">DigitalGiftCard</a>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a href="../api/float.html">Float</a>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a href="../api/physical_order_card.html">PhysicalOrderCard</a>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a aria-current="page" href="../api/template.html">Template</a><div class="nav-sections"><a class="nav-section" href="#get-templates">GET /templates</a></div></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/js.html">JavaScript</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
+<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
+<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
+<a href="../features/paging.html">Pagination signals for list operations</a>
+<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
+<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
+<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
+<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="template">Template</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-templates"><code>/templates</code></a></td>
+<td><code>load</code></td>
+<td>Successfully retrieved template list</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>last_refreshed_at</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>ISO 8601 timestamp of when the template data was last refreshed</td>
+</tr>
+<tr>
+<td><code>templates</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Object mapping brand slugs to their template variants and versions.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="load">load</h2>
+<h3 id="get-templates" class="operation" data-method="get"><code>GET</code> /templates</h3>
+<p>Operation ID: <code>getTemplates</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>brand</code> | <code>query</code> | <code>string</code> | No | Brand identifier/slug. Required if template parameter is provided. If omitted, returns templates for all brands accessible to the partner. |
+| <code>template</code> | <code>query</code> | <code>string</code> | No | Template variant name (for example, 'standard', 'premium'). If provided, brand parameter is required. Input is case-insensitive and normalized to lowercase. |</p>
+<h4 id="responses">Responses</h4>
+<h5 id="200-successfully-retrieved-template-list" class="status" data-status="2xx">200: Successfully retrieved template list</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.last_refreshed_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td>ISO 8601 timestamp of when the template data was last refreshed</td>
+</tr>
+<tr>
+<td><code>data.templates</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Object mapping brand slugs to their template variants and versions. Each brand slug maps to an object where keys are variant names (for example, 'standard') and values are version strings.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-authentication-failed-or-insufficient-permissions" class="status" data-status="4xx">401: Authentication failed or insufficient permissions</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional additional error details</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error-request-data-failed-validation-rules" class="status" data-status="4xx">422: Validation error. Request data failed validation rules</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$ref</code></td>
+<td><code>any</code></td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="502-bad-gateway-no-response-body-is-returned" class="status" data-status="5xx">502: Bad Gateway. No response body is returned</h5>
+<h5 id="504-gateway-timeout-no-response-body-is-returned" class="status" data-status="5xx">504: Gateway Timeout. No response body is returned</h5>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

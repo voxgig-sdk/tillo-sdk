@@ -3,8 +3,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SDK = exports.TilloSDK = exports.TilloEntityBase = exports.BaseFeature = exports.config = exports.stdutil = void 0;
 const BrandEntity_1 = require("./entity/BrandEntity");
-const DgcEntity_1 = require("./entity/DgcEntity");
+const BrandTemplateEntity_1 = require("./entity/BrandTemplateEntity");
+const DigitalGiftCardEntity_1 = require("./entity/DigitalGiftCardEntity");
+const DigitalIssueDeleteEntity_1 = require("./entity/DigitalIssueDeleteEntity");
+const DigitalIssuePostEntity_1 = require("./entity/DigitalIssuePostEntity");
+const DigitalOrderCardEntity_1 = require("./entity/DigitalOrderCardEntity");
+const DigitalOrderStatusEntity_1 = require("./entity/DigitalOrderStatusEntity");
+const DigitalTopUpPostEntity_1 = require("./entity/DigitalTopUpPostEntity");
 const FloatEntity_1 = require("./entity/FloatEntity");
+const PhysicalGiftCardEntity_1 = require("./entity/PhysicalGiftCardEntity");
+const PhysicalOrderCardEntity_1 = require("./entity/PhysicalOrderCardEntity");
+const PhysicalOrderStatusEntity_1 = require("./entity/PhysicalOrderStatusEntity");
+const PromotionEntity_1 = require("./entity/PromotionEntity");
+const TemplateEntity_1 = require("./entity/TemplateEntity");
 const node_util_1 = require("node:util");
 const Config_1 = require("./Config");
 Object.defineProperty(exports, "config", { enumerable: true, get: function () { return Config_1.config; } });
@@ -234,12 +245,54 @@ class TilloSDK {
         const self = this;
         return new BrandEntity_1.BrandEntity(self, entopts);
     }
-    // Entity access: `client.Dgc().list()` / `client.Dgc().load({ id })`.
+    // Entity access: `client.BrandTemplate().list()` / `client.BrandTemplate().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
     // constructor as entopts), not initial entity data.
-    Dgc(entopts) {
+    BrandTemplate(entopts) {
         const self = this;
-        return new DgcEntity_1.DgcEntity(self, entopts);
+        return new BrandTemplateEntity_1.BrandTemplateEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalGiftCard().list()` / `client.DigitalGiftCard().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalGiftCard(entopts) {
+        const self = this;
+        return new DigitalGiftCardEntity_1.DigitalGiftCardEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalIssueDelete().list()` / `client.DigitalIssueDelete().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalIssueDelete(entopts) {
+        const self = this;
+        return new DigitalIssueDeleteEntity_1.DigitalIssueDeleteEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalIssuePost().list()` / `client.DigitalIssuePost().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalIssuePost(entopts) {
+        const self = this;
+        return new DigitalIssuePostEntity_1.DigitalIssuePostEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalOrderCard().list()` / `client.DigitalOrderCard().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalOrderCard(entopts) {
+        const self = this;
+        return new DigitalOrderCardEntity_1.DigitalOrderCardEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalOrderStatus().list()` / `client.DigitalOrderStatus().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalOrderStatus(entopts) {
+        const self = this;
+        return new DigitalOrderStatusEntity_1.DigitalOrderStatusEntity(self, entopts);
+    }
+    // Entity access: `client.DigitalTopUpPost().list()` / `client.DigitalTopUpPost().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    DigitalTopUpPost(entopts) {
+        const self = this;
+        return new DigitalTopUpPostEntity_1.DigitalTopUpPostEntity(self, entopts);
     }
     // Entity access: `client.Float().list()` / `client.Float().load({ id })`.
     // The argument is the entity OPTIONS object (passed to the entity
@@ -247,6 +300,41 @@ class TilloSDK {
     Float(entopts) {
         const self = this;
         return new FloatEntity_1.FloatEntity(self, entopts);
+    }
+    // Entity access: `client.PhysicalGiftCard().list()` / `client.PhysicalGiftCard().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    PhysicalGiftCard(entopts) {
+        const self = this;
+        return new PhysicalGiftCardEntity_1.PhysicalGiftCardEntity(self, entopts);
+    }
+    // Entity access: `client.PhysicalOrderCard().list()` / `client.PhysicalOrderCard().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    PhysicalOrderCard(entopts) {
+        const self = this;
+        return new PhysicalOrderCardEntity_1.PhysicalOrderCardEntity(self, entopts);
+    }
+    // Entity access: `client.PhysicalOrderStatus().list()` / `client.PhysicalOrderStatus().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    PhysicalOrderStatus(entopts) {
+        const self = this;
+        return new PhysicalOrderStatusEntity_1.PhysicalOrderStatusEntity(self, entopts);
+    }
+    // Entity access: `client.Promotion().list()` / `client.Promotion().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    Promotion(entopts) {
+        const self = this;
+        return new PromotionEntity_1.PromotionEntity(self, entopts);
+    }
+    // Entity access: `client.Template().list()` / `client.Template().load({ id })`.
+    // The argument is the entity OPTIONS object (passed to the entity
+    // constructor as entopts), not initial entity data.
+    Template(entopts) {
+        const self = this;
+        return new TemplateEntity_1.TemplateEntity(self, entopts);
     }
     static test(testoptsarg, sdkoptsarg) {
         const struct = stdutil.struct;

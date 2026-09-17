@@ -1,7 +1,7 @@
 {
   "name": "@voxgig-sdk/tillo-js",
   "version": "0.0.1",
-  "description": "Unofficial generated JavaScript SDK for the Tillo Rewards public API. Not affiliated with or endorsed by the upstream API provider.",
+  "description": "Unofficial generated JavaScript SDK for the Tillo API v2 public API. Not affiliated with or endorsed by the upstream API provider.",
   "keywords": [
     "voxgig",
     "sdk",

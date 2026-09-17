@@ -120,25 +120,280 @@ declare class Config {
         base: string;
         auth: {
             prefix: string;
+            name: string;
         };
         headers: {
             "content-type": string;
         };
         entity: {
             brand: {};
-            dgc: {};
+            brand_template: {};
+            digital_gift_card: {};
+            digital_issue_delete: {};
+            digital_issue_post: {};
+            digital_order_card: {};
+            digital_order_status: {};
+            digital_top_up_post: {};
             float: {};
+            physical_gift_card: {};
+            physical_order_card: {};
+            physical_order_status: {};
+            promotion: {};
+            template: {};
         };
     };
     entity: {
         brand: {
-            fields: {
+            fields: ({
                 name: string;
                 type: string;
-            }[];
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                format?: undefined;
+            } | {
+                format: string;
+                name: string;
+                type: string;
+                union?: undefined;
+            })[];
             name: string;
             op: {
-                list: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: ({
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            } | {
+                                example: boolean;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            })[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        brand_template: {
+            fields: never[];
+            name: string;
+            op: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: ({
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                reqd: boolean;
+                                type: string;
+                            } | {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                                reqd?: undefined;
+                            })[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        digital_gift_card: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                format?: undefined;
+            } | {
+                name: string;
+                type: string;
+                req?: undefined;
+                short?: undefined;
+                format?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                format?: undefined;
+            } | {
+                format: string;
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            }[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        digital_issue_delete: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+                format?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                short?: undefined;
+                format?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+                remove: {
                     input: string;
                     name: string;
                     points: {
@@ -162,15 +417,271 @@ declare class Config {
                 ancestors: never[];
             };
         };
-        dgc: {
+        digital_issue_post: {
             fields: ({
                 name: string;
                 req: boolean;
+                short: string;
                 type: string;
+                format?: undefined;
+                union?: undefined;
             } | {
                 name: string;
+                short: string;
                 type: string;
                 req?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        digital_order_card: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        digital_order_status: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                format?: undefined;
+            } | {
+                format: string;
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+            })[];
+            name: string;
+            op: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            }[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        digital_top_up_post: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                op: {
+                    create: {
+                        type: string;
+                    };
+                };
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                op?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                op: {
+                    create: {
+                        type: string;
+                    };
+                };
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                op?: undefined;
+                format?: undefined;
             })[];
             name: string;
             op: {
@@ -199,13 +710,177 @@ declare class Config {
             };
         };
         float: {
-            fields: {
+            fields: ({
                 name: string;
+                req: boolean;
+                short: string;
                 type: string;
-            }[];
+                format?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+            })[];
             name: string;
             op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            $action: string;
+                        };
+                        transform: {
+                            req: {
+                                float: string;
+                            };
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
                 list: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            }[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            $action: string;
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            }[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        physical_gift_card: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                op: {
+                    create: {
+                        type: string;
+                    };
+                };
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                op?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                op?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                op?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                op?: undefined;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
                     input: string;
                     name: string;
                     points: {
@@ -217,6 +892,215 @@ declare class Config {
                             lit: string;
                         }[];
                         select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+                remove: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        physical_order_card: {
+            fields: ({
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                union?: undefined;
+            } | {
+                format: string;
+                name: string;
+                short: string;
+                type: string;
+                req?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                req: boolean;
+                type: string;
+                short?: undefined;
+                format?: undefined;
+                union?: undefined;
+            } | {
+                name: string;
+                short: string;
+                type: string;
+                union: {
+                    branches: number;
+                    count: number;
+                    depth: number;
+                };
+                req?: undefined;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        physical_order_status: {
+            fields: {
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+            }[];
+            name: string;
+            op: {
+                create: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        promotion: {
+            fields: ({
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+            } | {
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {};
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {};
+                        transform: {
+                            req: string;
+                            res: string;
+                        };
+                        parts: string[];
+                    }[];
+                };
+            };
+            relations: {
+                ancestors: never[];
+            };
+        };
+        template: {
+            fields: ({
+                format: string;
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+            } | {
+                name: string;
+                req: boolean;
+                short: string;
+                type: string;
+                format?: undefined;
+            })[];
+            name: string;
+            op: {
+                load: {
+                    input: string;
+                    name: string;
+                    points: {
+                        args: {
+                            query: {
+                                example: string;
+                                kind: string;
+                                name: string;
+                                orig: string;
+                                type: string;
+                            }[];
+                        };
+                        kind: string;
+                        method: string;
+                        orig: string;
+                        segments: {
+                            lit: string;
+                        }[];
+                        select: {
+                            exist: string[];
+                        };
                         transform: {
                             req: string;
                             res: string;

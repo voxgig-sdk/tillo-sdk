@@ -1,0 +1,405 @@
+{
+  "existing": {
+    "physical_order_status": {
+      "PHYSICAL_ORDER_STATUS00": {
+        "references": [],
+        "id": "PHYSICAL_ORDER_STATUS00"
+      },
+      "PHYSICAL_ORDER_STATUS01": {
+        "references": [],
+        "id": "PHYSICAL_ORDER_STATUS01"
+      },
+      "PHYSICAL_ORDER_STATUS02": {
+        "references": [],
+        "id": "PHYSICAL_ORDER_STATUS02"
+      }
+    }
+  },
+  "new": {
+    "physical_order_status": {
+      "physical_order_status_ref01": {
+        "references": []
+      }
+    }
+  },
+  "requests": {
+    "POST /physical/order-status": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalOrderStatus",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "multiple_references": {
+                  "description": "Check status for multiple order references",
+                  "summary": "Multiple References",
+                  "value": {
+                    "references": [
+                      "ab337240-e731-11e8-b7dc-8d2baaa618cb",
+                      "ab3223c0-ed7b-11f0-b734-4fea3167b172"
+                    ]
+                  }
+                },
+                "single_reference": {
+                  "description": "Check status for a single order reference",
+                  "summary": "Single Reference",
+                  "value": {
+                    "references": [
+                      "ab337240-e731-11e8-b7dc-8d2baaa618cb"
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "references": {
+                    "description": "Array of order references to check. Each reference should be a UUID from a previous order-card request.\nReturns status information for each reference, including 'not found' for references that don't exist.\n",
+                    "items": {
+                      "description": "Order reference (UUID) to check status for",
+                      "format": "uuid",
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "references"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error_status": {
+                    "description": "Order that encountered an error during processing",
+                    "summary": "Order with Error Status",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "error-reference-123": {
+                          "reference": "error-reference-123",
+                          "status": "error"
+                        }
+                      },
+                      "message": "Order statuses",
+                      "status": "success"
+                    }
+                  },
+                  "fulfilled_with_code": {
+                    "description": "Order that has been fulfilled and includes the gift card code",
+                    "summary": "Fulfilled Order with Code",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "ab337240-e731-11e8-b7dc-8d2baaa618cb": {
+                          "code": "5045075881749921691",
+                          "reference": "ab337240-e731-11e8-b7dc-8d2baaa618cb",
+                          "status": "fulfilled"
+                        }
+                      },
+                      "message": "Order statuses",
+                      "status": "success"
+                    }
+                  },
+                  "multiple_statuses": {
+                    "description": "Response showing statuses for multiple references including processing and not found",
+                    "summary": "Multiple Order Statuses",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "ab337240-e731-11e8-b7dc-8d2baaa618cb": {
+                          "reference": "ab337240-e731-11e8-b7dc-8d2baaa618cb",
+                          "status": "processing"
+                        },
+                        "this-does-not-exist": {
+                          "reference": "this-does-not-exist",
+                          "status": "not found"
+                        }
+                      },
+                      "message": "Order statuses",
+                      "status": "success"
+                    }
+                  },
+                  "not_found": {
+                    "description": "Reference that does not exist or is not accessible",
+                    "summary": "Order Not Found",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "this-does-not-exist": {
+                          "reference": "this-does-not-exist",
+                          "status": "not found"
+                        }
+                      },
+                      "message": "Order statuses",
+                      "status": "success"
+                    }
+                  },
+                  "processing_order": {
+                    "description": "Order that is currently being processed",
+                    "summary": "Processing Order",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "ab337240-e731-11e8-b7dc-8d2baaa618cb": {
+                          "reference": "ab337240-e731-11e8-b7dc-8d2baaa618cb",
+                          "status": "processing"
+                        },
+                        "this-does-not-exist": {
+                          "reference": "this-does-not-exist",
+                          "status": "not found"
+                        }
+                      },
+                      "message": "Order statuses",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": {
+                        "properties": {
+                          "code": {
+                            "description": "Gift card code. This will only be present when the order status is `fulfilled` and a code is available.",
+                            "example": "5045075881749921691",
+                            "type": "string"
+                          },
+                          "reference": {
+                            "description": "The order reference UUID",
+                            "example": "ab337240-e731-11e8-b7dc-8d2baaa618cb",
+                            "type": "string"
+                          },
+                          "status": {
+                            "description": "The current status of the order:\n- `received`: Order has been received and is queued for processing\n- `processing`: Order is currently being processed\n- `fulfilled`: Order has been fulfilled\n- `error`: Order encountered an error during processing\n- `not found`: Reference does not exist or is not accessible to the authenticated buyer\n",
+                            "enum": [
+                              "received",
+                              "processing",
+                              "fulfilled",
+                              "error",
+                              "not found"
+                            ],
+                            "example": "fulfilled",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "reference",
+                          "status"
+                        ],
+                        "type": "object"
+                      },
+                      "description": "Object where keys are order reference UUIDs and values are order status objects.\nEach reference provided in the request will have a corresponding entry in this object.\n",
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Order statuses",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "empty_references": {
+                    "description": "The references array cannot be empty",
+                    "summary": "Invalid or missing parameter",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "references": "The [references] field is required and must be an array"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Validation error code",
+                      "example": "433",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "description": "Optional detailed validation errors by field",
+                      "example": {
+                        "brand": [
+                          "The brand field is required."
+                        ],
+                        "faceValue.amount": [
+                          "The amount must be a positive number."
+                        ]
+                      },
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Error message",
+                      "example": "There were errors validating the request",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "502": {
+            "description": "Bad Gateway.  No response body is returned."
+          },
+          "504": {
+            "description": "Gateway Timeout.  No response body is returned"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

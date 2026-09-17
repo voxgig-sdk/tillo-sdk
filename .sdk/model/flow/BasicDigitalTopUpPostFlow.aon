@@ -1,0 +1,18 @@
+# BasicDigitalTopUpPostFlow
+
+main: kit: flow: BasicDigitalTopUpPostFlow:
+{
+  entity: "digital_top_up_post",
+  kind: "basic",
+  name: "BasicDigitalTopUpPostFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_top_up_post_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicDigitalTopUpPostFlow"
+}

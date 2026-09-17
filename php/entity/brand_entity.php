@@ -242,22 +242,20 @@ class BrandEntity
     }
 
     
-
-    
     /**
-     * List Brand items matching the given filter.
+     * Load a single Brand.
      *
-     * @param BrandListMatch|array|null $reqmatch Match filter (any subset
-     *   of Brand fields) as an assoc-array; BrandListMatch names the shape.
+     * @param BrandLoadMatch|array|null $reqmatch Match criteria (id/query
+     *   fields) as an assoc-array; a typed BrandLoadMatch names the shape.
      * @param mixed $ctrl Optional per-call control overrides.
-     * @return Brand[]|array A list of Brand items as assoc-arrays at
-     *   the SDK boundary; throws TilloError on failure (item-5 convention).
+     * @return Brand|array The loaded Brand as an assoc-array at the
+     *   SDK boundary; throws TilloError on failure (item-5 convention).
      */
-    public function list(?array $reqmatch = null, $ctrl = null): mixed
+    public function load(?array $reqmatch = null, $ctrl = null): mixed
     {
         $utility = $this->_utility;
         $ctx = ($utility->make_context)([
-            "opname" => "list",
+            "opname" => "load",
             "ctrl" => $ctrl,
             "match" => $this->_match,
             "data" => $this->_data,
@@ -269,11 +267,16 @@ class BrandEntity
                 if ($ctx->result->resmatch) {
                     $this->_match = $ctx->result->resmatch;
                 }
+                if ($ctx->result->resdata) {
+                    $this->_data = TilloHelpers::to_map(Struct::clone($ctx->result->resdata)) ?? [];
+                }
             }
         });
     }
 
 
+
+    
 
     
 

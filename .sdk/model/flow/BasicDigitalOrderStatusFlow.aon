@@ -1,0 +1,28 @@
+# BasicDigitalOrderStatusFlow
+
+main: kit: flow: BasicDigitalOrderStatusFlow:
+{
+  entity: "digital_order_status",
+  kind: "basic",
+  name: "BasicDigitalOrderStatusFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_order_status_ref01",
+        srcdatavar: "digital_order_status_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-digital_order_status_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicDigitalOrderStatusFlow"
+}

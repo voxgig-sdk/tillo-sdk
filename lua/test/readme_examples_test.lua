@@ -20,7 +20,7 @@ local SDK_MODULE = "tillo_sdk"
 -- A test-mode client seeded with a fixture for every entity. The constructor
 -- of each runnable snippet is rewritten to this form so the offline mock has
 -- data to return.
-local TEST_SEED = '{ entity = { ["brand"] = { ["test01"] = { id = "test01" } }, ["dgc"] = { ["test01"] = { id = "test01" } }, ["float"] = { ["test01"] = { id = "test01" } } } }'
+local TEST_SEED = '{ entity = { ["brand"] = { ["test01"] = { id = "test01" } }, ["brand_template"] = { ["test01"] = { id = "test01" } }, ["digital_gift_card"] = { ["test01"] = { id = "test01" } }, ["digital_issue_delete"] = { ["test01"] = { id = "test01" } }, ["digital_issue_post"] = { ["test01"] = { id = "test01" } }, ["digital_order_card"] = { ["test01"] = { id = "test01" } }, ["digital_order_status"] = { ["test01"] = { id = "test01" } }, ["digital_top_up_post"] = { ["test01"] = { id = "test01" } }, ["float"] = { ["test01"] = { id = "test01" } }, ["physical_gift_card"] = { ["test01"] = { id = "test01" } }, ["physical_order_card"] = { ["test01"] = { id = "test01" } }, ["physical_order_status"] = { ["test01"] = { id = "test01" } }, ["promotion"] = { ["test01"] = { id = "test01" } }, ["template"] = { ["test01"] = { id = "test01" } } } }'
 local TEST_CTOR = "sdk.test(" .. TEST_SEED .. ")"
 
 local function script_dir()

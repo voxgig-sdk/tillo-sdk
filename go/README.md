@@ -4,7 +4,7 @@
 
 The Golang SDK for the Tillo API — an entity-oriented client using standard Go conventions. No generics required; data flows as `map[string]any`.
 
-It exposes the API as capitalised, semantic **Entities** — e.g. `client.Brand(nil)` — each with the same small set of operations (`List`, `Create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+It exposes the API as capitalised, semantic **Entities** — e.g. `client.Brand(nil)` — each with the same small set of operations (`List`, `Load`, `Create`, `Remove`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
 > Also generated from this model: `go-cli`, `go-mcp`, `js`, `lua`, `php`, `py`, `ts` — see
 > the [top-level README](../README.md).
@@ -53,14 +53,12 @@ func main() {
         "apikey": os.Getenv("TILLO_APIKEY"),
     })
 
-    // List brand records — the value is the array of records itself.
-    brands, err := client.Brand(nil).List(nil, nil)
+    // Load a single brand — the value is the loaded record.
+    brand, err := client.Brand(nil).Load(nil, nil)
     if err != nil {
         panic(err)
     }
-    for _, item := range brands.([]any) {
-        fmt.Println(item)
-    }
+    fmt.Println(brand)
 }
 ```
 
@@ -71,12 +69,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-brands, err := client.Brand(nil).List(nil, nil)
+promotion, err := client.Promotion(nil).Load(nil, nil)
 if err != nil {
     // handle err
     return
 }
-_ = brands
+_ = promotion
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -140,13 +138,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-brand, err := client.Brand(nil).List(
+promotion, err := client.Promotion(nil).Load(
     nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(brand) // the returned mock data
+fmt.Println(promotion) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -226,8 +224,19 @@ Creates a test-mode client with mock transport. Both arguments may be `nil`.
 | `Prepare` | `(fetchargs map[string]any) (map[string]any, error)` | Build an HTTP request definition without sending. |
 | `Direct` | `(fetchargs map[string]any) (map[string]any, error)` | Build and send an HTTP request. |
 | `Brand` | `(data map[string]any) TilloEntity` | Create a Brand entity instance. |
-| `Dgc` | `(data map[string]any) TilloEntity` | Create a Dgc entity instance. |
+| `BrandTemplate` | `(data map[string]any) TilloEntity` | Create a BrandTemplate entity instance. |
+| `DigitalGiftCard` | `(data map[string]any) TilloEntity` | Create a DigitalGiftCard entity instance. |
+| `DigitalIssueDelete` | `(data map[string]any) TilloEntity` | Create a DigitalIssueDelete entity instance. |
+| `DigitalIssuePost` | `(data map[string]any) TilloEntity` | Create a DigitalIssuePost entity instance. |
+| `DigitalOrderCard` | `(data map[string]any) TilloEntity` | Create a DigitalOrderCard entity instance. |
+| `DigitalOrderStatus` | `(data map[string]any) TilloEntity` | Create a DigitalOrderStatus entity instance. |
+| `DigitalTopUpPost` | `(data map[string]any) TilloEntity` | Create a DigitalTopUpPost entity instance. |
 | `Float` | `(data map[string]any) TilloEntity` | Create a Float entity instance. |
+| `PhysicalGiftCard` | `(data map[string]any) TilloEntity` | Create a PhysicalGiftCard entity instance. |
+| `PhysicalOrderCard` | `(data map[string]any) TilloEntity` | Create a PhysicalOrderCard entity instance. |
+| `PhysicalOrderStatus` | `(data map[string]any) TilloEntity` | Create a PhysicalOrderStatus entity instance. |
+| `Promotion` | `(data map[string]any) TilloEntity` | Create a Promotion entity instance. |
+| `Template` | `(data map[string]any) TilloEntity` | Create a Template entity instance. |
 
 ### Entity interface (TilloEntity)
 
@@ -235,8 +244,10 @@ All entities implement the `TilloEntity` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
+| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
 | `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
 | `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
+| `Remove` | `(reqmatch, ctrl map[string]any) (any, error)` | Remove an entity. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
 | `Make` | `() Entity` | Create a new instance with the same options. |
@@ -249,14 +260,14 @@ operation's data **directly** — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `Create` | the entity record (`map[string]any`) |
+| `Load` / `Create` / `Remove` | the entity record (`map[string]any`) |
 | `List` | a `[]any` of entity records |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    brand, err := client.Brand(nil).List(map[string]any{/* fields */}, nil)
+    brand, err := client.Brand(nil).Load(nil, nil)
     if err != nil { /* handle */ }
     // brand is the returned record
 
@@ -269,38 +280,244 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 
 | Field | Description |
 | --- | --- |
-| `"currency"` |  |
-| `"name"` |  |
-| `"slug"` |  |
+| `"brands"` |  |
+| `"last_refreshed_at"` |  |
 
-Operations: List.
+Operations: Load.
 
 API path: `/brands`
 
-#### Dgc
+#### BrandTemplate
 
 | Field | Description |
 | --- | --- |
-| `"brand"` |  |
-| `"client_request_id"` |  |
-| `"delivery_method"` |  |
+
+Operations: Load.
+
+API path: `/template`
+
+#### DigitalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"code"` | Gift card code |
+| `"data"` |  |
 | `"face_value"` |  |
-| `"sector"` |  |
+| `"message"` |  |
+| `"original_client_request_id"` | This field will be the `client_request_id` provided in the original transaction. |
+| `"pin"` | Gift card PIN. |
+| `"reference"` | This is the `reference` you received when making the original issuance request. |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"serial_number"` | The serial number is a required parameter for any Sainsburys brand |
+| `"status"` |  |
+
+Operations: Create, Load.
+
+API path: `/digital/check-balance`
+
+#### DigitalIssueDelete
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"face_value"` |  |
+| `"float_balance"` | Your remaining balance on the float used for this cancellation transaction. |
+| `"original_client_request_id"` | This field will be the `client_request_id` provided in the original transaction. |
+| `"reference"` | Unique reference (UUID) for the cancellation transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"tags"` | Optional meta data associated with the issuance. |
+
+Operations: Create, Remove.
+
+API path: `/digital/reverse`
+
+#### DigitalIssuePost
+
+| Field | Description |
+| --- | --- |
+| `"barcode"` | Some brands provide a barcode alongside a code delivery. |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"code"` | Gift card code (for code-delivery brands) |
+| `"cost_value"` |  |
+| `"delivery_method"` |  |
+| `"discount"` | The discount percentage used on this transaction |
+| `"expiration_date"` | The expiration date for this gift card. |
+| `"face_value"` |  |
+| `"float_balance"` |  |
+| `"fulfilment_by"` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `"fulfilment_parameters"` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `"personalisation"` |  |
+| `"pin"` | Gift card PIN (for code-delivery brands). |
+| `"reference"` | Unique reference for this transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"security_code"` | Gift card security code (for code-delivery brands). |
+| `"serial_number"` | Gift card serial number. |
+| `"tags"` | Optional meta data associated with the issuance. |
+| `"url"` | Gift card URL (for URL-delivery brands) |
 
 Operations: Create.
 
 API path: `/digital/issue`
 
+#### DigitalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"cost_value"` |  |
+| `"delivery_method"` |  |
+| `"face_value"` |  |
+| `"float_balance"` |  |
+| `"fulfilment_by"` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `"fulfilment_parameters"` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `"personalisation"` |  |
+| `"reference"` | Unique reference for this transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"tags"` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/order-card`
+
+#### DigitalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `"barcode"` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"code"` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `"cost_value"` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `"discount"` | The discount percentage used on this transaction |
+| `"expiration_date"` | The expiration date for this gift card. |
+| `"face_value"` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `"pin"` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `"reference"` | Unique reference for this transaction |
+| `"security_code"` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `"serial_number"` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `"status"` | The current status of the order |
+| `"url"` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+Operations: Load.
+
+API path: `/digital/order-status`
+
+#### DigitalTopUpPost
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"code"` | Gift card code |
+| `"cost_value"` |  |
+| `"discount"` | The discount percentage used on this transaction |
+| `"face_value"` |  |
+| `"float_balance"` |  |
+| `"pin"` | Gift card PIN. |
+| `"reference"` | Unique reference for this transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"serial_number"` | Gift card serial number. |
+| `"tags"` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/digital/top-up`
+
 #### Float
 
 | Field | Description |
 | --- | --- |
-| `"balance"` |  |
-| `"currency"` |  |
+| `"floats"` | Float balances grouped by currency code |
+| `"last_refreshed_at"` | ISO 8601 timestamp of when the float data was last refreshed |
 
-Operations: List.
+Operations: Create, List, Load.
 
-API path: `/check-floats`
+API path: `/float/request-payment-transfer`
+
+#### PhysicalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"code"` | The long card number on the physical gift card you wish to cash out |
+| `"cost_value"` |  |
+| `"discount"` | The discount percentage used on this transaction |
+| `"expiration_date"` | The expiration date for this gift card. |
+| `"face_value"` |  |
+| `"float_balance"` |  |
+| `"fulfilled_at"` | The date for which this this gift card was fulfilled. |
+| `"original_client_request_id"` | This field will be the `client_request_id` provided in the original transaction. |
+| `"pin"` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `"reference"` | Unique reference for this transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"security_code"` | Gift card security code (for code-delivery brands). |
+| `"serial_number"` | Gift card serial number. |
+| `"tags"` | Optional meta data associated with the issuance. |
+| `"url"` | Gift card URL (for URL-delivery brands) |
+
+Operations: Create, Remove.
+
+API path: `/physical/activate`
+
+#### PhysicalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `"brand"` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `"client_request_id"` | Unique identifier for this request. |
+| `"cost_value"` | The amount you actually paid (once the discount has been taken into consideration) |
+| `"discount"` | The discount percentage used on this transaction |
+| `"expiration_date"` | The expiration date for this gift card. |
+| `"face_value"` | the face value amount of the gift card. |
+| `"float_balance"` | Your remaining balance on the float used to make this transaction |
+| `"fulfilment_by"` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `"fulfilment_parameters"` |  |
+| `"personalisation"` |  |
+| `"reference"` | Unique reference for this transaction |
+| `"sector"` | Must match one of the sectors configured for your buyer account. |
+| `"shipping_method"` | Shipping method identifier. |
+| `"tags"` | Optional meta data associated with the issuance. |
+
+Operations: Create.
+
+API path: `/physical/order-card`
+
+#### PhysicalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `"references"` | Array of order references to check. |
+
+Operations: Create.
+
+API path: `/physical/order-status`
+
+#### Promotion
+
+| Field | Description |
+| --- | --- |
+| `"last_refreshed_at"` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `"standard"` | Standard promotions grouped by brand slug. |
+
+Operations: Load.
+
+API path: `/promotions`
+
+#### Template
+
+| Field | Description |
+| --- | --- |
+| `"last_refreshed_at"` | ISO 8601 timestamp of when the template data was last refreshed |
+| `"templates"` | Object mapping brand slugs to their template variants and versions. |
+
+Operations: Load.
+
+API path: `/templates`
 
 
 
@@ -315,30 +532,147 @@ Create an instance: `brand := client.Brand(nil)`
 
 | Method | Description |
 | --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `currency` | `string` |  |
-| `name` | `string` |  |
-| `slug` | `string` |  |
+| `brands` | `any` |  |
+| `last_refreshed_at` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```go
-brands, err := client.Brand(nil).List(nil, nil)
+brand, err := client.Brand(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(brands) // the array of records
+fmt.Println(brand) // the loaded record
 ```
 
 
-### Dgc
+### BrandTemplate
 
-Create an instance: `dgc := client.Dgc(nil)`
+Create an instance: `brandTemplate := client.BrandTemplate(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```go
+brandTemplate, err := client.BrandTemplate(nil).Load(map[string]any{"brand": "brand"}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(brandTemplate) // the loaded record
+```
+
+
+### DigitalGiftCard
+
+Create an instance: `digitalGiftCard := client.DigitalGiftCard(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `data` | `map[string]any` |  |
+| `face_value` | `map[string]any` |  |
+| `message` | `string` |  |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | This is the `reference` you received when making the original issuance request. |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `string` |  |
+
+#### Example: Load
+
+```go
+digitalGiftCard, err := client.DigitalGiftCard(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(digitalGiftCard) // the loaded record
+```
+
+#### Example: Create
+
+```go
+result, err := client.DigitalGiftCard(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "face_value": map[string]any{},
+    "sector": "example_sector",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### DigitalIssueDelete
+
+Create an instance: `digitalIssueDelete := client.DigitalIssueDelete(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `face_value` | `map[string]any` |  |
+| `float_balance` | `map[string]any` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `string` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```go
+result, err := client.DigitalIssueDelete(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "original_client_request_id": "example_original_client_request_id",
+    "reference": "example_reference",
+    "sector": "example_sector",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### DigitalIssuePost
+
+Create an instance: `digitalIssuePost := client.DigitalIssuePost(nil)`
 
 #### Operations
 
@@ -350,19 +684,181 @@ Create an instance: `dgc := client.Dgc(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `brand` | `string` |  |
-| `client_request_id` | `string` |  |
+| `barcode` | `map[string]any` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code (for code-delivery brands) |
+| `cost_value` | `map[string]any` |  |
 | `delivery_method` | `string` |  |
+| `discount` | `float64` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
 | `face_value` | `map[string]any` |  |
-| `sector` | `string` |  |
+| `float_balance` | `map[string]any` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `map[string]any` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `map[string]any` |  |
+| `pin` | `string` | Gift card PIN (for code-delivery brands). |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
 
 #### Example: Create
 
 ```go
-result, err := client.Dgc(nil).Create(map[string]any{
+result, err := client.DigitalIssuePost(nil).Create(map[string]any{
+    "barcode": map[string]any{},
     "brand": "example_brand",
     "client_request_id": "example_client_request_id",
+    "cost_value": map[string]any{},
+    "delivery_method": "example_delivery_method",
+    "discount": 1,
     "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "fulfilment_by": "example_fulfilment_by",
+    "fulfilment_parameters": map[string]any{},
+    "personalisation": map[string]any{},
+    "reference": "example_reference",
+    "sector": "example_sector",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### DigitalOrderCard
+
+Create an instance: `digitalOrderCard := client.DigitalOrderCard(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `map[string]any` |  |
+| `delivery_method` | `string` |  |
+| `face_value` | `map[string]any` |  |
+| `float_balance` | `map[string]any` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `map[string]any` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `map[string]any` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```go
+result, err := client.DigitalOrderCard(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "cost_value": map[string]any{},
+    "delivery_method": "example_delivery_method",
+    "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "fulfilment_by": "example_fulfilment_by",
+    "fulfilment_parameters": map[string]any{},
+    "personalisation": map[string]any{},
+    "reference": "example_reference",
+    "sector": "example_sector",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### DigitalOrderStatus
+
+Create an instance: `digitalOrderStatus := client.DigitalOrderStatus(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `barcode` | `map[string]any` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `string` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `map[string]any` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `float64` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `map[string]any` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `string` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `string` | Unique reference for this transaction |
+| `security_code` | `string` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `string` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `string` | The current status of the order |
+| `url` | `string` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+#### Example: Load
+
+```go
+digitalOrderStatus, err := client.DigitalOrderStatus(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(digitalOrderStatus) // the loaded record
+```
+
+
+### DigitalTopUpPost
+
+Create an instance: `digitalTopUpPost := client.DigitalTopUpPost(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `cost_value` | `map[string]any` |  |
+| `discount` | `float64` | The discount percentage used on this transaction |
+| `face_value` | `map[string]any` |  |
+| `float_balance` | `map[string]any` |  |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```go
+result, err := client.DigitalTopUpPost(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "code": "example_code",
+    "cost_value": map[string]any{},
+    "discount": 1,
+    "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "reference": "example_reference",
+    "sector": "example_sector",
 }, nil)
 if err != nil {
     panic(err)
@@ -380,13 +876,25 @@ Create an instance: `float := client.Float(nil)`
 | Method | Description |
 | --- | --- |
 | `List(match, ctrl)` | List entities matching the criteria. |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `balance` | `float64` |  |
-| `currency` | `string` |  |
+| `floats` | `map[string]any` | Float balances grouped by currency code |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the float data was last refreshed |
+
+#### Example: Load
+
+```go
+float, err := client.Float(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(float) // the loaded record
+```
 
 #### Example: List
 
@@ -396,6 +904,212 @@ if err != nil {
     panic(err)
 }
 fmt.Println(floats) // the array of records
+```
+
+#### Example: Create
+
+```go
+result, err := client.Float(nil).Create(map[string]any{
+    "floats": map[string]any{},
+    "last_refreshed_at": "example_last_refreshed_at",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### PhysicalGiftCard
+
+Create an instance: `physicalGiftCard := client.PhysicalGiftCard(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+| `Remove(match, ctrl)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `map[string]any` |  |
+| `discount` | `float64` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `map[string]any` |  |
+| `float_balance` | `map[string]any` |  |
+| `fulfilled_at` | `string` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
+
+#### Example: Create
+
+```go
+result, err := client.PhysicalGiftCard(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "code": "example_code",
+    "cost_value": map[string]any{},
+    "discount": 1,
+    "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "original_client_request_id": "example_original_client_request_id",
+    "reference": "example_reference",
+    "sector": "example_sector",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### PhysicalOrderCard
+
+Create an instance: `physicalOrderCard := client.PhysicalOrderCard(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `map[string]any` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `float64` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `map[string]any` | the face value amount of the gift card. |
+| `float_balance` | `map[string]any` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `string` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `map[string]any` |  |
+| `personalisation` | `map[string]any` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `string` | Shipping method identifier. |
+| `tags` | `[]any` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```go
+result, err := client.PhysicalOrderCard(nil).Create(map[string]any{
+    "brand": "example_brand",
+    "client_request_id": "example_client_request_id",
+    "cost_value": map[string]any{},
+    "discount": 1,
+    "face_value": map[string]any{},
+    "float_balance": map[string]any{},
+    "fulfilment_by": "example_fulfilment_by",
+    "fulfilment_parameters": map[string]any{},
+    "personalisation": map[string]any{},
+    "reference": "example_reference",
+    "sector": "example_sector",
+    "shipping_method": "example_shipping_method",
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### PhysicalOrderStatus
+
+Create an instance: `physicalOrderStatus := client.PhysicalOrderStatus(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Create(data, ctrl)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `references` | `[]any` | Array of order references to check. |
+
+#### Example: Create
+
+```go
+result, err := client.PhysicalOrderStatus(nil).Create(map[string]any{
+    "references": []any{},
+}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(result)
+```
+
+
+### Promotion
+
+Create an instance: `promotion := client.Promotion(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `map[string]any` | Standard promotions grouped by brand slug. |
+
+#### Example: Load
+
+```go
+promotion, err := client.Promotion(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(promotion) // the loaded record
+```
+
+
+### Template
+
+Create an instance: `template := client.Template(nil)`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `map[string]any` | Object mapping brand slugs to their template variants and versions. |
+
+#### Example: Load
+
+```go
+template, err := client.Template(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(template) // the loaded record
 ```
 
 ## Features
@@ -611,15 +1325,15 @@ like `core.ToMapAny`.
 
 ### Entity state
 
-Entity instances are stateful. After a successful `List`, the entity
+Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-brand := client.Brand(nil)
-brand.List(nil, nil)
+promotion := client.Promotion(nil)
+promotion.Load(nil, nil)
 
-// brand.Data() now returns the brand data from the last list
-// brand.Match() returns the last match criteria
+// promotion.Data() now returns the promotion data from the last load
+// promotion.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

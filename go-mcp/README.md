@@ -27,8 +27,8 @@ Tool-call arguments (what an agent sends):
 
 ```jsonc
 // tillo_list: first page of records
-{ "entity": "brand" }
-{ "entity": "brand", "query": { } }
+{ "entity": "float" }
+{ "entity": "float", "query": { } }
 
 // tillo_load: one record by id
 { "entity": "brand", "query": { "id": 1 } }
@@ -60,8 +60,8 @@ Tool-call arguments (what an agent sends):
    ```
 
 4. **Restart Claude Code.** The `tillo_list` and `tillo_load` tools now appear
-   in new sessions. Ask the agent to *"list brand using tillo"*
-   and it calls `tillo_list` with `{"entity":"brand"}`.
+   in new sessions. Ask the agent to *"list float using tillo"*
+   and it calls `tillo_list` with `{"entity":"float"}`.
 
 ## How-to guides
 
@@ -92,7 +92,7 @@ Args: `entity` (required), `query` (optional filter map). Returns the first
 page of records as JSON:
 
 ```jsonc
-{ "entity": "brand" }
+{ "entity": "float" }
 ```
 
 ### Call the `tillo_load` tool
@@ -129,7 +129,7 @@ Both tools take the same argument object:
 
 | Field | Type | Notes |
 |-------|------|-------|
-| `entity` | string | One of the 3 supported entities (see below). |
+| `entity` | string | One of the 14 supported entities (see below). |
 | `query` | object | Optional match map. `{"id":N}` for load; omit or `{}` for list. |
 
 JSON schemas are emitted by the SDK from the `Args` struct's `json` /
@@ -151,9 +151,9 @@ JSON schemas are emitted by the SDK from the `Args` struct's `json` /
 
 ### Entities
 
-The 3 entities valid as the `entity` argument:
+The 14 entities valid as the `entity` argument:
 
-brand | dgc | float
+brand | brand_template | digital_gift_card | digital_issue_delete | digital_issue_post | digital_order_card | digital_order_status | digital_top_up_post | float | physical_gift_card | physical_order_card | physical_order_status | promotion | template
 
 ### Smoke test via HTTP (raw JSON-RPC)
 

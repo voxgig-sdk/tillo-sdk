@@ -46,13 +46,57 @@ $client = TilloSDK::test();
 
 Create a new `BrandEntity` instance. Pass `null` for no initial data.
 
-#### `Dgc($data = null)`
+#### `BrandTemplate($data = null)`
 
-Create a new `DgcEntity` instance. Pass `null` for no initial data.
+Create a new `BrandTemplateEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalGiftCard($data = null)`
+
+Create a new `DigitalGiftCardEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalIssueDelete($data = null)`
+
+Create a new `DigitalIssueDeleteEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalIssuePost($data = null)`
+
+Create a new `DigitalIssuePostEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalOrderCard($data = null)`
+
+Create a new `DigitalOrderCardEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalOrderStatus($data = null)`
+
+Create a new `DigitalOrderStatusEntity` instance. Pass `null` for no initial data.
+
+#### `DigitalTopUpPost($data = null)`
+
+Create a new `DigitalTopUpPostEntity` instance. Pass `null` for no initial data.
 
 #### `Float($data = null)`
 
 Create a new `FloatEntity` instance. Pass `null` for no initial data.
+
+#### `PhysicalGiftCard($data = null)`
+
+Create a new `PhysicalGiftCardEntity` instance. Pass `null` for no initial data.
+
+#### `PhysicalOrderCard($data = null)`
+
+Create a new `PhysicalOrderCardEntity` instance. Pass `null` for no initial data.
+
+#### `PhysicalOrderStatus($data = null)`
+
+Create a new `PhysicalOrderStatusEntity` instance. Pass `null` for no initial data.
+
+#### `Promotion($data = null)`
+
+Create a new `PromotionEntity` instance. Pass `null` for no initial data.
+
+#### `Template($data = null)`
+
+Create a new `TemplateEntity` instance. Pass `null` for no initial data.
 
 #### `options_map(): array`
 
@@ -101,18 +145,17 @@ $brand = $client->Brand();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `currency` | `string` | No |  |
-| `name` | `string` | No |  |
-| `slug` | `string` | No |  |
+| `brands` | `mixed` | No |  |
+| `last_refreshed_at` | `string` | No |  |
 
 ### Operations
 
-#### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+Load a single entity matching the given criteria. Throws on error.
 
 ```php
-$results = $client->Brand()->list();
+$result = $client->Brand()->load();
 ```
 
 ### Common Methods
@@ -145,21 +188,74 @@ Return the entity name.
 
 ---
 
-## DgcEntity
+## BrandTemplateEntity
 
 ```php
-$dgc = $client->Dgc();
+$brand_template = $client->BrandTemplate();
+```
+
+### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->BrandTemplate()->load(["brand" => "brand"]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): BrandTemplateEntity`
+
+Create a new `BrandTemplateEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalGiftCardEntity
+
+```php
+$digital_gift_card = $client->DigitalGiftCard();
 ```
 
 ### Fields
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `brand` | `string` | Yes |  |
-| `client_request_id` | `string` | Yes |  |
-| `delivery_method` | `string` | No |  |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | No | Gift card code |
+| `data` | `array` | No |  |
 | `face_value` | `array` | Yes |  |
-| `sector` | `string` | No |  |
+| `message` | `string` | No |  |
+| `original_client_request_id` | `string` | No | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | No | Gift card PIN. |
+| `reference` | `string` | No | This is the `reference` you received when making the original issuance request. |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | No | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `string` | No |  |
 
 ### Operations
 
@@ -168,10 +264,179 @@ $dgc = $client->Dgc();
 Create a new entity with the given data. Throws on error.
 
 ```php
-$result = $client->Dgc()->create([
+$result = $client->DigitalGiftCard()->create([
   "brand" => null, // string
   "client_request_id" => null, // string
   "face_value" => null, // array
+  "sector" => null, // string
+]);
+```
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->DigitalGiftCard()->load();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): DigitalGiftCardEntity`
+
+Create a new `DigitalGiftCardEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalIssueDeleteEntity
+
+```php
+$digital_issue_delete = $client->DigitalIssueDelete();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `face_value` | `array` | Yes |  |
+| `float_balance` | `array` | Yes | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `string` | Yes | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `string` | Yes | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->DigitalIssueDelete()->create([
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "original_client_request_id" => null, // string
+  "reference" => null, // string
+  "sector" => null, // string
+]);
+```
+
+#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
+
+Remove the entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->DigitalIssueDelete()->remove();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): DigitalIssueDeleteEntity`
+
+Create a new `DigitalIssueDeleteEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalIssuePostEntity
+
+```php
+$digital_issue_post = $client->DigitalIssuePost();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `barcode` | `array` | Yes | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | No | Gift card code (for code-delivery brands) |
+| `cost_value` | `array` | Yes |  |
+| `delivery_method` | `string` | Yes |  |
+| `discount` | `float` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `array` | Yes |  |
+| `float_balance` | `array` | Yes |  |
+| `fulfilment_by` | `string` | Yes | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `array` | Yes | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `array` | Yes |  |
+| `pin` | `string` | No | Gift card PIN (for code-delivery brands). |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | No | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands) |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->DigitalIssuePost()->create([
+  "barcode" => null, // array
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "cost_value" => null, // array
+  "delivery_method" => null, // string
+  "discount" => null, // float
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "fulfilment_by" => null, // string
+  "fulfilment_parameters" => null, // array
+  "personalisation" => null, // array
+  "reference" => null, // string
+  "sector" => null, // string
 ]);
 ```
 
@@ -193,9 +458,238 @@ Get the entity match criteria.
 
 Set the entity match criteria.
 
-#### `make(): DgcEntity`
+#### `make(): DigitalIssuePostEntity`
 
-Create a new `DgcEntity` instance with the same client and
+Create a new `DigitalIssuePostEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalOrderCardEntity
+
+```php
+$digital_order_card = $client->DigitalOrderCard();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `cost_value` | `array` | Yes |  |
+| `delivery_method` | `string` | Yes |  |
+| `face_value` | `array` | Yes |  |
+| `float_balance` | `array` | Yes |  |
+| `fulfilment_by` | `string` | Yes | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `array` | Yes | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `array` | Yes |  |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->DigitalOrderCard()->create([
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "cost_value" => null, // array
+  "delivery_method" => null, // string
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "fulfilment_by" => null, // string
+  "fulfilment_parameters" => null, // array
+  "personalisation" => null, // array
+  "reference" => null, // string
+  "sector" => null, // string
+]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): DigitalOrderCardEntity`
+
+Create a new `DigitalOrderCardEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalOrderStatusEntity
+
+```php
+$digital_order_status = $client->DigitalOrderStatus();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `barcode` | `array` | Yes | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `string` | No | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `string` | No | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `array` | Yes | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `float` | No | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `array` | Yes | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `string` | No | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `security_code` | `string` | No | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `string` | No | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `string` | Yes | The current status of the order |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->DigitalOrderStatus()->load();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): DigitalOrderStatusEntity`
+
+Create a new `DigitalOrderStatusEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## DigitalTopUpPostEntity
+
+```php
+$digital_top_up_post = $client->DigitalTopUpPost();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | Yes | Gift card code |
+| `cost_value` | `array` | Yes |  |
+| `discount` | `float` | Yes | The discount percentage used on this transaction |
+| `face_value` | `array` | Yes |  |
+| `float_balance` | `array` | Yes |  |
+| `pin` | `string` | No | Gift card PIN. |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+
+### Field Usage by Operation
+
+| Field | create |
+| --- | --- |
+| `brand` | - |
+| `client_request_id` | - |
+| `code` | Yes |
+| `cost_value` | - |
+| `discount` | - |
+| `face_value` | - |
+| `float_balance` | - |
+| `pin` | - |
+| `reference` | Yes |
+| `sector` | - |
+| `serial_number` | - |
+| `tags` | - |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->DigitalTopUpPost()->create([
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "code" => null, // string
+  "cost_value" => null, // array
+  "discount" => null, // float
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "reference" => null, // string
+  "sector" => null, // string
+]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): DigitalTopUpPostEntity`
+
+Create a new `DigitalTopUpPostEntity` instance with the same client and
 options.
 
 #### `get_name(): string`
@@ -215,10 +709,21 @@ $float = $client->Float();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `balance` | `float` | No |  |
-| `currency` | `string` | No |  |
+| `floats` | `array` | Yes | Float balances grouped by currency code |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when the float data was last refreshed |
 
 ### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->Float()->create([
+  "floats" => null, // array
+  "last_refreshed_at" => null, // string
+]);
+```
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
@@ -226,6 +731,14 @@ List entities matching the given criteria (call with no argument to list all). R
 
 ```php
 $results = $client->Float()->list();
+```
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->Float()->load();
 ```
 
 ### Common Methods
@@ -249,6 +762,353 @@ Set the entity match criteria.
 #### `make(): FloatEntity`
 
 Create a new `FloatEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalGiftCardEntity
+
+```php
+$physical_gift_card = $client->PhysicalGiftCard();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `code` | `string` | Yes | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `array` | Yes |  |
+| `discount` | `float` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `array` | Yes |  |
+| `float_balance` | `array` | Yes |  |
+| `fulfilled_at` | `string` | No | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `string` | Yes | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | No | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | No | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | No | Gift card serial number. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+| `url` | `string` | No | Gift card URL (for URL-delivery brands) |
+
+### Field Usage by Operation
+
+| Field | create | remove |
+| --- | --- | --- |
+| `brand` | - | - |
+| `client_request_id` | - | - |
+| `code` | Yes | - |
+| `cost_value` | - | - |
+| `discount` | - | - |
+| `expiration_date` | - | - |
+| `face_value` | - | - |
+| `float_balance` | - | - |
+| `fulfilled_at` | - | - |
+| `original_client_request_id` | - | - |
+| `pin` | - | - |
+| `reference` | - | - |
+| `sector` | - | - |
+| `security_code` | - | - |
+| `serial_number` | - | - |
+| `tags` | - | - |
+| `url` | - | - |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->PhysicalGiftCard()->create([
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "code" => null, // string
+  "cost_value" => null, // array
+  "discount" => null, // float
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "original_client_request_id" => null, // string
+  "reference" => null, // string
+  "sector" => null, // string
+]);
+```
+
+#### `remove(array $reqmatch, ?array $ctrl = null): mixed`
+
+Remove the entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->PhysicalGiftCard()->remove();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): PhysicalGiftCardEntity`
+
+Create a new `PhysicalGiftCardEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalOrderCardEntity
+
+```php
+$physical_order_card = $client->PhysicalOrderCard();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `brand` | `string` | Yes | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Yes | Unique identifier for this request. |
+| `cost_value` | `array` | Yes | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `float` | Yes | The discount percentage used on this transaction |
+| `expiration_date` | `string` | No | The expiration date for this gift card. |
+| `face_value` | `array` | Yes | the face value amount of the gift card. |
+| `float_balance` | `array` | Yes | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `string` | Yes | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `array` | Yes |  |
+| `personalisation` | `array` | Yes |  |
+| `reference` | `string` | Yes | Unique reference for this transaction |
+| `sector` | `string` | Yes | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `string` | Yes | Shipping method identifier. |
+| `tags` | `array` | No | Optional meta data associated with the issuance. |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->PhysicalOrderCard()->create([
+  "brand" => null, // string
+  "client_request_id" => null, // string
+  "cost_value" => null, // array
+  "discount" => null, // float
+  "face_value" => null, // array
+  "float_balance" => null, // array
+  "fulfilment_by" => null, // string
+  "fulfilment_parameters" => null, // array
+  "personalisation" => null, // array
+  "reference" => null, // string
+  "sector" => null, // string
+  "shipping_method" => null, // string
+]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): PhysicalOrderCardEntity`
+
+Create a new `PhysicalOrderCardEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## PhysicalOrderStatusEntity
+
+```php
+$physical_order_status = $client->PhysicalOrderStatus();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `references` | `array` | Yes | Array of order references to check. |
+
+### Operations
+
+#### `create(array $reqdata, ?array $ctrl = null): mixed`
+
+Create a new entity with the given data. Throws on error.
+
+```php
+$result = $client->PhysicalOrderStatus()->create([
+  "references" => null, // array
+]);
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): PhysicalOrderStatusEntity`
+
+Create a new `PhysicalOrderStatusEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## PromotionEntity
+
+```php
+$promotion = $client->Promotion();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `array` | Yes | Standard promotions grouped by brand slug. |
+
+### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->Promotion()->load();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): PromotionEntity`
+
+Create a new `PromotionEntity` instance with the same client and
+options.
+
+#### `get_name(): string`
+
+Return the entity name.
+
+
+---
+
+## TemplateEntity
+
+```php
+$template = $client->Template();
+```
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `last_refreshed_at` | `string` | Yes | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `array` | Yes | Object mapping brand slugs to their template variants and versions. |
+
+### Operations
+
+#### `load(array $reqmatch, ?array $ctrl = null): mixed`
+
+Load a single entity matching the given criteria. Throws on error.
+
+```php
+$result = $client->Template()->load();
+```
+
+### Common Methods
+
+#### `data_get(): array`
+
+Get the entity data. Returns a copy of the current data.
+
+#### `data_set($data): void`
+
+Set the entity data.
+
+#### `match_get(): array`
+
+Get the entity match criteria.
+
+#### `match_set($match): void`
+
+Set the entity match criteria.
+
+#### `make(): TemplateEntity`
+
+Create a new `TemplateEntity` instance with the same client and
 options.
 
 #### `get_name(): string`

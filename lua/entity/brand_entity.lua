@@ -230,16 +230,14 @@ end
 
 
 
-
-
----@param reqmatch BrandListMatch
+---@param reqmatch BrandLoadMatch
 ---@param ctrl? table
----@return Brand[]
+---@return Brand
 ---@return string? err
-function BrandEntity:list(reqmatch, ctrl)
+function BrandEntity:load(reqmatch, ctrl)
   local utility = self._utility
   local ctx = utility.make_context({
-    opname = "list",
+    opname = "load",
     ctrl = ctrl,
     match = self._match,
     data = self._data,
@@ -251,9 +249,14 @@ function BrandEntity:list(reqmatch, ctrl)
       if ctx.result.resmatch ~= nil then
         self._match = ctx.result.resmatch
       end
+      if ctx.result.resdata ~= nil then
+        self._data = helpers.to_map(vs.clone(ctx.result.resdata)) or {}
+      end
     end
   end)
 end
+
+
 
 
 

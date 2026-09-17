@@ -1,0 +1,18 @@
+# BasicDigitalIssuePostFlow
+
+main: kit: flow: BasicDigitalIssuePostFlow:
+{
+  entity: "digital_issue_post",
+  kind: "basic",
+  name: "BasicDigitalIssuePostFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_issue_post_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicDigitalIssuePostFlow"
+}

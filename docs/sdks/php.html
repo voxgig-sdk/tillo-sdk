@@ -1,14 +1,25 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PHP | Tillo Rewards API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PHP | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><a class="skip" href="#content">Skip to content</a>
-<header class="site-header"><a class="site-title" href="../index.html">Tillo Rewards API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
 <div class="site-notice" role="note"></div>
-<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo Rewards API</a></details>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
 <details><summary>API</summary><a href="../api/index.html">API overview</a>
 <a href="../api/brand.html">Brand</a>
-<a href="../api/dgc.html">Dgc</a>
-<a href="../api/float.html">Float</a></details>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a href="../api/digital_gift_card.html">DigitalGiftCard</a>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a href="../api/float.html">Float</a>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a href="../api/physical_order_card.html">PhysicalOrderCard</a>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a href="../api/template.html">Template</a></details>
 <details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
 <a href="../guides/first-call.html">Make your first API call</a>
 <a href="../guides/errors.html">Handle errors</a>
@@ -45,15 +56,59 @@
 <tbody>
 <tr>
 <td><a href="../api/brand.html">Brand</a></td>
-<td><code>list</code></td>
+<td><code>load</code></td>
 </tr>
 <tr>
-<td><a href="../api/dgc.html">Dgc</a></td>
+<td><a href="../api/brand_template.html">BrandTemplate</a></td>
+<td><code>load</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_gift_card.html">DigitalGiftCard</a></td>
+<td><code>create</code>, <code>load</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_issue_delete.html">DigitalIssueDelete</a></td>
+<td><code>create</code>, <code>remove</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_issue_post.html">DigitalIssuePost</a></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_order_card.html">DigitalOrderCard</a></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_order_status.html">DigitalOrderStatus</a></td>
+<td><code>load</code></td>
+</tr>
+<tr>
+<td><a href="../api/digital_top_up_post.html">DigitalTopUpPost</a></td>
 <td><code>create</code></td>
 </tr>
 <tr>
 <td><a href="../api/float.html">Float</a></td>
-<td><code>list</code></td>
+<td><code>create</code>, <code>list</code>, <code>load</code></td>
+</tr>
+<tr>
+<td><a href="../api/physical_gift_card.html">PhysicalGiftCard</a></td>
+<td><code>create</code>, <code>remove</code></td>
+</tr>
+<tr>
+<td><a href="../api/physical_order_card.html">PhysicalOrderCard</a></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td><a href="../api/physical_order_status.html">PhysicalOrderStatus</a></td>
+<td><code>create</code></td>
+</tr>
+<tr>
+<td><a href="../api/promotion.html">Promotion</a></td>
+<td><code>load</code></td>
+</tr>
+<tr>
+<td><a href="../api/template.html">Template</a></td>
+<td><code>load</code></td>
 </tr>
 </tbody>
 </table>
@@ -78,7 +133,7 @@ $client = new TilloSDK([&quot;apikey&quot; =&gt; getenv(&quot;TILLO_APIKEY&quot;
 </code></pre>
 <h2 id="client-defaults">Client defaults</h2>
 <pre><code class="language-json">{
-  &quot;base&quot;: &quot;https://app.tillo.io&quot;,
+  &quot;base&quot;: &quot;https://sandbox.tillo.dev/api/v2&quot;,
   &quot;auth&quot;: {
     &quot;prefix&quot;: &quot;&quot;
   },
@@ -87,8 +142,19 @@ $client = new TilloSDK([&quot;apikey&quot; =&gt; getenv(&quot;TILLO_APIKEY&quot;
   },
   &quot;entity&quot;: {
     &quot;brand&quot;: {},
-    &quot;dgc&quot;: {},
-    &quot;float&quot;: {}
+    &quot;brand_template&quot;: {},
+    &quot;digital_gift_card&quot;: {},
+    &quot;digital_issue_delete&quot;: {},
+    &quot;digital_issue_post&quot;: {},
+    &quot;digital_order_card&quot;: {},
+    &quot;digital_order_status&quot;: {},
+    &quot;digital_top_up_post&quot;: {},
+    &quot;float&quot;: {},
+    &quot;physical_gift_card&quot;: {},
+    &quot;physical_order_card&quot;: {},
+    &quot;physical_order_status&quot;: {},
+    &quot;promotion&quot;: {},
+    &quot;template&quot;: {}
   }
 }
 </code></pre>

@@ -77,8 +77,19 @@ _CLIENT_VARS = ("client", "sdk")
 # The API's capitalised semantic entities -> lowercase fixture key.
 _ENTITIES = {
     "Brand": "brand",
-    "Dgc": "dgc",
+    "BrandTemplate": "brand_template",
+    "DigitalGiftCard": "digital_gift_card",
+    "DigitalIssueDelete": "digital_issue_delete",
+    "DigitalIssuePost": "digital_issue_post",
+    "DigitalOrderCard": "digital_order_card",
+    "DigitalOrderStatus": "digital_order_status",
+    "DigitalTopUpPost": "digital_top_up_post",
     "Float": "float",
+    "PhysicalGiftCard": "physical_gift_card",
+    "PhysicalOrderCard": "physical_order_card",
+    "PhysicalOrderStatus": "physical_order_status",
+    "Promotion": "promotion",
+    "Template": "template",
 }
 
 # The three documents held to the gate, tagged by human label.

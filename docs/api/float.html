@@ -1,14 +1,27 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Float | Tillo Rewards API</title><link rel="stylesheet" href="../assets/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Float | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
 <body><a class="skip" href="#content">Skip to content</a>
-<header class="site-header"><a class="site-title" href="../index.html">Tillo Rewards API<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
 <div class="site-notice" role="note"></div>
-<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo Rewards API</a></details>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
 <details open><summary>API</summary><a href="../api/index.html">API overview</a>
 <a href="../api/brand.html">Brand</a>
-<a href="../api/dgc.html">Dgc</a>
-<a aria-current="page" href="../api/float.html">Float</a><div class="nav-sections"><a class="nav-section" href="#get-check-floats">GET /check-floats</a></div></details>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a href="../api/digital_gift_card.html">DigitalGiftCard</a>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a aria-current="page" href="../api/float.html">Float</a><div class="nav-sections"><a class="nav-section" href="#post-floatrequest-payment-transfer">POST /float/request-payment-transfer</a>
+<a class="nav-section" href="#get-floattransfer-requests">GET /float/transfer-requests</a>
+<a class="nav-section" href="#get-check-floats">GET /check-floats</a></div>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a href="../api/physical_order_card.html">PhysicalOrderCard</a>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a href="../api/template.html">Template</a></details>
 <details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
 <a href="../guides/first-call.html">Make your first API call</a>
 <a href="../guides/errors.html">Handle errors</a>
@@ -42,10 +55,22 @@
 </thead>
 <tbody>
 <tr>
+<td><code>POST</code></td>
+<td><a href="#post-floatrequest-payment-transfer"><code>/float/request-payment-transfer</code></a></td>
+<td><code>create</code></td>
+<td>Payment transfer request successfully registered</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><a href="#get-floattransfer-requests"><code>/float/transfer-requests</code></a></td>
+<td><code>list</code></td>
+<td>Successfully retrieved transfer requests</td>
+</tr>
+<tr>
 <td><code>GET</code></td>
 <td><a href="#get-check-floats"><code>/check-floats</code></a></td>
-<td><code>list</code></td>
-<td>Floats</td>
+<td><code>load</code></td>
+<td>Successfully retrieved float balances</td>
 </tr>
 </tbody>
 </table>
@@ -61,25 +86,24 @@
 </thead>
 <tbody>
 <tr>
-<td><code>balance</code></td>
-<td><code>number</code></td>
-<td>No</td>
-<td></td>
+<td><code>floats</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Float balances grouped by currency code</td>
 </tr>
 <tr>
-<td><code>currency</code></td>
+<td><code>last_refreshed_at</code></td>
 <td><code>string</code></td>
-<td>No</td>
-<td></td>
+<td>Yes</td>
+<td>ISO 8601 timestamp of when the float data was last refreshed</td>
 </tr>
 </tbody>
 </table>
-<h2 id="list">list</h2>
-<h3 id="get-check-floats" class="operation" data-method="get"><code>GET</code> /check-floats</h3>
-<p>Operation ID: <code>listFloats</code>.</p>
-<p>Authentication: API key in the header (<code>apiKeyAuth</code>).</p>
-<h4 id="responses">Responses</h4>
-<h5 id="200-floats" class="status" data-status="2xx">200: Floats</h5>
+<h2 id="create">create</h2>
+<h3 id="post-floatrequest-payment-transfer" class="operation" data-method="post"><code>POST</code> /float/request-payment-transfer</h3>
+<p>Operation ID: <code>postFloatRequestPaymentTransfer</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="request-body">Request body</h4>
 <p><code>application/json</code></p>
 <table>
 <thead>
@@ -92,15 +116,565 @@
 </thead>
 <tbody>
 <tr>
-<td><code>[].balance</code></td>
-<td><code>number</code></td>
+<td><code>amount</code></td>
+<td><code>string or number (float)</code></td>
+<td>No</td>
+<td>Amount to transfer. Accepts either a string or number. String amounts can have any number of decimal places (for example, &quot;300.1000000000001&quot;) and will be normalized to 2 decimal places in the response. Minimum value is 0.01, maximum is 99,999,999.99.</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
 <td>No</td>
 <td></td>
 </tr>
 <tr>
-<td><code>[].currency</code></td>
+<td><code>finance_email</code></td>
+<td><code>string (email)</code></td>
+<td>No</td>
+<td>Optional finance email address to override the default recipient. Required if partner has no default finance email configured.</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Float identifier from the check-floats endpoint (for example universal-float, brand-specific float name)</td>
+</tr>
+<tr>
+<td><code>payment_reference</code></td>
 <td><code>string</code></td>
 <td>No</td>
+<td>Optional payment reference. If not provided, Tillo will generate one automatically. Uniqueness is not enforced, but unique references are recommended.</td>
+</tr>
+<tr>
+<td><code>proforma_invoice</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional proforma invoice company details override. Only available if partner has proforma invoicing feature enabled. If provided, company_name is required.</td>
+</tr>
+<tr>
+<td><code>proforma_invoice.address_line_1</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.address_line_2</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.address_line_3</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.address_line_4</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.city</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.company_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.contact_name</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.country</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.county</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.post_code</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>proforma_invoice.vat_number</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="200-payment-transfer-request-successfully-registered" class="status" data-status="2xx">200: Payment transfer request successfully registered</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Response code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.amount</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.float</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The float identifier that was requested</td>
+</tr>
+<tr>
+<td><code>data.payment_reference</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The payment reference (either partner-provided or Tillo-generated)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable response message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="400-bad-request-invalid-or-missing-required-parameters" class="status" data-status="4xx">400: Bad request. Invalid or missing required parameters</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional additional error details</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-unauthorized---partner-account-is-disabled-or-invalid-credentials" class="status" data-status="4xx">401: Unauthorized - partner account is disabled or invalid credentials</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error---invalid-request-parameters" class="status" data-status="4xx">422: Validation error - invalid request parameters</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>messages</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Validation errors by field</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="list">list</h2>
+<h3 id="get-floattransfer-requests" class="operation" data-method="get"><code>GET</code> /float/transfer-requests</h3>
+<p>Operation ID: <code>getFloatTransferRequests</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="parameters">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>float</code> | <code>query</code> | <code>string</code> | No | Specifies the target float (for example, &quot;universal-float&quot;, &quot;amazon&quot;, &quot;reward-pass&quot;) |
+| <code>currency</code> | <code>query</code> | <code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code> | No | Optional filter to return transfer requests for a specific currency only. Provide the three-character ISO 4217 currency code (eg. GBP, EUR, USD). Must be uppercase. |
+| <code>payment_reference</code> | <code>query</code> | <code>string</code> | No | The payment reference to filter transfer requests |
+| <code>start_date</code> | <code>query</code> | <code>string (date)</code> | No | Beginning of the date range in ISO 8601 format |
+| <code>end_date</code> | <code>query</code> | <code>string (date)</code> | No | End of the date range in ISO 8601 format |
+| <code>status</code> | <code>query</code> | <code>enum: pending, approved, approved_edited, removed, cancelled</code> | No | Filter for transfer request state |</p>
+<h4 id="responses-1">Responses</h4>
+<h5 id="200-successfully-retrieved-transfer-requests" class="status" data-status="2xx">200: Successfully retrieved transfer requests</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Response code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>array of object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].approved</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Approved amount (null if pending or cancelled)</td>
+</tr>
+<tr>
+<td><code>data[].approved.amount</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].approved.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].created_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td>Timestamp when the transfer request was created in ISO 8601 format</td>
+</tr>
+<tr>
+<td><code>data[].float</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The float identifier</td>
+</tr>
+<tr>
+<td><code>data[].payment_reference</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>The payment reference</td>
+</tr>
+<tr>
+<td><code>data[].requested</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].requested.amount</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].requested.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data[].status</code></td>
+<td><code>enum: pending, approved, approved_edited, removed, cancelled</code></td>
+<td>Yes</td>
+<td>Transfer request status</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-authentication-failed-invalid-api-key-signature-or-timestamp" class="status" data-status="4xx">401: Authentication failed. Invalid API key, signature, or timestamp</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error---invalid-parameters-provided" class="status" data-status="4xx">422: Validation error - invalid parameters provided</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>array of string</code></td>
+<td>Yes</td>
+<td>List of validation error messages</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="502-bad-gateway-no-response-body-is-returned" class="status" data-status="5xx">502: Bad Gateway No response body is returned.</h5>
+<h5 id="504-gateway-timeout-no-response-body-is-returned" class="status" data-status="5xx">504: Gateway Timeout No response body is returned</h5>
+<h2 id="load">load</h2>
+<h3 id="get-check-floats" class="operation" data-method="get"><code>GET</code> /check-floats</h3>
+<p>Operation ID: <code>getCheckFloats</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="parameters-1">Parameters</h4>
+<p>| Parameter | In | Type | Required | Description |
+| --- | --- | --- | --- |
+| <code>currency</code> | <code>query</code> | <code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code> | No | Optional filter to return floats for a specific currency only. Provide the three-character ISO 4217 currency code (eg. GBP, EUR, USD). Must be uppercase. |</p>
+<h4 id="responses-2">Responses</h4>
+<h5 id="200-successfully-retrieved-float-balances" class="status" data-status="2xx">200: Successfully retrieved float balances</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Response code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.floats</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Float balances grouped by currency code</td>
+</tr>
+<tr>
+<td><code>data.last_refreshed_at</code></td>
+<td><code>string (date-time)</code></td>
+<td>Yes</td>
+<td>ISO 8601 timestamp of when the float data was last refreshed</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-authentication-failed-invalid-api-key-signature-or-timestamp-1" class="status" data-status="4xx">401: Authentication failed. Invalid API key, signature, or timestamp</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error---invalid-currency-code-provided" class="status" data-status="4xx">422: Validation error - invalid currency code provided</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error code</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
 <td></td>
 </tr>
 </tbody>

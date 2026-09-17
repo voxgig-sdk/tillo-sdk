@@ -62,7 +62,7 @@ class FloatEntityTest extends TestCase
         $setup = float_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["list"] as $_op) {
+        foreach (["create", "list", "load"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "float." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -77,20 +77,25 @@ class FloatEntityTest extends TestCase
         }
         $client = $setup["client"];
 
-        // Bootstrap entity data from existing test data.
-        $float_ref01_data_raw = Vs::items(Helpers::to_map(
-            Vs::getpath($setup["data"], "existing.float")));
-        $float_ref01_data = null;
-        if (count($float_ref01_data_raw) > 0) {
-            $float_ref01_data = Helpers::to_map($float_ref01_data_raw[0][1]);
-        }
+        // CREATE
+        $float_ref01_ent = $client->Float(null);
+        $float_ref01_data = Helpers::to_map(Vs::getprop(
+            Vs::getpath($setup["data"], "new.float"), "float_ref01"));
+
+        $float_ref01_data_result = $float_ref01_ent->create($float_ref01_data, null);
+        $float_ref01_data = Helpers::to_map(is_object($float_ref01_data_result) && method_exists($float_ref01_data_result, 'data_get') ? $float_ref01_data_result->data_get() : $float_ref01_data_result);
+        $this->assertNotNull($float_ref01_data);
 
         // LIST
-        $float_ref01_ent = $client->Float(null);
         $float_ref01_match = [];
 
         $float_ref01_list_result = $float_ref01_ent->list($float_ref01_match, null);
         $this->assertIsArray($float_ref01_list_result);
+
+        // LOAD
+        $float_ref01_match_dt0 = [];
+        $float_ref01_data_dt0_loaded = $float_ref01_ent->load($float_ref01_match_dt0, null);
+        $this->assertNotNull($float_ref01_data_dt0_loaded);
 
     }
 }

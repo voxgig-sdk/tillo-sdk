@@ -61,7 +61,7 @@ class TestFloatEntity:
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["list"]:
+        for _op in ["create", "list", "load"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "float." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -73,19 +73,24 @@ class TestFloatEntity:
                         "set TILLO_TEST_FLOAT_ENTID JSON to run live")
         client = setup["client"]
 
-        # Bootstrap entity data from existing test data.
-        float_ref01_data_raw = vs.items(helpers.to_map(
-            vs.getpath(setup["data"], "existing.float")))
-        float_ref01_data = None
-        if len(float_ref01_data_raw) > 0:
-            float_ref01_data = helpers.to_map(float_ref01_data_raw[0][1])
+        # CREATE
+        float_ref01_ent = client.Float(None)
+        float_ref01_data = helpers.to_map(vs.getprop(
+            vs.getpath(setup["data"], "new.float"), "float_ref01"))
+
+        float_ref01_data = helpers.to_map(runner.entity_data(float_ref01_ent.create(float_ref01_data, None)))
+        assert float_ref01_data is not None
 
         # LIST
-        float_ref01_ent = client.Float(None)
         float_ref01_match = {}
 
         float_ref01_list_result = float_ref01_ent.list(float_ref01_match, None)
         assert isinstance(float_ref01_list_result, list)
+
+        # LOAD
+        float_ref01_match_dt0 = {}
+        float_ref01_data_dt0_loaded = float_ref01_ent.load(float_ref01_match_dt0, None)
+        assert float_ref01_data_dt0_loaded is not None
 
 
 

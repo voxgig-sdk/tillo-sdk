@@ -1,0 +1,3703 @@
+{
+  "existing": {
+    "physical_gift_card": {
+      "PHYSICAL_GIFT_CARD00": {
+        "brand": "saa",
+        "client_request_id": "CLIENT_REQUEST01",
+        "code": "sac",
+        "cost_value": {},
+        "discount": 174,
+        "expiration_date": "saf",
+        "face_value": {},
+        "float_balance": {},
+        "fulfilled_at": "sb2",
+        "original_client_request_id": "ORIGINAL_CLIENT_REQUEST01",
+        "pin": "sb4",
+        "reference": "sb5",
+        "sector": "sb6",
+        "security_code": "sb7",
+        "serial_number": "sb8",
+        "tags": [],
+        "url": "sba",
+        "id": "PHYSICAL_GIFT_CARD00"
+      },
+      "PHYSICAL_GIFT_CARD01": {
+        "brand": "s154",
+        "client_request_id": "CLIENT_REQUEST01",
+        "code": "s156",
+        "cost_value": {},
+        "discount": 344,
+        "expiration_date": "s159",
+        "face_value": {},
+        "float_balance": {},
+        "fulfilled_at": "s15c",
+        "original_client_request_id": "ORIGINAL_CLIENT_REQUEST01",
+        "pin": "s15e",
+        "reference": "s15f",
+        "sector": "s160",
+        "security_code": "s161",
+        "serial_number": "s162",
+        "tags": [],
+        "url": "s164",
+        "id": "PHYSICAL_GIFT_CARD01"
+      },
+      "PHYSICAL_GIFT_CARD02": {
+        "brand": "s1fe",
+        "client_request_id": "CLIENT_REQUEST01",
+        "code": "s200",
+        "cost_value": {},
+        "discount": 514,
+        "expiration_date": "s203",
+        "face_value": {},
+        "float_balance": {},
+        "fulfilled_at": "s206",
+        "original_client_request_id": "ORIGINAL_CLIENT_REQUEST01",
+        "pin": "s208",
+        "reference": "s209",
+        "sector": "s20a",
+        "security_code": "s20b",
+        "serial_number": "s20c",
+        "tags": [],
+        "url": "s20e",
+        "id": "PHYSICAL_GIFT_CARD02"
+      }
+    }
+  },
+  "new": {
+    "physical_gift_card": {
+      "physical_gift_card_ref01": {
+        "brand": "s2a8",
+        "client_request_id": "CLIENT_REQUEST01",
+        "code": "s2aa",
+        "cost_value": {},
+        "discount": 684,
+        "expiration_date": "s2ad",
+        "face_value": {},
+        "float_balance": {},
+        "fulfilled_at": "s2b0",
+        "original_client_request_id": "ORIGINAL_CLIENT_REQUEST01",
+        "pin": "s2b2",
+        "reference": "s2b3",
+        "sector": "s2b4",
+        "security_code": "s2b5",
+        "serial_number": "s2b6",
+        "tags": [],
+        "url": "s2b8"
+      }
+    }
+  },
+  "requests": {
+    "POST /physical/activate": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalActivate",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "physical_activate_with_code": {
+                  "description": "Simple example of activating a physical gift card using just the code from the gift card.",
+                  "summary": "Physical Activate - with code",
+                  "value": {
+                    "brand": "example-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 45,
+                      "currency": "GBP"
+                    },
+                    "sector": "marketplace"
+                  }
+                },
+                "physical_activate_with_code_and_pin": {
+                  "description": "Simple example of activating a physical gift card using both the code and pin from the gift card.",
+                  "summary": "Physical Activate - with code and pin",
+                  "value": {
+                    "brand": "example-brand",
+                    "client_request_id": "req-12345-67891",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 45,
+                      "currency": "GBP"
+                    },
+                    "pin": "1234",
+                    "sector": "marketplace"
+                  }
+                },
+                "physical_activate_with_custom_tags": {
+                  "description": "Simple example of activating a physical gift card and providing some custom tags.",
+                  "summary": "Physical Activate - with custom tags",
+                  "value": {
+                    "brand": "example-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 45,
+                      "currency": "GBP"
+                    },
+                    "sector": "marketplace",
+                    "tags": [
+                      "winter-promo",
+                      "physical"
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9 ._-]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "amount": {
+                        "description": "Amount in the brand's currency. Accepts string or number with up to 2 decimal places.\nMinimum and maximum amounts depend on the buyer↔brand configuration.\nUse the brand discovery endpoint to retrieve valid denomination ranges.\nReturns 400 if the amount is outside the allowed range for the buyer↔brand combination.\n",
+                        "oneOf": [
+                          {
+                            "examples": [
+                              "25",
+                              "25.0",
+                              "25.00"
+                            ],
+                            "pattern": "^\\d+(\\.\\d{1,2})?$",
+                            "type": "string"
+                          },
+                          {
+                            "examples": [
+                              24.99,
+                              25,
+                              25.5
+                            ],
+                            "format": "float",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "pin": {
+                    "maxLength": 20,
+                    "minLength": 3,
+                    "pattern": "^[a-zA-Z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tags": {
+                    "description": "Optional meta data associated with the issuance.",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "pattern": "^[-A-Za-z0-9 ]+$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "brand",
+                  "face_value",
+                  "code",
+                  "sector"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "000",
+                  "data": {
+                    "brand": "example-brand",
+                    "code": "8888777766665555",
+                    "cost_value": {
+                      "amount": 4.5,
+                      "currency": "GBP"
+                    },
+                    "discount": 10,
+                    "face_value": {
+                      "amount": 5,
+                      "currency": "GBP"
+                    },
+                    "float_balance": {
+                      "amount": 95.5,
+                      "currency": "GBP"
+                    },
+                    "pin": "1234",
+                    "reference": "a9a403c0-d9b9-11f0-8cb1-09a11602bcf6"
+                  },
+                  "message": "Card activated successfully",
+                  "status": "success"
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "brand": {
+                          "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                          "example": "fixed-async-uk",
+                          "maxLength": 255,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "code": {
+                          "example": "5045075988099901072",
+                          "type": "string"
+                        },
+                        "cost_value": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "discount": {
+                          "description": "The discount percentage used on this transaction",
+                          "examples": [
+                            0,
+                            9.5,
+                            5.75
+                          ],
+                          "format": "float",
+                          "minimum": 0,
+                          "type": "number"
+                        },
+                        "expiration_date": {
+                          "description": "The expiration date for this gift card. This will only be present when the brand provides one.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "face_value": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "float_balance": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "pin": {
+                          "example": "0936",
+                          "type": "string"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "security_code": {
+                          "description": "Gift card security code (for code-delivery brands). This will only be present when the brand provides one.",
+                          "type": "string"
+                        },
+                        "serial_number": {
+                          "description": "Gift card serial number. Required for certain brands.\nMust be at least 1 character when provided.\n",
+                          "example": "SN123456789",
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "url": {
+                          "description": "Gift card URL (for URL-delivery brands)",
+                          "example": "https://example-gift-card.com",
+                          "format": "uri",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "brand",
+                        "code",
+                        "face_value",
+                        "cost_value",
+                        "discount",
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "const": "Card activated successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "links": {
+              "deletePhysicalActivate": {
+                "description": "Cancel this activation using the DELETE endpoint.",
+                "operationId": "deletePhysicalActivate",
+                "parameters": {
+                  "code": "$response.body#/data/code",
+                  "original_client_request_id": "$request.body#/client_request_id",
+                  "pin": "$response.body#/data/pin"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "brand_does_not_exist": {
+                    "summary": "Example when provided an invalid brand",
+                    "value": {
+                      "code": "072",
+                      "message": "The requested brand [example-brand] does not exist",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "brand_does_not_support_transaction_type": {
+                    "description": "This error will occur when the requested brand does not support requested transaction type",
+                    "summary": "Transaction type not supported by brand",
+                    "value": {
+                      "code": "720",
+                      "message": "The transaction type is not available for the requested brand",
+                      "status": "error"
+                    }
+                  },
+                  "buyer_does_not_support_transaction_type": {
+                    "description": "This error may occur when your account has not been configured to allow certain physical gift card transactions",
+                    "summary": "Transaction type not supported on your account",
+                    "value": {
+                      "code": "719",
+                      "message": "The transaction type is not supported by the partner",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "external_error": {
+                    "summary": "External error with third party providers",
+                    "value": {
+                      "code": "603",
+                      "message": "Error returned by the Processor",
+                      "status": "error"
+                    }
+                  },
+                  "internal_error": {
+                    "summary": "Internal error",
+                    "value": {
+                      "code": "600",
+                      "message": "Internal error",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Bad Gateway No response body is returned."
+          },
+          "504": {
+            "description": "Gateway Timeout No response body is returned"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "POST /physical/cash-out-original-transaction": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalCashOutOriginalTransaction",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "cashout_with_code": {
+                  "description": "You can perform a physical cash out using just the gift card number",
+                  "summary": "Physical cash out with code",
+                  "value": {
+                    "brand": "example-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "2000200171",
+                    "original_client_request_id": "orig-req-12345-67890",
+                    "sector": "voluntary-benefits"
+                  }
+                },
+                "cashout_with_code_and_pin": {
+                  "description": "Some brands will require a PIN number in addition to the gift card number",
+                  "summary": "Physical cash out with code and pin",
+                  "value": {
+                    "brand": "another-example-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "2000200171",
+                    "original_client_request_id": "orig-req-12345-67890",
+                    "pin": "7721",
+                    "sector": "voluntary-benefits"
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "The long card number on the physical gift card you wish to cash out",
+                    "type": "string"
+                  },
+                  "original_client_request_id": {
+                    "description": "This field will be the `client_request_id` provided in the original transaction.  For example, if you are performing some form of cancellation, then this would be the `client_request_id` you provided when making the original issuance request\n",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "pin": {
+                    "description": "The pin number (only applies to certain brands which provide pin) on the physical gift card",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tags": {
+                    "description": "Optional meta data associated with the issuance.",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "pattern": "^[-A-Za-z0-9 ]+$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "original_client_request_id",
+                  "brand",
+                  "sector",
+                  "code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "successful_cash_out": {
+                    "summary": "Example successful response after performing a physical cash out",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "face_value": {
+                          "amount": 5,
+                          "currency": "GBP"
+                        },
+                        "float_balance": {
+                          "amount": 995,
+                          "currency": "GBP"
+                        },
+                        "reference": "af856ec0-efb4-11f0-ba68-d7ff0407d58c"
+                      },
+                      "message": "Card cashed out successfully",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "face_value": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "float_balance": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/face_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/face_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "face_value",
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Card cashed out successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_brand": {
+                    "summary": "Example when provided an invalid brand",
+                    "value": {
+                      "code": "072",
+                      "message": "The requested brand [abc123] does not exist",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "already_cancelled": {
+                    "description": "Example error when gift card you are attempting to cash out has already been cancelled, or cashed out.",
+                    "summary": "Already Cancelled",
+                    "value": {
+                      "code": "100",
+                      "message": "The gift code has already been cancelled",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "internal_error": {
+                    "summary": "Example when we have an intermittent issue with a particular brand or processor",
+                    "value": {
+                      "code": "999",
+                      "message": "Internal error",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Bad Gateway. No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout. No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "POST /physical/check-balance": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalCheckBalance",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "balance_check_with_code_and_pin": {
+                  "description": "Perform a balance check on a physical gift card using the gift card code. Please note, that in addition to the `code` some brands will also require the `pin`",
+                  "summary": "Balance Check - using code and pin",
+                  "value": {
+                    "brand": "fixed-sync-uk",
+                    "client_request_id": "req-12345-00002",
+                    "code": "1234123412341234",
+                    "face_value": {
+                      "currency": "GBP"
+                    },
+                    "pin": "0321",
+                    "sector": "gift-card-mall"
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "Gift card code",
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9 ._-]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "pin": {
+                    "description": "Gift card PIN. This field is optional and only some brands will require this to be added.",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "brand",
+                  "face_value",
+                  "sector",
+                  "code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "face_value": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "face_value"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Card balance retrieved successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "missing_pin_number": {
+                    "summary": "Example when missing required parameter",
+                    "value": {
+                      "code": "704",
+                      "data": {
+                        "pin": [
+                          "The pin field is required."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Validation error code",
+                      "example": "433",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "description": "Optional detailed validation errors by field",
+                      "example": {
+                        "brand": [
+                          "The brand field is required."
+                        ],
+                        "faceValue.amount": [
+                          "The amount must be a positive number."
+                        ]
+                      },
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Error message",
+                      "example": "There were errors validating the request",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "211",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Too many attempts for the API rate limit",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Too many requests. Rate limit exceeded."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "external_error": {
+                    "summary": "Example processor error",
+                    "value": {
+                      "code": "603",
+                      "message": "Error returned by the Processor",
+                      "status": "error"
+                    }
+                  },
+                  "unable_to_locate_sale": {
+                    "summary": "Example missing sale",
+                    "value": {
+                      "code": "724",
+                      "message": "Could not locate original sale record.",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Bad Gateway No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "POST /physical/fulfil-order": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalFulfilOrder",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "fulfilment_with_code": {
+                  "summary": "Physical Fulfilment - with code",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "5045075881749921691",
+                    "face_value": {
+                      "amount": 25,
+                      "currency": "GBP"
+                    },
+                    "reference": "a9cc4820-de83-11e8-a2fb-5dd310db76de"
+                  }
+                },
+                "fulfilment_with_code_and_pin": {
+                  "summary": "Physical Fulfilment - with code and pin",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "5045075881749921691",
+                    "face_value": {
+                      "amount": 25,
+                      "currency": "GBP"
+                    },
+                    "pin": "9999",
+                    "reference": "a9cc4820-de83-11e8-a2fb-5dd310db76de"
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "The gift card code",
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9 ._-]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "amount": {
+                        "description": "Amount in the brand's currency. Accepts string or number with up to 2 decimal places.\nMinimum and maximum amounts depend on the buyer↔brand configuration.\nUse the brand discovery endpoint to retrieve valid denomination ranges.\nReturns 400 if the amount is outside the allowed range for the buyer↔brand combination.\n",
+                        "oneOf": [
+                          {
+                            "examples": [
+                              "25",
+                              "25.0",
+                              "25.00"
+                            ],
+                            "pattern": "^\\d+(\\.\\d{1,2})?$",
+                            "type": "string"
+                          },
+                          {
+                            "examples": [
+                              24.99,
+                              25,
+                              25.5
+                            ],
+                            "format": "float",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "pin": {
+                    "description": "The gift card PIN, only required for certain brands.",
+                    "maxLength": 20,
+                    "minLength": 3,
+                    "pattern": "^[a-zA-Z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "reference": {
+                    "description": "Unique reference for this transaction",
+                    "example": "019ade93-d513-776b-92a2-b6323329b661",
+                    "format": "uuid",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "brand",
+                  "client_request_id",
+                  "code",
+                  "face_value",
+                  "reference"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "000",
+                  "data": {
+                    "brand": "example-brand",
+                    "code": "6405666273630824",
+                    "face_value": {
+                      "amount": 20,
+                      "currency": "GBP"
+                    },
+                    "fulfilled_at": "2025-12-17T11:32:12+00:00",
+                    "reference": "a87423c0-db3b-11f0-94a8-43a459169868"
+                  },
+                  "message": "Card fulfilled successfully",
+                  "status": "success"
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "brand": {
+                          "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                          "example": "fixed-async-uk",
+                          "maxLength": 255,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "code": {
+                          "description": "Some brands may return this within the response where relevant.",
+                          "type": "string"
+                        },
+                        "expiration_date": {
+                          "description": "The expiration date for this gift card. This will only be present when the brand provides one.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "face_value": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "float_balance": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/face_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/face_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "fulfilled_at": {
+                          "description": "The date for which this this gift card was fulfilled.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "security_code": {
+                          "description": "Some brands may return this within the response where relevant.",
+                          "type": "string"
+                        },
+                        "serial_number": {
+                          "description": "Some brands may return this within the response where relevant.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "brand",
+                        "face_value",
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "const": "Card fulfilled successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_brand": {
+                    "description": "Example error when providing an invalid brand",
+                    "summary": "Invalid brand",
+                    "value": {
+                      "code": "072",
+                      "message": "The requested brand [abc123] does not exist",
+                      "status": "error"
+                    }
+                  },
+                  "invalid_face_value": {
+                    "description": "This error can occur when not using a valid face value amount. \nEnsure that for open denomination brands your amount is above the minimum, and below the maximum thresholds.\nFor fixed denomination brands, ensure that the face value amount you have specified is a valid denomination. \nUse the brands endpoint to determine what are the allowed face value amounts per brand.\n",
+                    "summary": "Invalid face value amount",
+                    "value": {
+                      "code": "704",
+                      "message": "Denomination [20] not available for Brand [Example Brand]",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_status": {
+                    "description": "This error can occur when the sale your trying to fulfil is not currently in the correct status",
+                    "summary": "Invalid sale status",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "reference": "Cannot fulfil order, invalid status"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "999",
+                  "message": "Internal Error",
+                  "status": "error"
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "502": {
+            "description": "Bad Gateway. No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout. No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "POST /physical/top-up": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "postPhysicalTopUp",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "with_code": {
+                  "description": "Top-up request with gift card code only (when PIN is not required by brand)",
+                  "summary": "Physical Top-up with Code",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67891",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 25,
+                      "currency": "GBP"
+                    },
+                    "sector": "voluntary-benefits"
+                  }
+                },
+                "with_code_and_pin": {
+                  "description": "Top-up request using both gift card code and PIN",
+                  "summary": "Physical Top-up with Code and PIN",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 22.35,
+                      "currency": "GBP"
+                    },
+                    "pin": "12562161",
+                    "sector": "marketplace"
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "Physical card number (8-110 characters, alphanumeric with spaces, periods, underscores, and hyphens)",
+                    "example": "6280390102830976",
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9 ._-]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "amount": {
+                        "description": "Amount in the brand's currency. Accepts string or number with up to 2 decimal places.\nMinimum and maximum amounts depend on the buyer↔brand configuration.\nUse the brand discovery endpoint to retrieve valid denomination ranges.\nReturns 400 if the amount is outside the allowed range for the buyer↔brand combination.\n",
+                        "oneOf": [
+                          {
+                            "examples": [
+                              "25",
+                              "25.0",
+                              "25.00"
+                            ],
+                            "pattern": "^\\d+(\\.\\d{1,2})?$",
+                            "type": "string"
+                          },
+                          {
+                            "examples": [
+                              24.99,
+                              25,
+                              25.5
+                            ],
+                            "format": "float",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "pin": {
+                    "description": "Gift card PIN. Required for certain brands.\nMust be between 3 and 20 characters when provided.\nAllowed characters: alphanumeric, underscore, hyphen.\n",
+                    "example": "12562161",
+                    "maxLength": 20,
+                    "minLength": 3,
+                    "pattern": "^[a-zA-Z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "serial_number": {
+                    "description": "Gift card serial number. Required for certain brands.\nMust be at least 1 character when provided.\n",
+                    "example": "SN123456789",
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "tags": {
+                    "description": "Optional meta data associated with the issuance.",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "pattern": "^[-A-Za-z0-9 ]+$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "brand",
+                  "face_value",
+                  "sector",
+                  "code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "with_code": {
+                    "description": "Top-up successful with only gift card code",
+                    "summary": "Successful Response - Code",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "brand": "example-brand",
+                        "code": "ABC1234",
+                        "cost_value": {
+                          "amount": 90,
+                          "currency": "GBP"
+                        },
+                        "discount": 10,
+                        "face_value": {
+                          "amount": 100,
+                          "currency": "GBP"
+                        },
+                        "float_balance": {
+                          "amount": 20763.3,
+                          "currency": "GBP"
+                        },
+                        "reference": "a1395200-ea40-11f0-88f5-c7a4c5716c58"
+                      },
+                      "message": "Card topped up successfully",
+                      "status": "success"
+                    }
+                  },
+                  "with_code_and_pin": {
+                    "description": "Top-up successful with both gift card code and PIN returned",
+                    "summary": "Successful Response - Code and PIN",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "brand": "example-brand",
+                        "code": "ABC1234",
+                        "cost_value": {
+                          "amount": 90,
+                          "currency": "GBP"
+                        },
+                        "discount": 10,
+                        "face_value": {
+                          "amount": 100,
+                          "currency": "GBP"
+                        },
+                        "float_balance": {
+                          "amount": 20763.3,
+                          "currency": "GBP"
+                        },
+                        "pin": "12345",
+                        "reference": "a3e72620-ea45-11f0-8158-adb8121c3859"
+                      },
+                      "message": "Card topped up successfully",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "brand": {
+                          "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                          "example": "fixed-async-uk",
+                          "maxLength": 255,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "code": {
+                          "example": "4444555566667777",
+                          "type": "string"
+                        },
+                        "cost_value": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "discount": {
+                          "description": "The discount percentage used on this transaction",
+                          "examples": [
+                            0,
+                            9.5,
+                            5.75
+                          ],
+                          "format": "float",
+                          "minimum": 0,
+                          "type": "number"
+                        },
+                        "expiration_date": {
+                          "description": "The expiration date for this gift card. This will only be present when the brand provides one.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "face_value": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "float_balance": {
+                          "properties": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties"
+                          },
+                          "required": {
+                            "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/required"
+                          },
+                          "type": "object"
+                        },
+                        "pin": {
+                          "example": "1234",
+                          "type": "string"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "security_code": {
+                          "description": "Gift card security code (for code-delivery brands). This will only be present when the brand provides one.",
+                          "type": "string"
+                        },
+                        "serial_number": {
+                          "description": "Gift card serial number. Required for certain brands.\nMust be at least 1 character when provided.\n",
+                          "example": "SN123456789",
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "brand",
+                        "face_value",
+                        "cost_value",
+                        "discount",
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Card topped up successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_face_value_range": {
+                    "description": "Validation error when face value amount is outside the allowed range for the brand (min and max values are brand-specific)",
+                    "summary": "Invalid Face Value Range",
+                    "value": {
+                      "code": "704",
+                      "message": "The face value must be between [1.00] and [150.00]",
+                      "status": "error"
+                    }
+                  },
+                  "invalid_sector": {
+                    "description": "Validation error when sector field contains an invalid value",
+                    "summary": "Invalid Sector",
+                    "value": {
+                      "code": "704",
+                      "data": {
+                        "sector": "The sector [marketplaces] is invalid. Please provide an acceptable one"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error": {
+                    "description": "Bad request with validation errors",
+                    "summary": "Validation Error",
+                    "value": {
+                      "code": "704",
+                      "data": {
+                        "amount": "The [amount] must be a number"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request. Invalid or missing required parameters."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "currency_not_found": {
+                    "description": "The requested currency was not found",
+                    "summary": "Currency Not Found",
+                    "value": {
+                      "code": "721",
+                      "message": "The requested currency was not found",
+                      "status": "error"
+                    }
+                  },
+                  "currency_not_supported_by_brand": {
+                    "description": "The requested currency is not supported by this brand",
+                    "summary": "Currency Not Supported by Brand",
+                    "value": {
+                      "code": "723",
+                      "message": "The requested currency is not supported by this brand",
+                      "status": "error"
+                    }
+                  },
+                  "transaction_type_not_available": {
+                    "description": "The requested transaction type is not available for the requested brand",
+                    "summary": "Transaction Type Not Available for Brand",
+                    "value": {
+                      "code": "720",
+                      "message": "The transaction type is not available for the requested brand",
+                      "status": "error"
+                    }
+                  },
+                  "transaction_type_not_supported": {
+                    "description": "The requested transaction type is not supported by the partner",
+                    "summary": "Transaction Type Not Supported by Partner",
+                    "value": {
+                      "code": "719",
+                      "message": "The transaction type is not supported by the partner",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error": {
+                    "description": "Request data failed validation rules",
+                    "summary": "Validation Error",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The brand field is required."
+                        ],
+                        "face_value.amount": [
+                          "The amount must be a positive number."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "internal_error": {
+                    "description": "Internal server error",
+                    "summary": "Internal Error",
+                    "value": {
+                      "code": "999",
+                      "message": "Internal error",
+                      "status": "error"
+                    }
+                  },
+                  "processor_error": {
+                    "description": "Error returned by the processor",
+                    "summary": "Processor Error",
+                    "value": {
+                      "code": "603",
+                      "message": "Error returned by the Processor",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal server error. Error returned by the processor."
+          },
+          "502": {
+            "description": "Bad Gateway No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "DELETE /physical/activate": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "deletePhysicalActivate",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "brand": "mock-brand",
+                "client_request_id": "req-12345-67891",
+                "code": "123456789",
+                "face_value": {
+                  "amount": 25,
+                  "currency": "GBP"
+                },
+                "original_client_request_id": "req-12345-67890",
+                "sector": "voluntary-benefits"
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "The gift card number",
+                    "example": "123456789",
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9._\\-:\\/]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "amount": {
+                        "description": "Amount in the brand's currency. Accepts string or number with up to 2 decimal places.\nMinimum and maximum amounts depend on the buyer↔brand configuration.\nUse the brand discovery endpoint to retrieve valid denomination ranges.\nReturns 400 if the amount is outside the allowed range for the buyer↔brand combination.\n",
+                        "oneOf": [
+                          {
+                            "examples": [
+                              "25",
+                              "25.0",
+                              "25.00"
+                            ],
+                            "pattern": "^\\d+(\\.\\d{1,2})?$",
+                            "type": "string"
+                          },
+                          {
+                            "examples": [
+                              24.99,
+                              25,
+                              25.5
+                            ],
+                            "format": "float",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "original_client_request_id": {
+                    "description": "This field will be the `client_request_id` provided in the original transaction.  For example, if you are performing some form of cancellation, then this would be the `client_request_id` you provided when making the original issuance request\n",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "pin": {
+                    "description": "The PIN number on the card, not all brands provide these.",
+                    "example": "1234",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "original_client_request_id",
+                  "brand",
+                  "face_value",
+                  "code",
+                  "sector"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "000",
+                  "data": {
+                    "float_balance": {
+                      "amount": 100,
+                      "currency": "GBP"
+                    },
+                    "reference": "acf52eb0-da6c-11f0-9168-7b24d6782c52"
+                  },
+                  "message": "Card activation cancelled successfully",
+                  "status": "success"
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "float_balance": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Card activation cancelled successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": "704",
+                  "message": "The face value must be between [0.01] and [100.00]",
+                  "status": "error"
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "original_sale_mismatch": {
+                    "description": "When cancelling an activation, the brand, amount and currency within the cancellation request body must match the original activation request.",
+                    "summary": "Mismatch with original activation",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": "Attempting to cancel a gift code of a different brand"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "sale_already_cancelled": {
+                    "description": "This error will occur when the physical activation you are trying to cancel has already been cancelled.",
+                    "summary": "Activation already cancelled",
+                    "value": {
+                      "code": "100",
+                      "message": "The gift code has already been cancelled",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "502": {
+            "description": "Bad Gateway. No response body is returned."
+          },
+          "504": {
+            "description": "Gateway Timeout. No response body is returned"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    },
+    "DELETE /physical/top-up": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "deletePhysicalTopUp",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "with_code": {
+                  "description": "Cancel top-up request with code",
+                  "summary": "Cancel with Code",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67890",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 22.35,
+                      "currency": "GBP"
+                    },
+                    "original_client_request_id": "orig-req-12345-67890",
+                    "sector": "marketplace"
+                  }
+                },
+                "with_code_and_pin": {
+                  "description": "Cancel top-up request with code and PIN",
+                  "summary": "Cancel with Code and PIN",
+                  "value": {
+                    "brand": "mock-brand",
+                    "client_request_id": "req-12345-67891",
+                    "code": "6280390102830976",
+                    "face_value": {
+                      "amount": 22.35,
+                      "currency": "GBP"
+                    },
+                    "original_client_request_id": "orig-req-12345-67890",
+                    "pin": "12562161",
+                    "sector": "marketplace"
+                  }
+                }
+              },
+              "schema": {
+                "properties": {
+                  "brand": {
+                    "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                    "example": "fixed-async-uk",
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9-]+$",
+                    "type": "string"
+                  },
+                  "client_request_id": {
+                    "description": "Unique identifier for this request. Also acts as an idempotency key",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "code": {
+                    "maxLength": 110,
+                    "minLength": 8,
+                    "pattern": "^[a-zA-Z0-9:_\\-:\\/]+$",
+                    "type": "string"
+                  },
+                  "face_value": {
+                    "properties": {
+                      "amount": {
+                        "description": "Amount in the brand's currency. Accepts string or number with up to 2 decimal places.\nMinimum and maximum amounts depend on the buyer↔brand configuration.\nUse the brand discovery endpoint to retrieve valid denomination ranges.\nReturns 400 if the amount is outside the allowed range for the buyer↔brand combination.\n",
+                        "oneOf": [
+                          {
+                            "examples": [
+                              "25",
+                              "25.0",
+                              "25.00"
+                            ],
+                            "pattern": "^\\d+(\\.\\d{1,2})?$",
+                            "type": "string"
+                          },
+                          {
+                            "examples": [
+                              24.99,
+                              25,
+                              25.5
+                            ],
+                            "format": "float",
+                            "type": "number"
+                          }
+                        ]
+                      },
+                      "currency": {
+                        "enum": [
+                          "AED",
+                          "AUD",
+                          "BHD",
+                          "BRL",
+                          "CAD",
+                          "CHF",
+                          "CNY",
+                          "CZK",
+                          "DKK",
+                          "EUR",
+                          "GBP",
+                          "HUF",
+                          "INR",
+                          "JPY",
+                          "KWD",
+                          "MXN",
+                          "NOK",
+                          "NZD",
+                          "OMR",
+                          "PLN",
+                          "QAR",
+                          "RON",
+                          "SAR",
+                          "SEK",
+                          "USD"
+                        ],
+                        "maxLength": 3,
+                        "minLength": 3,
+                        "pattern": "^[A-Z]{3}$",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "amount",
+                      "currency"
+                    ],
+                    "type": "object"
+                  },
+                  "original_client_request_id": {
+                    "description": "This field will be the `client_request_id` provided in the original transaction.  For example, if you are performing some form of cancellation, then this would be the `client_request_id` you provided when making the original issuance request\n",
+                    "example": "req-12345-67890",
+                    "maxLength": 50,
+                    "minLength": 5,
+                    "pattern": "^[A-Za-z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "pin": {
+                    "description": "Gift card PIN. Required for certain brands.\nMust be between 3 and 20 characters when provided.\nAllowed characters: alphanumeric, underscore, hyphen.\n",
+                    "example": "12562161",
+                    "maxLength": 20,
+                    "minLength": 3,
+                    "pattern": "^[a-zA-Z0-9_-]+$",
+                    "type": "string"
+                  },
+                  "sector": {
+                    "description": "Must match one of the sectors configured for your buyer account.\n",
+                    "enum": [
+                      "affiliate-marketing",
+                      "aggregator",
+                      "b2c-marketplace",
+                      "cashback",
+                      "cash-out",
+                      "charity",
+                      "consumer",
+                      "consumer-rewards-and-incentives",
+                      "crypto-currency",
+                      "crypto-off-ramp",
+                      "customer-acquisition",
+                      "digital-currency",
+                      "employee-benefits",
+                      "employee-rewards-and-incentives",
+                      "gift-card-mall",
+                      "insurance",
+                      "marketplace",
+                      "other",
+                      "relief-support-and-disbursement",
+                      "reward-recognition",
+                      "voluntary-benefits"
+                    ],
+                    "example": "voluntary-benefits",
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "client_request_id",
+                  "original_client_request_id",
+                  "brand",
+                  "face_value",
+                  "code",
+                  "sector"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "cancellation_successful": {
+                    "description": "Top-up cancellation successful",
+                    "summary": "Cancellation Successful",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "float_balance": {
+                          "amount": 20763.3,
+                          "currency": "GBP"
+                        },
+                        "reference": "a491f1f0-0c75-11eb-af67-09b215648e5c"
+                      },
+                      "message": "Card top up cancelled successfully",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "float_balance": {
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reference"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Card top up cancelled successfully",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "validation_error": {
+                    "description": "Bad request with validation errors",
+                    "summary": "Validation Error",
+                    "value": {
+                      "code": "704",
+                      "data": {
+                        "amount": "The [amount] must be a number"
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad Request. Invalid or missing required parameters."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "currency_not_found": {
+                    "description": "The requested currency was not found",
+                    "summary": "Currency Not Found",
+                    "value": {
+                      "code": "721",
+                      "message": "The requested currency was not found",
+                      "status": "error"
+                    }
+                  },
+                  "currency_not_supported_by_brand": {
+                    "description": "The requested currency is not supported by this brand",
+                    "summary": "Currency Not Supported by Brand",
+                    "value": {
+                      "code": "723",
+                      "message": "The requested currency is not supported by this brand",
+                      "status": "error"
+                    }
+                  },
+                  "transaction_type_not_available": {
+                    "description": "The requested transaction type is not available for the requested brand",
+                    "summary": "Transaction Type Not Available for Brand",
+                    "value": {
+                      "code": "720",
+                      "message": "The transaction type is not available for the requested brand",
+                      "status": "error"
+                    }
+                  },
+                  "transaction_type_not_supported": {
+                    "description": "The requested transaction type is not supported by the partner",
+                    "summary": "Transaction Type Not Supported by Partner",
+                    "value": {
+                      "code": "719",
+                      "message": "The transaction type is not supported by the partner",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error": {
+                    "description": "Request data failed validation rules",
+                    "summary": "Validation Error",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "brand": [
+                          "The brand field is required."
+                        ],
+                        "face_value.amount": [
+                          "The amount must be a positive number."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "internal_error": {
+                    "description": "Internal server error",
+                    "summary": "Internal Error",
+                    "value": {
+                      "code": "999",
+                      "message": "Internal error",
+                      "status": "error"
+                    }
+                  },
+                  "processor_error": {
+                    "description": "Error returned by the processor",
+                    "summary": "Processor Error",
+                    "value": {
+                      "code": "603",
+                      "message": "Error returned by the Processor",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$ref": "#/responses/400/content/application~1json/schema/properties"
+                  },
+                  "required": {
+                    "$ref": "#/responses/400/content/application~1json/schema/required"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Internal server error. Error returned by the processor."
+          },
+          "502": {
+            "description": "Bad Gateway.  No response body is returned.\n"
+          },
+          "504": {
+            "description": "Gateway Timeout.  No response body is returned\n"
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

@@ -7,12 +7,18 @@ main: kit: flow: BasicBrandFlow:
   name: "BasicBrandFlow",
   step: [
     {
-      op: "list",
+      input: {
+        ref: "brand_ref01",
+        srcdatavar: "brand_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
       valid: [
         {
-          apply: "ItemExists",
+          apply: "TextFieldMark",
           def: {
-            ref: "brand_ref01"
+            mark: "Mark01-brand_ref01"
           }
         }
       ]

@@ -7,12 +7,38 @@ main: kit: flow: BasicFloatFlow:
   name: "BasicFloatFlow",
   step: [
     {
+      input: {
+        ref: "float_ref01"
+      }
+
+      op: "create"
+    }
+
+    {
       op: "list",
       valid: [
         {
           apply: "ItemExists",
           def: {
             ref: "float_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      input: {
+        ref: "float_ref01",
+        srcdatavar: "float_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-float_ref01"
           }
         }
       ]

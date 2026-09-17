@@ -359,21 +359,129 @@ class TilloSDK
     }
 
 
-    private $_dgc = null;
+    private $_brand_template = null;
 
-    // Canonical facade: $client->Dgc()->list() / ->load(["id" => ...]).
-    // PHP method names are case-insensitive, so lowercase $client->dgc()
+    // Canonical facade: $client->BrandTemplate()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->brand_template()
     // resolves here too.
-    public function Dgc($data = null)
+    public function BrandTemplate($data = null)
     {
-        require_once __DIR__ . '/entity/dgc_entity.php';
+        require_once __DIR__ . '/entity/brand_template_entity.php';
         if ($data === null) {
-            if ($this->_dgc === null) {
-                $this->_dgc = new DgcEntity($this, null);
+            if ($this->_brand_template === null) {
+                $this->_brand_template = new BrandTemplateEntity($this, null);
             }
-            return $this->_dgc;
+            return $this->_brand_template;
         }
-        return new DgcEntity($this, $data);
+        return new BrandTemplateEntity($this, $data);
+    }
+
+
+    private $_digital_gift_card = null;
+
+    // Canonical facade: $client->DigitalGiftCard()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_gift_card()
+    // resolves here too.
+    public function DigitalGiftCard($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_gift_card_entity.php';
+        if ($data === null) {
+            if ($this->_digital_gift_card === null) {
+                $this->_digital_gift_card = new DigitalGiftCardEntity($this, null);
+            }
+            return $this->_digital_gift_card;
+        }
+        return new DigitalGiftCardEntity($this, $data);
+    }
+
+
+    private $_digital_issue_delete = null;
+
+    // Canonical facade: $client->DigitalIssueDelete()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_issue_delete()
+    // resolves here too.
+    public function DigitalIssueDelete($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_issue_delete_entity.php';
+        if ($data === null) {
+            if ($this->_digital_issue_delete === null) {
+                $this->_digital_issue_delete = new DigitalIssueDeleteEntity($this, null);
+            }
+            return $this->_digital_issue_delete;
+        }
+        return new DigitalIssueDeleteEntity($this, $data);
+    }
+
+
+    private $_digital_issue_post = null;
+
+    // Canonical facade: $client->DigitalIssuePost()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_issue_post()
+    // resolves here too.
+    public function DigitalIssuePost($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_issue_post_entity.php';
+        if ($data === null) {
+            if ($this->_digital_issue_post === null) {
+                $this->_digital_issue_post = new DigitalIssuePostEntity($this, null);
+            }
+            return $this->_digital_issue_post;
+        }
+        return new DigitalIssuePostEntity($this, $data);
+    }
+
+
+    private $_digital_order_card = null;
+
+    // Canonical facade: $client->DigitalOrderCard()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_order_card()
+    // resolves here too.
+    public function DigitalOrderCard($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_order_card_entity.php';
+        if ($data === null) {
+            if ($this->_digital_order_card === null) {
+                $this->_digital_order_card = new DigitalOrderCardEntity($this, null);
+            }
+            return $this->_digital_order_card;
+        }
+        return new DigitalOrderCardEntity($this, $data);
+    }
+
+
+    private $_digital_order_status = null;
+
+    // Canonical facade: $client->DigitalOrderStatus()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_order_status()
+    // resolves here too.
+    public function DigitalOrderStatus($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_order_status_entity.php';
+        if ($data === null) {
+            if ($this->_digital_order_status === null) {
+                $this->_digital_order_status = new DigitalOrderStatusEntity($this, null);
+            }
+            return $this->_digital_order_status;
+        }
+        return new DigitalOrderStatusEntity($this, $data);
+    }
+
+
+    private $_digital_top_up_post = null;
+
+    // Canonical facade: $client->DigitalTopUpPost()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->digital_top_up_post()
+    // resolves here too.
+    public function DigitalTopUpPost($data = null)
+    {
+        require_once __DIR__ . '/entity/digital_top_up_post_entity.php';
+        if ($data === null) {
+            if ($this->_digital_top_up_post === null) {
+                $this->_digital_top_up_post = new DigitalTopUpPostEntity($this, null);
+            }
+            return $this->_digital_top_up_post;
+        }
+        return new DigitalTopUpPostEntity($this, $data);
     }
 
 
@@ -392,6 +500,96 @@ class TilloSDK
             return $this->_float;
         }
         return new FloatEntity($this, $data);
+    }
+
+
+    private $_physical_gift_card = null;
+
+    // Canonical facade: $client->PhysicalGiftCard()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->physical_gift_card()
+    // resolves here too.
+    public function PhysicalGiftCard($data = null)
+    {
+        require_once __DIR__ . '/entity/physical_gift_card_entity.php';
+        if ($data === null) {
+            if ($this->_physical_gift_card === null) {
+                $this->_physical_gift_card = new PhysicalGiftCardEntity($this, null);
+            }
+            return $this->_physical_gift_card;
+        }
+        return new PhysicalGiftCardEntity($this, $data);
+    }
+
+
+    private $_physical_order_card = null;
+
+    // Canonical facade: $client->PhysicalOrderCard()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->physical_order_card()
+    // resolves here too.
+    public function PhysicalOrderCard($data = null)
+    {
+        require_once __DIR__ . '/entity/physical_order_card_entity.php';
+        if ($data === null) {
+            if ($this->_physical_order_card === null) {
+                $this->_physical_order_card = new PhysicalOrderCardEntity($this, null);
+            }
+            return $this->_physical_order_card;
+        }
+        return new PhysicalOrderCardEntity($this, $data);
+    }
+
+
+    private $_physical_order_status = null;
+
+    // Canonical facade: $client->PhysicalOrderStatus()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->physical_order_status()
+    // resolves here too.
+    public function PhysicalOrderStatus($data = null)
+    {
+        require_once __DIR__ . '/entity/physical_order_status_entity.php';
+        if ($data === null) {
+            if ($this->_physical_order_status === null) {
+                $this->_physical_order_status = new PhysicalOrderStatusEntity($this, null);
+            }
+            return $this->_physical_order_status;
+        }
+        return new PhysicalOrderStatusEntity($this, $data);
+    }
+
+
+    private $_promotion = null;
+
+    // Canonical facade: $client->Promotion()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->promotion()
+    // resolves here too.
+    public function Promotion($data = null)
+    {
+        require_once __DIR__ . '/entity/promotion_entity.php';
+        if ($data === null) {
+            if ($this->_promotion === null) {
+                $this->_promotion = new PromotionEntity($this, null);
+            }
+            return $this->_promotion;
+        }
+        return new PromotionEntity($this, $data);
+    }
+
+
+    private $_template = null;
+
+    // Canonical facade: $client->Template()->list() / ->load(["id" => ...]).
+    // PHP method names are case-insensitive, so lowercase $client->template()
+    // resolves here too.
+    public function Template($data = null)
+    {
+        require_once __DIR__ . '/entity/template_entity.php';
+        if ($data === null) {
+            if ($this->_template === null) {
+                $this->_template = new TemplateEntity($this, null);
+            }
+            return $this->_template;
+        }
+        return new TemplateEntity($this, $data);
     }
 
 

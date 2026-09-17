@@ -16,7 +16,7 @@ import (
 // reqdata map passed through to the SDK. For load, `query` should be
 // `{"id": <value>}`. For list, omit `query` or pass an empty map.
 type Args struct {
-	Entity string         `json:"entity" jsonschema:"brand | dgc | float"`
+	Entity string         `json:"entity" jsonschema:"brand | brand_template | digital_gift_card | digital_issue_delete | digital_issue_post | digital_order_card | digital_order_status | digital_top_up_post | float | physical_gift_card | physical_order_card | physical_order_status | promotion | template"`
 	Query  map[string]any `json:"query,omitempty" jsonschema:"optional match map e.g. {\"id\":1} for load, omit for list"`
 }
 
@@ -79,10 +79,32 @@ func entityFor(client *sdk.TilloSDK, name string) (sdk.TilloEntity, error) {
 	switch strings.ToLower(name) {
 	case "brand":
 		return client.Brand(nil), nil
-	case "dgc":
-		return client.Dgc(nil), nil
+	case "brand_template":
+		return client.BrandTemplate(nil), nil
+	case "digital_gift_card":
+		return client.DigitalGiftCard(nil), nil
+	case "digital_issue_delete":
+		return client.DigitalIssueDelete(nil), nil
+	case "digital_issue_post":
+		return client.DigitalIssuePost(nil), nil
+	case "digital_order_card":
+		return client.DigitalOrderCard(nil), nil
+	case "digital_order_status":
+		return client.DigitalOrderStatus(nil), nil
+	case "digital_top_up_post":
+		return client.DigitalTopUpPost(nil), nil
 	case "float":
 		return client.Float(nil), nil
+	case "physical_gift_card":
+		return client.PhysicalGiftCard(nil), nil
+	case "physical_order_card":
+		return client.PhysicalOrderCard(nil), nil
+	case "physical_order_status":
+		return client.PhysicalOrderStatus(nil), nil
+	case "promotion":
+		return client.Promotion(nil), nil
+	case "template":
+		return client.Template(nil), nil
 
 	}
 	return nil, fmt.Errorf("unknown entity %q", name)

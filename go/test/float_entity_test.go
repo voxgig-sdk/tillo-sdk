@@ -80,7 +80,7 @@ func TestFloatEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"list"} {
+		for _, _op := range []string{"create", "list", "load"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "float." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -97,18 +97,21 @@ func TestFloatEntity(t *testing.T) {
 		}
 		client := setup.client
 
-		// Bootstrap entity data from existing test data (no create step in flow).
-		floatRef01DataRaw := vs.Items(core.ToMapAny(vs.GetPath(setup.data, "existing.float")))
-		var floatRef01Data map[string]any
-		if len(floatRef01DataRaw) > 0 {
-			floatRef01Data = core.ToMapAny(floatRef01DataRaw[0][1])
+		// CREATE
+		floatRef01Ent := client.Float(nil)
+		floatRef01Data := core.ToMapAny(vs.GetProp(
+			vs.GetPath(setup.data, []any{"new", "float"}), "float_ref01"))
+
+		floatRef01DataResult, err := floatRef01Ent.Create(floatRef01Data, nil)
+		if err != nil {
+			t.Fatalf("create failed: %v", err)
 		}
-		// Discard guards against Go's unused-var check when the flow's steps
-		// happen not to consume the bootstrap data (e.g. list-only flows).
-		_ = floatRef01Data
+		floatRef01Data = core.ToMapAny(entityData(floatRef01DataResult))
+		if floatRef01Data == nil {
+			t.Fatal("expected create result to be a map")
+		}
 
 		// LIST
-		floatRef01Ent := client.Float(nil)
 		floatRef01Match := map[string]any{}
 
 		floatRef01ListResult, err := floatRef01Ent.List(floatRef01Match, nil)
@@ -118,6 +121,16 @@ func TestFloatEntity(t *testing.T) {
 		_, floatRef01ListOk := floatRef01ListResult.([]any)
 		if !floatRef01ListOk {
 			t.Fatalf("expected list result to be an array, got %T", floatRef01ListResult)
+		}
+
+		// LOAD
+		floatRef01MatchDt0 := map[string]any{}
+		floatRef01DataDt0Loaded, err := floatRef01Ent.Load(floatRef01MatchDt0, nil)
+		if err != nil {
+			t.Fatalf("load failed: %v", err)
+		}
+		if floatRef01DataDt0Loaded == nil {
+			t.Fatal("expected load result to be non-nil")
 		}
 
 	})

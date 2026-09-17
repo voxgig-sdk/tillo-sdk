@@ -1,0 +1,653 @@
+{
+  "existing": {
+    "digital_order_status": {
+      "DIGITAL_ORDER_STATUS00": {
+        "barcode": {},
+        "brand": "s83",
+        "code": "s84",
+        "cost_value": {},
+        "discount": 134,
+        "expiration_date": "s87",
+        "face_value": {},
+        "pin": "s89",
+        "reference": "s8a",
+        "security_code": "s8b",
+        "serial_number": "s8c",
+        "status": "s8d",
+        "url": "s8e",
+        "id": "DIGITAL_ORDER_STATUS00"
+      },
+      "DIGITAL_ORDER_STATUS01": {
+        "barcode": {},
+        "brand": "s105",
+        "code": "s106",
+        "cost_value": {},
+        "discount": 264,
+        "expiration_date": "s109",
+        "face_value": {},
+        "pin": "s10b",
+        "reference": "s10c",
+        "security_code": "s10d",
+        "serial_number": "s10e",
+        "status": "s10f",
+        "url": "s110",
+        "id": "DIGITAL_ORDER_STATUS01"
+      },
+      "DIGITAL_ORDER_STATUS02": {
+        "barcode": {},
+        "brand": "s187",
+        "code": "s188",
+        "cost_value": {},
+        "discount": 394,
+        "expiration_date": "s18b",
+        "face_value": {},
+        "pin": "s18d",
+        "reference": "s18e",
+        "security_code": "s18f",
+        "serial_number": "s190",
+        "status": "s191",
+        "url": "s192",
+        "id": "DIGITAL_ORDER_STATUS02"
+      }
+    }
+  },
+  "new": {
+    "digital_order_status": {
+      "digital_order_status_ref01": {
+        "barcode": {},
+        "brand": "s209",
+        "code": "s20a",
+        "cost_value": {},
+        "discount": 524,
+        "expiration_date": "s20d",
+        "face_value": {},
+        "pin": "s20f",
+        "reference": "s210",
+        "security_code": "s211",
+        "serial_number": "s212",
+        "status": "s213",
+        "url": "s214"
+      }
+    }
+  },
+  "requests": {
+    "GET /digital/order-status": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "getDigitalOrderStatus",
+        "parameters": [
+          {
+            "description": "The unique reference (UUID) returned when the order was created.  Cannot be used together with original_client_request_id.",
+            "example": "019ade93-d513-776b-92a2-b6323329b661",
+            "in": "query",
+            "name": "reference",
+            "required": false,
+            "schema": {
+              "description": "Unique reference for this transaction",
+              "example": "019ade93-d513-776b-92a2-b6323329b661",
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The unique identifier (client_request_id) that you provided when creating the order. Cannot be used together with reference.",
+            "example": "req-12345-67890",
+            "in": "query",
+            "name": "original_client_request_id",
+            "required": false,
+            "schema": {
+              "description": "This field will be the `client_request_id` provided in the original transaction.  For example, if you are performing some form of cancellation, then this would be the `client_request_id` you provided when making the original issuance request\n",
+              "example": "req-12345-67890",
+              "maxLength": 50,
+              "minLength": 5,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "failed_order": {
+                    "description": "Response when the order has failed to process",
+                    "summary": "Order failed",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "reference": "019ade93-d513-776b-92a2-b6323329b661",
+                        "status": "ERROR"
+                      },
+                      "message": "Order failed to process",
+                      "status": "success"
+                    }
+                  },
+                  "pending_order": {
+                    "description": "Response when checking by reference and the order is still being processed",
+                    "summary": "Order still processing",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "reference": "ab8044e0-82cb-11e9-8395-f18b28b35eef",
+                        "status": "PENDING"
+                      },
+                      "message": "Order is still processing",
+                      "status": "success"
+                    }
+                  },
+                  "successful_code_order": {
+                    "description": "Response when the order has completed successfully with code delivery method",
+                    "summary": "Order successful - Code delivery",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "barcode": {
+                          "string": "97801149999107077547",
+                          "type": "C128",
+                          "url": "https://example.com?type=C128&code=97801149999107077547"
+                        },
+                        "brand": "async-mock-brand",
+                        "code": "97801149999107077547",
+                        "cost_value": {
+                          "amount": 4.5,
+                          "currency": "GBP"
+                        },
+                        "expiration_date": "2024-05-30T11:12:49+00:00",
+                        "face_value": {
+                          "amount": 5,
+                          "currency": "GBP"
+                        },
+                        "pin": "7547",
+                        "reference": "ab8044e0-82cb-11e9-8395-f18b28b35eef",
+                        "status": "SUCCESS"
+                      },
+                      "message": "Order has finished processing",
+                      "status": "success"
+                    }
+                  },
+                  "successful_url_order": {
+                    "description": "Response when the order has completed successfully with URL delivery method",
+                    "summary": "Order successful - URL delivery",
+                    "value": {
+                      "code": "000",
+                      "data": {
+                        "brand": "fixed-async-uk",
+                        "cost_value": {
+                          "amount": 36.9,
+                          "currency": "GBP"
+                        },
+                        "discount": 10,
+                        "expiration_date": "2027-12-02T23:59:59+00:00",
+                        "face_value": {
+                          "amount": 41,
+                          "currency": "GBP"
+                        },
+                        "reference": "019ade93-d513-776b-92a2-b6323329b661",
+                        "status": "SUCCESS",
+                        "url": "https://example.com"
+                      },
+                      "message": "Order has finished processing",
+                      "status": "success"
+                    }
+                  }
+                },
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "const": "000",
+                      "maxLength": 3,
+                      "minLength": 3,
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {
+                        "barcode": {
+                          "additionalProperties": false,
+                          "description": "Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS')",
+                          "properties": {
+                            "string": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "enum": [
+                                "C128",
+                                "C128A",
+                                "C39",
+                                "I25",
+                                "QRCODE",
+                                "PDF417",
+                                "NONE"
+                              ],
+                              "type": "string"
+                            },
+                            "url": {
+                              "format": "uri",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "string",
+                            "url"
+                          ],
+                          "type": "object"
+                        },
+                        "brand": {
+                          "description": "Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.\n",
+                          "example": "fixed-async-uk",
+                          "maxLength": 255,
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9-]+$",
+                          "type": "string"
+                        },
+                        "code": {
+                          "description": "Gift card code (for code-delivery brands, only present when status is 'SUCCESS')",
+                          "example": "99998888777766665555",
+                          "type": "string"
+                        },
+                        "cost_value": {
+                          "description": "Cost value of the gift card (only present when status is 'SUCCESS')",
+                          "properties": {
+                            "amount": {
+                              "examples": [
+                                24.99,
+                                25,
+                                25.5
+                              ],
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": [
+                                "AED",
+                                "AUD",
+                                "BHD",
+                                "BRL",
+                                "CAD",
+                                "CHF",
+                                "CNY",
+                                "CZK",
+                                "DKK",
+                                "EUR",
+                                "GBP",
+                                "HUF",
+                                "INR",
+                                "JPY",
+                                "KWD",
+                                "MXN",
+                                "NOK",
+                                "NZD",
+                                "OMR",
+                                "PLN",
+                                "QAR",
+                                "RON",
+                                "SAR",
+                                "SEK",
+                                "USD"
+                              ],
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "discount": {
+                          "description": "The discount percentage used on this transaction",
+                          "examples": [
+                            0,
+                            9.5,
+                            5.75
+                          ],
+                          "format": "float",
+                          "minimum": 0,
+                          "type": "number"
+                        },
+                        "expiration_date": {
+                          "description": "The expiration date for this gift card. This will only be present when the brand provides one.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "face_value": {
+                          "description": "Face value of the gift card (only present when status is 'SUCCESS')",
+                          "properties": {
+                            "amount": {
+                              "examples": {
+                                "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties/amount/examples"
+                              },
+                              "format": "float",
+                              "type": "number"
+                            },
+                            "currency": {
+                              "enum": {
+                                "$ref": "#/responses/200/content/application~1json/schema/properties/data/properties/cost_value/properties/currency/enum"
+                              },
+                              "maxLength": 3,
+                              "minLength": 3,
+                              "pattern": "^[A-Z]{3}$",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "amount",
+                            "currency"
+                          ],
+                          "type": "object"
+                        },
+                        "pin": {
+                          "description": "Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
+                          "example": "1234",
+                          "type": "string"
+                        },
+                        "reference": {
+                          "description": "Unique reference for this transaction",
+                          "example": "019ade93-d513-776b-92a2-b6323329b661",
+                          "format": "uuid",
+                          "type": "string"
+                        },
+                        "security_code": {
+                          "description": "Gift card security code (only present when status is 'SUCCESS' and brand provides one)",
+                          "type": "string"
+                        },
+                        "serial_number": {
+                          "description": "Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "The current status of the order",
+                          "enum": [
+                            "REQUESTED",
+                            "PENDING",
+                            "PROCESSING",
+                            "SUCCESS",
+                            "ERROR",
+                            "CANCELLED"
+                          ],
+                          "type": "string"
+                        },
+                        "url": {
+                          "description": "Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS')",
+                          "example": "https://example-gift-card.com/redeem/abc123",
+                          "format": "uri",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "reference",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    "message": {
+                      "example": "Order has finished processing",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "success",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Order status retrieved successfully",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "The number of requests you are allowed to make to this endpoint within a 60 second window",
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "The number of requests you have remaining within your 60 second window",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "714",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "There were errors validating the request",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Bad request. Invalid or missing required parameters."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Authentication failed. Invalid API key, signature, or timestamp."
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "validation_error_both_parameters": {
+                    "description": "Error when both reference and original_client_request_id are provided",
+                    "summary": "Both parameters provided",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "original_client_request_id": [
+                          "The original client request id field is prohibited when reference is present."
+                        ],
+                        "reference": [
+                          "The reference field is prohibited when original_client_request_id is present."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_invalid_reference": {
+                    "description": "Error when reference is not a valid UUID",
+                    "summary": "Invalid reference format",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "reference": [
+                          "The reference must be a valid UUID."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_no_parameters": {
+                    "description": "Error when neither reference nor original_client_request_id is provided",
+                    "summary": "No parameters provided",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "reference": [
+                          "At least one of reference or original_client_request_id must be provided."
+                        ]
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  },
+                  "validation_error_sale_not_found": {
+                    "description": "Error when the order cannot be found",
+                    "summary": "Sale not found",
+                    "value": {
+                      "code": "433",
+                      "data": {
+                        "reference": "The sale could not be found."
+                      },
+                      "message": "There were errors validating the request",
+                      "status": "error"
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "434",
+                      "type": "string"
+                    },
+                    "data": {
+                      "additionalProperties": true,
+                      "description": "Optional additional error details",
+                      "type": "object"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Authentication failed",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation error. Request data failed validation rules."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "description": "Internal error code (3-digit string)",
+                      "example": "211",
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Human-readable error message",
+                      "example": "Too many attempts for the API rate limit",
+                      "type": "string"
+                    },
+                    "status": {
+                      "const": "error",
+                      "description": "Status of the response",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "code",
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Too many requests. Rate limit exceeded."
+          }
+        },
+        "security": [
+          {
+            "APIKey": [],
+            "HMACSignature": [],
+            "Timestamp": []
+          }
+        ],
+        "securitySchemes": {
+          "APIKey": {
+            "description": "Your API key",
+            "in": "header",
+            "name": "API-Key",
+            "type": "apiKey"
+          },
+          "HMACSignature": {
+            "description": "HMAC-SHA256 signature of the request",
+            "in": "header",
+            "name": "Signature",
+            "type": "apiKey"
+          },
+          "Timestamp": {
+            "description": "Unix timestamp in milliseconds",
+            "in": "header",
+            "name": "Timestamp",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
+  }
+}

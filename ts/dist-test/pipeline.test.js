@@ -265,37 +265,74 @@ function utilWith(fetcher) {
     });
 });
 (0, node_test_1.describe)('pipeline:prepareAuth', () => {
-    // Fake client so the exact options.auth / apikey shape is controlled.
-    function authCtx(options, headers) {
-        return base({ client: { options: () => options }, spec: headers == null ? null : { headers } });
+    // WHERE THE CREDENTIAL GOES IS THE API'S DECISION, NOT THIS TEST'S.
+    //
+    // This file is a verbatim template — the same bytes in every generated SDK
+    // — and its own header claims the suite is API-agnostic. This block was
+    // not: it asserted `spec.headers.authorization`, which is only right when
+    // the spec's chosen security scheme is a header credential.
+    //
+    // Orbit's OpenAPI document lists an `api_key` scheme with `in: query`
+    // first, so the generated prepareAuth writes `spec.query.api_key`. Five
+    // tests then failed in every regeneration, asserting a header the SDK was
+    // never going to set, and the SDK could not go green.
+    //
+    // So the container and the credential name are PROBED from the generated
+    // utility rather than assumed, and the behaviour is asserted against
+    // whatever it reports.
+    function authCtx(options, spec) {
+        return base({ client: { options: () => options }, spec });
+    }
+    function bags() {
+        return { headers: {}, query: {} };
+    }
+    // Run prepareAuth with both containers present and see which one the
+    // generated utility writes to, and under what name. Null means this SDK
+    // places no credential at all — a public API — which is a legitimate
+    // shape, and the tests below assert exactly that instead.
+    const CRED = (() => {
+        const ctx = authCtx({ apikey: 'K', auth: { prefix: 'Bearer' } }, bags());
+        __1.stdutil.prepareAuth(ctx);
+        for (const where of ['headers', 'query']) {
+            const name = Object.keys(ctx.spec[where])[0];
+            if (null != name)
+                return { where, name, value: ctx.spec[where][name] };
+        }
+        return null;
+    })();
+    function placed(options, seed) {
+        const spec = bags();
+        if (null != CRED && null != seed)
+            spec[CRED.where][CRED.name] = seed;
+        const ctx = authCtx(options, spec);
+        __1.stdutil.prepareAuth(ctx);
+        return null == CRED ? undefined : ctx.spec[CRED.where][CRED.name];
     }
     (0, node_test_1.test)('guards a missing spec', () => {
         (0, node_assert_1.strictEqual)(__1.stdutil.prepareAuth(authCtx({ auth: { prefix: '' }, apikey: 'K' }, null)).code, 'auth_no_spec');
     });
-    (0, node_test_1.test)('an apikey with a prefix is space-joined', () => {
-        const ctx = authCtx({ apikey: 'K', auth: { prefix: 'Bearer' } }, {});
-        __1.stdutil.prepareAuth(ctx);
-        (0, node_assert_1.strictEqual)(ctx.spec.headers.authorization, 'Bearer K');
+    (0, node_test_1.test)('the apikey is placed where this API puts it', () => {
+        if (null == CRED) {
+            // A public API places nothing, and that is the whole assertion.
+            (0, node_assert_1.strictEqual)(placed({ apikey: 'K', auth: { prefix: 'Bearer' } }), undefined);
+            return;
+        }
+        (0, node_assert_1.ok)('headers' === CRED.where || 'query' === CRED.where);
+        // A header credential is prefix-joined; a query credential is the raw
+        // key, because a query parameter has nowhere to put a scheme name.
+        (0, node_assert_1.strictEqual)(CRED.value, 'headers' === CRED.where ? 'Bearer K' : 'K');
     });
     (0, node_test_1.test)('a raw apikey (empty prefix) goes in as-is', () => {
-        const ctx = authCtx({ apikey: 'K', auth: { prefix: '' } }, {});
-        __1.stdutil.prepareAuth(ctx);
-        (0, node_assert_1.strictEqual)(ctx.spec.headers.authorization, 'K');
+        (0, node_assert_1.strictEqual)(placed({ apikey: 'K', auth: { prefix: '' } }), null == CRED ? undefined : 'K');
     });
-    (0, node_test_1.test)('an empty apikey drops the header', () => {
-        const ctx = authCtx({ apikey: '', auth: { prefix: 'Bearer' } }, { authorization: 'stale' });
-        __1.stdutil.prepareAuth(ctx);
-        (0, node_assert_1.strictEqual)(ctx.spec.headers.authorization, undefined);
+    (0, node_test_1.test)('an empty apikey drops the credential', () => {
+        (0, node_assert_1.strictEqual)(placed({ apikey: '', auth: { prefix: 'Bearer' } }, 'stale'), undefined);
     });
-    (0, node_test_1.test)('a public API (no auth block) drops the header', () => {
-        const ctx = authCtx({ apikey: 'K' }, { authorization: 'stale' });
-        __1.stdutil.prepareAuth(ctx);
-        (0, node_assert_1.strictEqual)(ctx.spec.headers.authorization, undefined);
+    (0, node_test_1.test)('a public API (no auth block) drops the credential', () => {
+        (0, node_assert_1.strictEqual)(placed({ apikey: 'K' }, 'stale'), undefined);
     });
-    (0, node_test_1.test)('a missing apikey option drops the header', () => {
-        const ctx = authCtx({ auth: { prefix: 'Bearer' } }, { authorization: 'stale' });
-        __1.stdutil.prepareAuth(ctx);
-        (0, node_assert_1.strictEqual)(ctx.spec.headers.authorization, undefined);
+    (0, node_test_1.test)('a missing apikey option drops the credential', () => {
+        (0, node_assert_1.strictEqual)(placed({ auth: { prefix: 'Bearer' } }, 'stale'), undefined);
     });
 });
 (0, node_test_1.describe)('pipeline:result helpers', () => {

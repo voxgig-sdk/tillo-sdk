@@ -8,7 +8,7 @@ source = {
   dir = "tillo-sdk/lua"
 }
 description = {
-  summary = "Unofficial generated Lua SDK for the Tillo Rewards public API. Not affiliated with or endorsed by the upstream API provider.",
+  summary = "Unofficial generated Lua SDK for the Tillo API v2 public API. Not affiliated with or endorsed by the upstream API provider.",
   homepage = "https://github.com/voxgig-sdk/tillo-sdk",
   issues_url = "https://github.com/voxgig-sdk/tillo-sdk/issues",
   license = "MIT",
@@ -25,6 +25,7 @@ build = {
     ["config"] = "config.lua",
     ["config_shared"] = "config_shared.lua",
     ["config_plugins"] = "config_plugins.lua",
+    ["schema"] = "schema.lua",
     ["features"] = "features.lua",
     ["feature.base_feature"] = "feature/base_feature.lua",
     ["feature.debug_feature"] = "feature/debug_feature.lua",

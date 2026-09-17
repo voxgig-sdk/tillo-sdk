@@ -37,7 +37,7 @@ const SDK_NAME = 'TilloSDK'
 
 // A fixture for every entity, so list()/load() resolve offline with no
 // network. Snippet client construction is rewritten to seed this.
-const TEST_SEED = {"entity":{"brand":{"test01":{"id":"test01"}},"dgc":{"test01":{"id":"test01"}},"float":{"test01":{"id":"test01"}}}}
+const TEST_SEED = {"entity":{"brand":{"test01":{"id":"test01"}},"brand_template":{"test01":{"id":"test01"}},"digital_gift_card":{"test01":{"id":"test01"}},"digital_issue_delete":{"test01":{"id":"test01"}},"digital_issue_post":{"test01":{"id":"test01"}},"digital_order_card":{"test01":{"id":"test01"}},"digital_order_status":{"test01":{"id":"test01"}},"digital_top_up_post":{"test01":{"id":"test01"}},"float":{"test01":{"id":"test01"}},"physical_gift_card":{"test01":{"id":"test01"}},"physical_order_card":{"test01":{"id":"test01"}},"physical_order_status":{"test01":{"id":"test01"}},"promotion":{"test01":{"id":"test01"}},"template":{"test01":{"id":"test01"}}}}
 const SEED_ARG = JSON.stringify(TEST_SEED)
 const SEEDED_CTOR = SDK_NAME + '.test(' + SEED_ARG + ')'
 

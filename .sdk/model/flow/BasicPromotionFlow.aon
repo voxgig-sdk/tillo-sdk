@@ -1,0 +1,28 @@
+# BasicPromotionFlow
+
+main: kit: flow: BasicPromotionFlow:
+{
+  entity: "promotion",
+  kind: "basic",
+  name: "BasicPromotionFlow",
+  step: [
+    {
+      input: {
+        ref: "promotion_ref01",
+        srcdatavar: "promotion_ref01_data",
+        suffix: "_dt0"
+      }
+
+      op: "load",
+      valid: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-promotion_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicPromotionFlow"
+}

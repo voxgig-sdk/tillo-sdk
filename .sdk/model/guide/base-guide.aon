@@ -1,25 +1,143 @@
 # Guide
 
 guide: {
-  metrics: count: entity: 3
-  metrics: count: path: 3
-  metrics: count: method: 3
+  metrics: count: entity: 14
+  metrics: count: path: 21
+  metrics: count: method: 24
 
   entity: brand: {
     path: "/brands": {
-      op: list: method: *GET
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
     }
   }
 
-  entity: dgc: {
+  entity: brand_template: {
+    path: "/template": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: digital_gift_card: {
+    path: "/check-stock": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
+    }
+    path: "/digital/check-balance": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: digital_issue_delete: {
+    path: "/digital/issue": {
+      op: remove: method: *DELETE
+      op: remove: transform: res: *("`body.data`")|top
+    }
+    path: "/digital/reverse": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: digital_issue_post: {
     path: "/digital/issue": {
       op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: digital_order_card: {
+    path: "/digital/order-card": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: digital_order_status: {
+    path: "/digital/order-status": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: digital_top_up_post: {
+    path: "/digital/top-up": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
     }
   }
 
   entity: float: {
     path: "/check-floats": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
+    }
+    path: "/float/request-payment-transfer": {
+      action: "request_payment_transfer": {}
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+      op: create: transform: req: "float": *("`reqdata`")|top
+    }
+    path: "/float/transfer-requests": {
+      action: "transfer_request": {}
       op: list: method: *GET
+      op: list: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: physical_gift_card: {
+    path: "/physical/activate": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+      op: remove: method: *DELETE
+      op: remove: transform: res: *("`body.data`")|top
+    }
+    path: "/physical/cash-out-original-transaction": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+    path: "/physical/check-balance": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+    path: "/physical/fulfil-order": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+    path: "/physical/top-up": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+      op: remove: method: *DELETE
+      op: remove: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: physical_order_card: {
+    path: "/physical/order-card": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: physical_order_status: {
+    path: "/physical/order-status": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: promotion: {
+    path: "/promotions": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
+    }
+  }
+
+  entity: template: {
+    path: "/templates": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.data`")|top
     }
   }
 

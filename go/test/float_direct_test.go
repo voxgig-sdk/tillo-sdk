@@ -31,7 +31,7 @@ func TestFloatDirect(t *testing.T) {
 
 
 		result, err := client.Direct(map[string]any{
-			"path":   "check-floats",
+			"path":   "float/transfer-requests",
 			"method": "GET",
 			"params": map[string]any{},
 		})
@@ -73,6 +73,78 @@ func TestFloatDirect(t *testing.T) {
 
 			if len(*setup.calls) != 1 {
 				t.Fatalf("expected 1 call, got %d", len(*setup.calls))
+			}
+		}
+	})
+
+	t.Run("direct-load-float", func(t *testing.T) {
+		setup := floatDirectSetup(map[string]any{"id": "direct01"})
+		_mode := "unit"
+		if setup.live {
+			_mode = "live"
+		}
+		if _shouldSkip, _reason := isControlSkipped("direct", "direct-load-float", _mode); _shouldSkip {
+			if _reason == "" {
+				_reason = "skipped via sdk-test-control.json"
+			}
+			t.Skip(_reason)
+			return
+		}
+		client := setup.client
+
+
+		result, err := client.Direct(map[string]any{
+			"path":   "check-floats",
+			"method": "GET",
+			"params": map[string]any{},
+		})
+		if setup.live {
+			// Live mode is lenient: synthetic IDs frequently 4xx. Skip
+			// rather than fail when the load endpoint isn't reachable with
+			// the IDs we can construct from setup.idmap — unless the model
+			// sets main.kit.test.live.strict.
+			if err != nil {
+				t.Fatalf("load call failed (likely synthetic IDs against live API): %v", err)
+			}
+			if result["ok"] != true {
+				t.Fatalf("load call not ok (likely synthetic IDs against live API): %v", result)
+			}
+			status := core.ToInt(result["status"])
+			if status < 200 || status >= 300 {
+				t.Fatalf("expected 2xx status, got %v", result["status"])
+			}
+		} else {
+			if err != nil {
+				t.Fatalf("direct failed: %v", err)
+			}
+			if result["ok"] != true {
+				t.Fatalf("expected ok to be true, got %v", result["ok"])
+			}
+			if core.ToInt(result["status"]) != 200 {
+				t.Fatalf("expected status 200, got %v", result["status"])
+			}
+			if result["data"] == nil {
+				t.Fatal("expected data to be non-nil")
+			}
+		}
+
+		if !setup.live {
+			if dataMap, ok := result["data"].(map[string]any); ok {
+				if dataMap["id"] != "direct01" {
+					t.Fatalf("expected data.id to be direct01, got %v", dataMap["id"])
+				}
+			}
+
+			if len(*setup.calls) != 1 {
+				t.Fatalf("expected 1 call, got %d", len(*setup.calls))
+			}
+			call := (*setup.calls)[0]
+			if initMap, ok := call["init"].(map[string]any); ok {
+				if initMap["method"] != "GET" {
+					t.Fatalf("expected method GET, got %v", initMap["method"])
+				}
+			}
+			if _, ok := call["url"].(string); ok {
 			}
 		}
 	})

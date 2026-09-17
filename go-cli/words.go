@@ -91,10 +91,32 @@ func entityFor(client *sdk.TilloSDK, name string) (sdk.TilloEntity, error) {
 	switch strings.ToLower(name) {
 	case "brand":
 		return client.Brand(nil), nil
-	case "dgc":
-		return client.Dgc(nil), nil
+	case "brand_template":
+		return client.BrandTemplate(nil), nil
+	case "digital_gift_card":
+		return client.DigitalGiftCard(nil), nil
+	case "digital_issue_delete":
+		return client.DigitalIssueDelete(nil), nil
+	case "digital_issue_post":
+		return client.DigitalIssuePost(nil), nil
+	case "digital_order_card":
+		return client.DigitalOrderCard(nil), nil
+	case "digital_order_status":
+		return client.DigitalOrderStatus(nil), nil
+	case "digital_top_up_post":
+		return client.DigitalTopUpPost(nil), nil
 	case "float":
 		return client.Float(nil), nil
+	case "physical_gift_card":
+		return client.PhysicalGiftCard(nil), nil
+	case "physical_order_card":
+		return client.PhysicalOrderCard(nil), nil
+	case "physical_order_status":
+		return client.PhysicalOrderStatus(nil), nil
+	case "promotion":
+		return client.Promotion(nil), nil
+	case "template":
+		return client.Template(nil), nil
 
 	}
 	return nil, fmt.Errorf("unknown entity %q", name)

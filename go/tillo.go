@@ -56,11 +56,44 @@ func init() {
 	core.NewBrandEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
 		return entity.NewBrandEntity(client, entopts)
 	}
-	core.NewDgcEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
-		return entity.NewDgcEntity(client, entopts)
+	core.NewBrandTemplateEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewBrandTemplateEntity(client, entopts)
+	}
+	core.NewDigitalGiftCardEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalGiftCardEntity(client, entopts)
+	}
+	core.NewDigitalIssueDeleteEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalIssueDeleteEntity(client, entopts)
+	}
+	core.NewDigitalIssuePostEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalIssuePostEntity(client, entopts)
+	}
+	core.NewDigitalOrderCardEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalOrderCardEntity(client, entopts)
+	}
+	core.NewDigitalOrderStatusEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalOrderStatusEntity(client, entopts)
+	}
+	core.NewDigitalTopUpPostEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewDigitalTopUpPostEntity(client, entopts)
 	}
 	core.NewFloatEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
 		return entity.NewFloatEntity(client, entopts)
+	}
+	core.NewPhysicalGiftCardEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewPhysicalGiftCardEntity(client, entopts)
+	}
+	core.NewPhysicalOrderCardEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewPhysicalOrderCardEntity(client, entopts)
+	}
+	core.NewPhysicalOrderStatusEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewPhysicalOrderStatusEntity(client, entopts)
+	}
+	core.NewPromotionEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewPromotionEntity(client, entopts)
+	}
+	core.NewTemplateEntityFunc = func(client *core.TilloSDK, entopts map[string]any) core.TilloEntity {
+		return entity.NewTemplateEntity(client, entopts)
 	}
 }
 

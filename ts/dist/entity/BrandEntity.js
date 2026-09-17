@@ -13,14 +13,14 @@ class BrandEntity extends TilloEntityBase_1.TilloEntityBase {
     make() {
         return new BrandEntity(this._client, this.entopts());
     }
-    async list(reqmatch, ctrl) {
+    async load(reqmatch, ctrl) {
         const utility = this._utility;
         const { makeContext, done, 
         // The registry name is `makeError`; `error` is the local alias.
         makeError: error, featureHook, makePoint, makeRequest, makeResponse, makeResult, makeSpec, } = utility;
         let fres = undefined;
         let ctx = makeContext({
-            opname: 'list',
+            opname: 'load',
             ctrl,
             match: this._match,
             data: this._data,
@@ -75,8 +75,18 @@ class BrandEntity extends TilloEntityBase_1.TilloEntityBase {
                 if (null != ctx.result.resmatch) {
                     this._match = ctx.result.resmatch;
                 }
+                if (null != ctx.result.resdata) {
+                    this._data = ctx.result.resdata;
+                }
             }
-            return done(ctx);
+            const out = done(ctx);
+            // An operation resolves to the ENTITY, not the raw data — the record
+            // has just been absorbed into this instance and is reached through
+            // data(). `done` still runs: it completes the pipeline and raises on
+            // failure, and when throwing is disabled it hands back the error
+            // payload, which passes through unchanged. See AGENTS.md "Entity
+            // operations return ENTITIES".
+            return (ctx.result && ctx.result.ok) ? this : out;
         }
         catch (err) {
             fres = featureHook(ctx, 'PreUnexpected');
@@ -89,7 +99,7 @@ class BrandEntity extends TilloEntityBase_1.TilloEntityBase {
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Brand[]> return stays clean under strict null checks.
+                // Promise<Brand> return stays clean under strict null checks.
                 return undefined;
             }
         }

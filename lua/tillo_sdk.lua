@@ -367,15 +367,99 @@ function TilloSDK:Brand(data)
 end
 
 
--- Idiomatic facade: client:Dgc():list() / client:Dgc():load({ id = ... })
+-- Idiomatic facade: client:BrandTemplate():list() / client:BrandTemplate():load({ id = ... })
 -- Entity access is capitalised (PascalCase) for parity with the other SDKs.
-function TilloSDK:Dgc(data)
-  local EntityMod = require("entity.dgc_entity")
+function TilloSDK:BrandTemplate(data)
+  local EntityMod = require("entity.brand_template_entity")
   if data == nil then
-    if self._dgc == nil then
-      self._dgc = EntityMod.new(self, nil)
+    if self._brand_template == nil then
+      self._brand_template = EntityMod.new(self, nil)
     end
-    return self._dgc
+    return self._brand_template
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalGiftCard():list() / client:DigitalGiftCard():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalGiftCard(data)
+  local EntityMod = require("entity.digital_gift_card_entity")
+  if data == nil then
+    if self._digital_gift_card == nil then
+      self._digital_gift_card = EntityMod.new(self, nil)
+    end
+    return self._digital_gift_card
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalIssueDelete():list() / client:DigitalIssueDelete():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalIssueDelete(data)
+  local EntityMod = require("entity.digital_issue_delete_entity")
+  if data == nil then
+    if self._digital_issue_delete == nil then
+      self._digital_issue_delete = EntityMod.new(self, nil)
+    end
+    return self._digital_issue_delete
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalIssuePost():list() / client:DigitalIssuePost():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalIssuePost(data)
+  local EntityMod = require("entity.digital_issue_post_entity")
+  if data == nil then
+    if self._digital_issue_post == nil then
+      self._digital_issue_post = EntityMod.new(self, nil)
+    end
+    return self._digital_issue_post
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalOrderCard():list() / client:DigitalOrderCard():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalOrderCard(data)
+  local EntityMod = require("entity.digital_order_card_entity")
+  if data == nil then
+    if self._digital_order_card == nil then
+      self._digital_order_card = EntityMod.new(self, nil)
+    end
+    return self._digital_order_card
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalOrderStatus():list() / client:DigitalOrderStatus():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalOrderStatus(data)
+  local EntityMod = require("entity.digital_order_status_entity")
+  if data == nil then
+    if self._digital_order_status == nil then
+      self._digital_order_status = EntityMod.new(self, nil)
+    end
+    return self._digital_order_status
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:DigitalTopUpPost():list() / client:DigitalTopUpPost():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:DigitalTopUpPost(data)
+  local EntityMod = require("entity.digital_top_up_post_entity")
+  if data == nil then
+    if self._digital_top_up_post == nil then
+      self._digital_top_up_post = EntityMod.new(self, nil)
+    end
+    return self._digital_top_up_post
   end
   return EntityMod.new(self, data)
 end
@@ -390,6 +474,76 @@ function TilloSDK:Float(data)
       self._float = EntityMod.new(self, nil)
     end
     return self._float
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:PhysicalGiftCard():list() / client:PhysicalGiftCard():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:PhysicalGiftCard(data)
+  local EntityMod = require("entity.physical_gift_card_entity")
+  if data == nil then
+    if self._physical_gift_card == nil then
+      self._physical_gift_card = EntityMod.new(self, nil)
+    end
+    return self._physical_gift_card
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:PhysicalOrderCard():list() / client:PhysicalOrderCard():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:PhysicalOrderCard(data)
+  local EntityMod = require("entity.physical_order_card_entity")
+  if data == nil then
+    if self._physical_order_card == nil then
+      self._physical_order_card = EntityMod.new(self, nil)
+    end
+    return self._physical_order_card
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:PhysicalOrderStatus():list() / client:PhysicalOrderStatus():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:PhysicalOrderStatus(data)
+  local EntityMod = require("entity.physical_order_status_entity")
+  if data == nil then
+    if self._physical_order_status == nil then
+      self._physical_order_status = EntityMod.new(self, nil)
+    end
+    return self._physical_order_status
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:Promotion():list() / client:Promotion():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:Promotion(data)
+  local EntityMod = require("entity.promotion_entity")
+  if data == nil then
+    if self._promotion == nil then
+      self._promotion = EntityMod.new(self, nil)
+    end
+    return self._promotion
+  end
+  return EntityMod.new(self, data)
+end
+
+
+-- Idiomatic facade: client:Template():list() / client:Template():load({ id = ... })
+-- Entity access is capitalised (PascalCase) for parity with the other SDKs.
+function TilloSDK:Template(data)
+  local EntityMod = require("entity.template_entity")
+  if data == nil then
+    if self._template == nil then
+      self._template = EntityMod.new(self, nil)
+    end
+    return self._template
   end
   return EntityMod.new(self, data)
 end

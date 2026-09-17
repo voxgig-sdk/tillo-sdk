@@ -60,7 +60,7 @@ describe("FloatEntity", function()
     local setup = float_basic_setup(nil)
     -- Per-op sdk-test-control.json skip.
     local _live = setup.live or false
-    for _, _op in ipairs({"list"}) do
+    for _, _op in ipairs({"create", "list", "load"}) do
       local _should_skip, _reason = runner.is_control_skipped("entityOp", "float." .. _op, _live and "live" or "unit")
       if _should_skip then
         pending(_reason or "skipped via sdk-test-control.json")
@@ -75,21 +75,28 @@ describe("FloatEntity", function()
     end
     local client = setup.client
 
-    -- Bootstrap entity data from existing test data.
-    local float_ref01_data_raw = vs.items(helpers.to_map(
-      vs.getpath(setup.data, "existing.float")))
-    local float_ref01_data = nil
-    if #float_ref01_data_raw > 0 then
-      float_ref01_data = helpers.to_map(float_ref01_data_raw[1][2])
-    end
+    -- CREATE
+    local float_ref01_ent = client:Float(nil)
+    local float_ref01_data = helpers.to_map(vs.getprop(
+      vs.getpath(setup.data, "new.float"), "float_ref01"))
+
+    local float_ref01_data_result, err = float_ref01_ent:create(float_ref01_data, nil)
+    assert.is_nil(err)
+    float_ref01_data = helpers.to_map(type(float_ref01_data_result) == 'table' and float_ref01_data_result.data_get and float_ref01_data_result:data_get() or float_ref01_data_result)
+    assert.is_not_nil(float_ref01_data)
 
     -- LIST
-    local float_ref01_ent = client:Float(nil)
     local float_ref01_match = {}
 
     local float_ref01_list_result, err = float_ref01_ent:list(float_ref01_match, nil)
     assert.is_nil(err)
     assert.is_table(float_ref01_list_result)
+
+    -- LOAD
+    local float_ref01_match_dt0 = {}
+    local float_ref01_data_dt0_loaded, err = float_ref01_ent:load(float_ref01_match_dt0, nil)
+    assert.is_nil(err)
+    assert.is_not_nil(float_ref01_data_dt0_loaded)
 
   end)
 end)

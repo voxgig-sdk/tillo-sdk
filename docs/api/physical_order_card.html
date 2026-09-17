@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PhysicalOrderCard | Tillo API v2</title><link rel="stylesheet" href="../assets/style.css"></head>
+<body><a class="skip" href="#content">Skip to content</a>
+<header class="site-header"><a class="site-title" href="../index.html">Tillo API v2<span>SDK documentation</span></a><div class="site-links"><a class="repo-link" href="https://github.com/voxgig-sdk/tillo-sdk">voxgig-sdk/tillo-sdk</a></div></header>
+<div class="site-notice" role="note"></div>
+<div class="shell"><nav class="site-nav" aria-label="Documentation"><div class="search"><label for="search">Search documentation</label><input id="search" type="search" data-base="../" placeholder="Find a guide or reference"><div id="results" aria-live="polite"></div></div><details><summary>Overview</summary><a href="../index.html">Tillo API v2</a></details>
+<details open><summary>API</summary><a href="../api/index.html">API overview</a>
+<a href="../api/brand.html">Brand</a>
+<a href="../api/brand_template.html">BrandTemplate</a>
+<a href="../api/digital_gift_card.html">DigitalGiftCard</a>
+<a href="../api/digital_issue_delete.html">DigitalIssueDelete</a>
+<a href="../api/digital_issue_post.html">DigitalIssuePost</a>
+<a href="../api/digital_order_card.html">DigitalOrderCard</a>
+<a href="../api/digital_order_status.html">DigitalOrderStatus</a>
+<a href="../api/digital_top_up_post.html">DigitalTopUpPost</a>
+<a href="../api/float.html">Float</a>
+<a href="../api/physical_gift_card.html">PhysicalGiftCard</a>
+<a aria-current="page" href="../api/physical_order_card.html">PhysicalOrderCard</a><div class="nav-sections"><a class="nav-section" href="#post-physicalorder-card">POST /physical/order-card</a></div>
+<a href="../api/physical_order_status.html">PhysicalOrderStatus</a>
+<a href="../api/promotion.html">Promotion</a>
+<a href="../api/template.html">Template</a></details>
+<details><summary>Guides</summary><a href="../guides/authentication.html">Authentication</a>
+<a href="../guides/first-call.html">Make your first API call</a>
+<a href="../guides/errors.html">Handle errors</a>
+<a href="../guides/concepts.html">Entities, SDKs, and tools</a></details>
+<details><summary>SDKs</summary><a href="../sdks/go.html">Golang</a>
+<a href="../sdks/js.html">JavaScript</a>
+<a href="../sdks/lua.html">Lua</a>
+<a href="../sdks/php.html">PHP</a>
+<a href="../sdks/py.html">Python</a>
+<a href="../sdks/ts.html">TypeScript</a></details>
+<details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
+<a href="../tools/go-mcp.html">Go MCP server</a></details>
+<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
+<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
+<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
+<a href="../features/paging.html">Pagination signals for list operations</a>
+<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
+<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
+<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
+<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="physicalordercard">PhysicalOrderCard</h1>
+<h2 id="operations">Operations</h2>
+<p>Every route this entity exposes. Each route links to its own reference on this page.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Route</th>
+<th>SDK operation</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><a href="#post-physicalorder-card"><code>/physical/order-card</code></a></td>
+<td><code>create</code></td>
+<td>Successful Response</td>
+</tr>
+</tbody>
+</table>
+<h2 id="fields">Fields</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brand</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Brand identifier/slug (lowercase letters, numbers, hyphens only).</td>
+</tr>
+<tr>
+<td><code>client_request_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Unique identifier for this request.</td>
+</tr>
+<tr>
+<td><code>cost_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>The amount you actually paid (once the discount has been taken into consideration)</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td><code>number</code></td>
+<td>Yes</td>
+<td>The discount percentage used on this transaction</td>
+</tr>
+<tr>
+<td><code>expiration_date</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td>The expiration date for this gift card.</td>
+</tr>
+<tr>
+<td><code>face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>the face value amount of the gift card.</td>
+</tr>
+<tr>
+<td><code>float_balance</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>Your remaining balance on the float used to make this transaction</td>
+</tr>
+<tr>
+<td><code>fulfilment_by</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>When ordering a physical gift card, this must be set to <code>rewardcloud</code></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>personalisation</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reference</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Unique reference for this transaction</td>
+</tr>
+<tr>
+<td><code>sector</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Must match one of the sectors configured for your buyer account.</td>
+</tr>
+<tr>
+<td><code>shipping_method</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Shipping method identifier.</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td><code>array</code></td>
+<td>No</td>
+<td>Optional meta data associated with the issuance.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="create">create</h2>
+<h3 id="post-physicalorder-card" class="operation" data-method="post"><code>POST</code> /physical/order-card</h3>
+<p>Operation ID: <code>postPhysicalOrderCard</code>.</p>
+<p>Authentication: API key in the header (<code>APIKey</code>) or API key in the header (<code>HMACSignature</code>) or API key in the header (<code>Timestamp</code>).</p>
+<h4 id="request-body">Request body</h4>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brand</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.</td>
+</tr>
+<tr>
+<td><code>client_request_id</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Unique identifier for this request. Also acts as an idempotency key</td>
+</tr>
+<tr>
+<td><code>face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>face_value.amount</code></td>
+<td><code>string or number (float)</code></td>
+<td>Yes</td>
+<td>Amount in the brand's currency. Accepts string or number with up to 2 decimal places. Minimum and maximum amounts depend on the buyer↔brand configuration. Use the brand discovery endpoint to retrieve valid denomination ranges. Returns 400 if the amount is outside the allowed range for the buyer↔brand combination.</td>
+</tr>
+<tr>
+<td><code>face_value.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_by</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>When ordering a physical gift card, this must be set to <code>rewardcloud</code></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.address_1</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.address_2</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.address_3</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.address_4</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.city</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.company_name</code></td>
+<td><code>string</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.country</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.postal_code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fulfilment_parameters.to_name</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>personalisation</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>personalisation.message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sector</code></td>
+<td><code>enum: affiliate-marketing, aggregator, b2c-marketplace, cashback, cash-out, charity, ...</code></td>
+<td>Yes</td>
+<td>Must match one of the sectors configured for your buyer account.</td>
+</tr>
+<tr>
+<td><code>shipping_method</code></td>
+<td><code>enum: standard, standard-signed, standard-tracked, second-class, second-class-signed</code></td>
+<td>Yes</td>
+<td>Shipping method identifier. Must be a valid shipping method for the fulfilment house. Returns 400 if the shipping method is not available for the fulfilment house.</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td><code>array of string or number</code></td>
+<td>No</td>
+<td>Optional meta data associated with the issuance.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="responses">Responses</h4>
+<h5 id="200-successful-response" class="status" data-status="2xx">200: Successful Response</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.brand</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Brand identifier/slug (lowercase letters, numbers, hyphens only). Must be a brand connected to your buyer account.</td>
+</tr>
+<tr>
+<td><code>data.cost_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>The amount you actually paid (once the discount has been taken into consideration)</td>
+</tr>
+<tr>
+<td><code>data.cost_value.amount</code></td>
+<td><code>number (float)</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.cost_value.currency</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.discount</code></td>
+<td><code>number (float)</code></td>
+<td>Yes</td>
+<td>The discount percentage used on this transaction</td>
+</tr>
+<tr>
+<td><code>data.expiration_date</code></td>
+<td><code>string (date-time)</code></td>
+<td>No</td>
+<td>The expiration date for this gift card. This will only be present when the brand provides one.</td>
+</tr>
+<tr>
+<td><code>data.face_value</code></td>
+<td><code>object</code></td>
+<td>Yes</td>
+<td>the face value amount of the gift card.</td>
+</tr>
+<tr>
+<td><code>data.face_value.$ref</code></td>
+<td><code>any</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.float_balance</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Your remaining balance on the float used to make this transaction</td>
+</tr>
+<tr>
+<td><code>data.float_balance.$ref</code></td>
+<td><code>any</code></td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td><code>data.reference</code></td>
+<td><code>string (uuid)</code></td>
+<td>Yes</td>
+<td>Unique reference for this transaction</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Example response:</p>
+<pre><code class="language-json">{
+  &quot;code&quot;: &quot;000&quot;,
+  &quot;data&quot;: {
+    &quot;brand&quot;: &quot;example-brand&quot;,
+    &quot;cost_value&quot;: {
+      &quot;amount&quot;: 9.8,
+      &quot;currency&quot;: &quot;GBP&quot;
+    },
+    &quot;discount&quot;: 10,
+    &quot;face_value&quot;: {
+      &quot;amount&quot;: 10,
+      &quot;currency&quot;: &quot;GBP&quot;
+    },
+    &quot;float_balance&quot;: {
+      &quot;amount&quot;: 7557.63,
+      &quot;currency&quot;: &quot;GBP&quot;
+    },
+    &quot;reference&quot;: &quot;a60ab120-eb17-11f0-9a51-1be5a50b6aae&quot;
+  },
+  &quot;message&quot;: &quot;Card ordered successfully&quot;,
+  &quot;status&quot;: &quot;success&quot;
+}
+</code></pre>
+<h5 id="400-bad-request" class="status" data-status="4xx">400: Bad Request</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional additional error details</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="401-authentication-failed-invalid-api-key-signature-or-timestamp" class="status" data-status="4xx">401: Authentication failed. Invalid API key, signature, or timestamp</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="422-validation-error-request-data-failed-validation-rules" class="status" data-status="4xx">422: Validation error. Request data failed validation rules</h5>
+<p><code>application/json</code></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Validation error code</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
+<td>No</td>
+<td>Optional detailed validation errors by field</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
+</tr>
+</tbody>
+</table>
+<h5 id="502-bad-gateway-no-response-body-is-returned" class="status" data-status="5xx">502: Bad Gateway. No response body is returned</h5>
+<h5 id="504-gateway-timeout-no-response-body-is-returned" class="status" data-status="5xx">504: Gateway Timeout. No response body is returned</h5>
+</main></div>
+<script src="../assets/search.js" defer></script></body></html>

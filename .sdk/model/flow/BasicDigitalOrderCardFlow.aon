@@ -1,0 +1,18 @@
+# BasicDigitalOrderCardFlow
+
+main: kit: flow: BasicDigitalOrderCardFlow:
+{
+  entity: "digital_order_card",
+  kind: "basic",
+  name: "BasicDigitalOrderCardFlow",
+  step: [
+    {
+      input: {
+        ref: "digital_order_card_ref01"
+      }
+
+      op: "create"
+    }
+  ],
+  "key$": "BasicDigitalOrderCardFlow"
+}

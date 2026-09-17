@@ -313,16 +313,82 @@ class TilloSDK:
         return BrandEntity(self, data)
 
 
-    def Dgc(self, data=None) -> "DgcEntity":
-        """Entity factory: client.Dgc().list() / client.Dgc().load({"id": ...})."""
-        from tillo_sdk.entity.dgc_entity import DgcEntity
-        return DgcEntity(self, data)
+    def BrandTemplate(self, data=None) -> "BrandTemplateEntity":
+        """Entity factory: client.BrandTemplate().list() / client.BrandTemplate().load({"id": ...})."""
+        from tillo_sdk.entity.brand_template_entity import BrandTemplateEntity
+        return BrandTemplateEntity(self, data)
+
+
+    def DigitalGiftCard(self, data=None) -> "DigitalGiftCardEntity":
+        """Entity factory: client.DigitalGiftCard().list() / client.DigitalGiftCard().load({"id": ...})."""
+        from tillo_sdk.entity.digital_gift_card_entity import DigitalGiftCardEntity
+        return DigitalGiftCardEntity(self, data)
+
+
+    def DigitalIssueDelete(self, data=None) -> "DigitalIssueDeleteEntity":
+        """Entity factory: client.DigitalIssueDelete().list() / client.DigitalIssueDelete().load({"id": ...})."""
+        from tillo_sdk.entity.digital_issue_delete_entity import DigitalIssueDeleteEntity
+        return DigitalIssueDeleteEntity(self, data)
+
+
+    def DigitalIssuePost(self, data=None) -> "DigitalIssuePostEntity":
+        """Entity factory: client.DigitalIssuePost().list() / client.DigitalIssuePost().load({"id": ...})."""
+        from tillo_sdk.entity.digital_issue_post_entity import DigitalIssuePostEntity
+        return DigitalIssuePostEntity(self, data)
+
+
+    def DigitalOrderCard(self, data=None) -> "DigitalOrderCardEntity":
+        """Entity factory: client.DigitalOrderCard().list() / client.DigitalOrderCard().load({"id": ...})."""
+        from tillo_sdk.entity.digital_order_card_entity import DigitalOrderCardEntity
+        return DigitalOrderCardEntity(self, data)
+
+
+    def DigitalOrderStatus(self, data=None) -> "DigitalOrderStatusEntity":
+        """Entity factory: client.DigitalOrderStatus().list() / client.DigitalOrderStatus().load({"id": ...})."""
+        from tillo_sdk.entity.digital_order_status_entity import DigitalOrderStatusEntity
+        return DigitalOrderStatusEntity(self, data)
+
+
+    def DigitalTopUpPost(self, data=None) -> "DigitalTopUpPostEntity":
+        """Entity factory: client.DigitalTopUpPost().list() / client.DigitalTopUpPost().load({"id": ...})."""
+        from tillo_sdk.entity.digital_top_up_post_entity import DigitalTopUpPostEntity
+        return DigitalTopUpPostEntity(self, data)
 
 
     def Float(self, data=None) -> "FloatEntity":
         """Entity factory: client.Float().list() / client.Float().load({"id": ...})."""
         from tillo_sdk.entity.float_entity import FloatEntity
         return FloatEntity(self, data)
+
+
+    def PhysicalGiftCard(self, data=None) -> "PhysicalGiftCardEntity":
+        """Entity factory: client.PhysicalGiftCard().list() / client.PhysicalGiftCard().load({"id": ...})."""
+        from tillo_sdk.entity.physical_gift_card_entity import PhysicalGiftCardEntity
+        return PhysicalGiftCardEntity(self, data)
+
+
+    def PhysicalOrderCard(self, data=None) -> "PhysicalOrderCardEntity":
+        """Entity factory: client.PhysicalOrderCard().list() / client.PhysicalOrderCard().load({"id": ...})."""
+        from tillo_sdk.entity.physical_order_card_entity import PhysicalOrderCardEntity
+        return PhysicalOrderCardEntity(self, data)
+
+
+    def PhysicalOrderStatus(self, data=None) -> "PhysicalOrderStatusEntity":
+        """Entity factory: client.PhysicalOrderStatus().list() / client.PhysicalOrderStatus().load({"id": ...})."""
+        from tillo_sdk.entity.physical_order_status_entity import PhysicalOrderStatusEntity
+        return PhysicalOrderStatusEntity(self, data)
+
+
+    def Promotion(self, data=None) -> "PromotionEntity":
+        """Entity factory: client.Promotion().list() / client.Promotion().load({"id": ...})."""
+        from tillo_sdk.entity.promotion_entity import PromotionEntity
+        return PromotionEntity(self, data)
+
+
+    def Template(self, data=None) -> "TemplateEntity":
+        """Entity factory: client.Template().list() / client.Template().load({"id": ...})."""
+        from tillo_sdk.entity.template_entity import TemplateEntity
+        return TemplateEntity(self, data)
 
 
 
@@ -353,5 +419,16 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from tillo_sdk.entity.brand_entity import BrandEntity
-    from tillo_sdk.entity.dgc_entity import DgcEntity
+    from tillo_sdk.entity.brand_template_entity import BrandTemplateEntity
+    from tillo_sdk.entity.digital_gift_card_entity import DigitalGiftCardEntity
+    from tillo_sdk.entity.digital_issue_delete_entity import DigitalIssueDeleteEntity
+    from tillo_sdk.entity.digital_issue_post_entity import DigitalIssuePostEntity
+    from tillo_sdk.entity.digital_order_card_entity import DigitalOrderCardEntity
+    from tillo_sdk.entity.digital_order_status_entity import DigitalOrderStatusEntity
+    from tillo_sdk.entity.digital_top_up_post_entity import DigitalTopUpPostEntity
     from tillo_sdk.entity.float_entity import FloatEntity
+    from tillo_sdk.entity.physical_gift_card_entity import PhysicalGiftCardEntity
+    from tillo_sdk.entity.physical_order_card_entity import PhysicalOrderCardEntity
+    from tillo_sdk.entity.physical_order_status_entity import PhysicalOrderStatusEntity
+    from tillo_sdk.entity.promotion_entity import PromotionEntity
+    from tillo_sdk.entity.template_entity import TemplateEntity

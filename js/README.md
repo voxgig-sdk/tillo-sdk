@@ -5,7 +5,7 @@
 The JavaScript SDK for the Tillo API — an entity-oriented client with full async/await support.
 
 The API is exposed as capitalised, semantic **Entities** — e.g.
-`client.Brand()` — each with a small set of operations (`list`, `create`)
+`client.Brand()` — each with a small set of operations (`list`, `load`, `create`, `remove`)
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
@@ -33,13 +33,11 @@ const client = new TilloSDK({
 })
 ```
 
-### List Brand Records
+### Load a Brand
 
 ```js
-const brands = await client.Brand().list()
-for (const brand of brands) {
-  console.log(brand)
-}
+const brand = await client.Brand().load()
+console.log(brand)
 ```
 
 ### Direct API Access
@@ -65,10 +63,10 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const brands = await client.Brand().list()
-  console.log(brands)
+  const promotion = await client.Promotion().load()
+  console.log(promotion)
 } catch (err) {
-  console.error('list failed:', err)
+  console.error('load failed:', err)
 }
 ```
 
@@ -132,10 +130,10 @@ Create a mock client for unit testing — no server required:
 ```js
 const client = TilloSDK.test()
 
-const brand = await client.Brand().list()
-// brand is the entity, populated with mock response data
-// — call brand.data() for the record itself
-console.log(brand)
+const promotion = await client.Promotion().load()
+// promotion is the entity, populated with mock response data
+// — call promotion.data() for the record itself
+console.log(promotion)
 ```
 
 You can also use the instance method:
@@ -150,10 +148,10 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```js
-const entity = client.Brand()
+const entity = client.Promotion()
 
 // First call runs the operation and stores its result
-await entity.list()
+await entity.load()
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
@@ -226,8 +224,19 @@ new TilloSDK(options?)
 | `prepare(fetchargs?)` | `Promise<FetchDef>` | Build an HTTP request definition without sending it. |
 | `direct(fetchargs?)` | `Promise<DirectResult>` | Build and send an HTTP request. |
 | `Brand(data?)` | `BrandEntity` | Create a Brand entity instance. |
-| `Dgc(data?)` | `DgcEntity` | Create a Dgc entity instance. |
+| `BrandTemplate(data?)` | `BrandTemplateEntity` | Create a BrandTemplate entity instance. |
+| `DigitalGiftCard(data?)` | `DigitalGiftCardEntity` | Create a DigitalGiftCard entity instance. |
+| `DigitalIssueDelete(data?)` | `DigitalIssueDeleteEntity` | Create a DigitalIssueDelete entity instance. |
+| `DigitalIssuePost(data?)` | `DigitalIssuePostEntity` | Create a DigitalIssuePost entity instance. |
+| `DigitalOrderCard(data?)` | `DigitalOrderCardEntity` | Create a DigitalOrderCard entity instance. |
+| `DigitalOrderStatus(data?)` | `DigitalOrderStatusEntity` | Create a DigitalOrderStatus entity instance. |
+| `DigitalTopUpPost(data?)` | `DigitalTopUpPostEntity` | Create a DigitalTopUpPost entity instance. |
 | `Float(data?)` | `FloatEntity` | Create a Float entity instance. |
+| `PhysicalGiftCard(data?)` | `PhysicalGiftCardEntity` | Create a PhysicalGiftCard entity instance. |
+| `PhysicalOrderCard(data?)` | `PhysicalOrderCardEntity` | Create a PhysicalOrderCard entity instance. |
+| `PhysicalOrderStatus(data?)` | `PhysicalOrderStatusEntity` | Create a PhysicalOrderStatus entity instance. |
+| `Promotion(data?)` | `PromotionEntity` | Create a Promotion entity instance. |
+| `Template(data?)` | `TemplateEntity` | Create a Template entity instance. |
 | `tester(testopts?, sdkopts?)` | `TilloSDK` | Create a test-mode client instance. |
 
 #### Static methods
@@ -244,8 +253,10 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
+| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
 | `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
 | `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
+| `remove` | `remove(reqmatch?, ctrl?): Promise<void>` | Remove an entity. |
 | `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
 | `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
@@ -257,9 +268,10 @@ All entities share the same interface.
 Entity operations resolve to the entity data directly — there is no
 result envelope:
 
-- `create` resolves to a single entity object.
+- `load` and `create` resolve to a single entity object.
 - `list` resolves to an **array** of entity objects (iterate it directly;
   there is no `.data` and no `.ok`).
+- `remove` resolves to `undefined`.
 
 On a failed request these methods **throw**, so wrap calls in
 `try`/`catch` to handle errors. Only `direct()` returns the result
@@ -299,38 +311,244 @@ The `prepare()` method returns:
 
 | Field | Description |
 | --- | --- |
-| `currency` |  |
-| `name` |  |
-| `slug` |  |
+| `brands` |  |
+| `last_refreshed_at` |  |
 
-Operations: list.
+Operations: load.
 
 API path: `/brands`
 
-#### Dgc
+#### BrandTemplate
 
 | Field | Description |
 | --- | --- |
-| `brand` |  |
-| `client_request_id` |  |
-| `delivery_method` |  |
+
+Operations: load.
+
+API path: `/template`
+
+#### DigitalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `data` |  |
 | `face_value` |  |
-| `sector` |  |
+| `message` |  |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | Gift card PIN. |
+| `reference` | This is the `reference` you received when making the original issuance request. |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | The serial number is a required parameter for any Sainsburys brand |
+| `status` |  |
+
+Operations: create, load.
+
+API path: `/digital/check-balance`
+
+#### DigitalIssueDelete
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `face_value` |  |
+| `float_balance` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: create, remove.
+
+API path: `/digital/reverse`
+
+#### DigitalIssuePost
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code (for code-delivery brands) |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `pin` | Gift card PIN (for code-delivery brands). |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
 
 Operations: create.
 
 API path: `/digital/issue`
 
+#### DigitalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` |  |
+| `delivery_method` |  |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilment_by` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: create.
+
+API path: `/digital/order-card`
+
+#### DigitalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `barcode` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | Unique reference for this transaction |
+| `security_code` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | The current status of the order |
+| `url` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+Operations: load.
+
+API path: `/digital/order-status`
+
+#### DigitalTopUpPost
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | Gift card code |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `face_value` |  |
+| `float_balance` |  |
+| `pin` | Gift card PIN. |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: create.
+
+API path: `/digital/top-up`
+
 #### Float
 
 | Field | Description |
 | --- | --- |
-| `balance` |  |
-| `currency` |  |
+| `floats` | Float balances grouped by currency code |
+| `last_refreshed_at` | ISO 8601 timestamp of when the float data was last refreshed |
 
-Operations: list.
+Operations: create, list, load.
 
-API path: `/check-floats`
+API path: `/float/request-payment-transfer`
+
+#### PhysicalGiftCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `code` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` |  |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` |  |
+| `float_balance` |  |
+| `fulfilled_at` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | Gift card security code (for code-delivery brands). |
+| `serial_number` | Gift card serial number. |
+| `tags` | Optional meta data associated with the issuance. |
+| `url` | Gift card URL (for URL-delivery brands) |
+
+Operations: create, remove.
+
+API path: `/physical/activate`
+
+#### PhysicalOrderCard
+
+| Field | Description |
+| --- | --- |
+| `brand` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | Unique identifier for this request. |
+| `cost_value` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | The discount percentage used on this transaction |
+| `expiration_date` | The expiration date for this gift card. |
+| `face_value` | the face value amount of the gift card. |
+| `float_balance` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` |  |
+| `personalisation` |  |
+| `reference` | Unique reference for this transaction |
+| `sector` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | Shipping method identifier. |
+| `tags` | Optional meta data associated with the issuance. |
+
+Operations: create.
+
+API path: `/physical/order-card`
+
+#### PhysicalOrderStatus
+
+| Field | Description |
+| --- | --- |
+| `references` | Array of order references to check. |
+
+Operations: create.
+
+API path: `/physical/order-status`
+
+#### Promotion
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | Standard promotions grouped by brand slug. |
+
+Operations: load.
+
+API path: `/promotions`
+
+#### Template
+
+| Field | Description |
+| --- | --- |
+| `last_refreshed_at` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | Object mapping brand slugs to their template variants and versions. |
+
+Operations: load.
+
+API path: `/templates`
 
 
 
@@ -345,26 +563,127 @@ Create an instance: `const brand = client.Brand()`
 
 | Method | Description |
 | --- | --- |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `currency` | `string` |  |
-| `name` | `string` |  |
-| `slug` | `string` |  |
+| `brands` | `*` |  |
+| `last_refreshed_at` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```ts
-const brands = await client.Brand().list()
+const brand = await client.Brand().load()
 ```
 
 
-### Dgc
+### BrandTemplate
 
-Create an instance: `const dgc = client.Dgc()`
+Create an instance: `const brand_template = client.BrandTemplate()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Example: Load
+
+```ts
+const brand_template = await client.BrandTemplate().load({ brand: 'brand' })
+```
+
+
+### DigitalGiftCard
+
+Create an instance: `const digital_gift_card = client.DigitalGiftCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `data` | `Object` |  |
+| `face_value` | `Object` |  |
+| `message` | `string` |  |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | This is the `reference` you received when making the original issuance request. |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | The serial number is a required parameter for any Sainsburys brand |
+| `status` | `string` |  |
+
+#### Example: Load
+
+```ts
+const digital_gift_card = await client.DigitalGiftCard().load()
+```
+
+#### Example: Create
+
+```ts
+const digital_gift_card = await client.DigitalGiftCard().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  face_value: {},
+  sector: 'example_sector',
+})
+```
+
+
+### DigitalIssueDelete
+
+Create an instance: `const digital_issue_delete = client.DigitalIssueDelete()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `face_value` | `Object` |  |
+| `float_balance` | `Object` | Your remaining balance on the float used for this cancellation transaction. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `reference` | `string` | Unique reference (UUID) for the cancellation transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```ts
+const digital_issue_delete = await client.DigitalIssueDelete().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  face_value: {},
+  float_balance: {},
+  original_client_request_id: 'example_original_client_request_id',
+  reference: 'example_reference',
+  sector: 'example_sector',
+})
+```
+
+
+### DigitalIssuePost
+
+Create an instance: `const digital_issue_post = client.DigitalIssuePost()`
 
 #### Operations
 
@@ -376,19 +695,169 @@ Create an instance: `const dgc = client.Dgc()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `brand` | `string` |  |
-| `client_request_id` | `string` |  |
+| `barcode` | `Object` | Some brands provide a barcode alongside a code delivery. |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code (for code-delivery brands) |
+| `cost_value` | `Object` |  |
 | `delivery_method` | `string` |  |
+| `discount` | `number` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
 | `face_value` | `Object` |  |
-| `sector` | `string` |  |
+| `float_balance` | `Object` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `Object` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `Object` |  |
+| `pin` | `string` | Gift card PIN (for code-delivery brands). |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
 
 #### Example: Create
 
 ```ts
-const dgc = await client.Dgc().create({
+const digital_issue_post = await client.DigitalIssuePost().create({
+  barcode: {},
   brand: 'example_brand',
   client_request_id: 'example_client_request_id',
+  cost_value: {},
+  delivery_method: 'example_delivery_method',
+  discount: 1,
   face_value: {},
+  float_balance: {},
+  fulfilment_by: 'example_fulfilment_by',
+  fulfilment_parameters: {},
+  personalisation: {},
+  reference: 'example_reference',
+  sector: 'example_sector',
+})
+```
+
+
+### DigitalOrderCard
+
+Create an instance: `const digital_order_card = client.DigitalOrderCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `Object` |  |
+| `delivery_method` | `string` |  |
+| `face_value` | `Object` |  |
+| `float_balance` | `Object` |  |
+| `fulfilment_by` | `string` | This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued. |
+| `fulfilment_parameters` | `Object` | Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf |
+| `personalisation` | `Object` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```ts
+const digital_order_card = await client.DigitalOrderCard().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  cost_value: {},
+  delivery_method: 'example_delivery_method',
+  face_value: {},
+  float_balance: {},
+  fulfilment_by: 'example_fulfilment_by',
+  fulfilment_parameters: {},
+  personalisation: {},
+  reference: 'example_reference',
+  sector: 'example_sector',
+})
+```
+
+
+### DigitalOrderStatus
+
+Create an instance: `const digital_order_status = client.DigitalOrderStatus()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `barcode` | `Object` | Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS') |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `code` | `string` | Gift card code (for code-delivery brands, only present when status is 'SUCCESS') |
+| `cost_value` | `Object` | Cost value of the gift card (only present when status is 'SUCCESS') |
+| `discount` | `number` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `Object` | Face value of the gift card (only present when status is 'SUCCESS') |
+| `pin` | `string` | Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `reference` | `string` | Unique reference for this transaction |
+| `security_code` | `string` | Gift card security code (only present when status is 'SUCCESS' and brand provides one) |
+| `serial_number` | `string` | Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one) |
+| `status` | `string` | The current status of the order |
+| `url` | `string` | Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS') |
+
+#### Example: Load
+
+```ts
+const digital_order_status = await client.DigitalOrderStatus().load()
+```
+
+
+### DigitalTopUpPost
+
+Create an instance: `const digital_top_up_post = client.DigitalTopUpPost()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | Gift card code |
+| `cost_value` | `Object` |  |
+| `discount` | `number` | The discount percentage used on this transaction |
+| `face_value` | `Object` |  |
+| `float_balance` | `Object` |  |
+| `pin` | `string` | Gift card PIN. |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```ts
+const digital_top_up_post = await client.DigitalTopUpPost().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  code: 'example_code',
+  cost_value: {},
+  discount: 1,
+  face_value: {},
+  float_balance: {},
+  reference: 'example_reference',
+  sector: 'example_sector',
 })
 ```
 
@@ -401,19 +870,209 @@ Create an instance: `const float = client.Float()`
 
 | Method | Description |
 | --- | --- |
+| `create(data)` | Create a new entity with the given data. |
 | `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `balance` | `number` |  |
-| `currency` | `string` |  |
+| `floats` | `Object` | Float balances grouped by currency code |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the float data was last refreshed |
+
+#### Example: Load
+
+```ts
+const float = await client.Float().load()
+```
 
 #### Example: List
 
 ```ts
 const floats = await client.Float().list()
+```
+
+#### Example: Create
+
+```ts
+const float = await client.Float().create({
+  floats: {},
+  last_refreshed_at: 'example_last_refreshed_at',
+})
+```
+
+
+### PhysicalGiftCard
+
+Create an instance: `const physical_gift_card = client.PhysicalGiftCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+| `remove(match)` | Remove the matching entity. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `code` | `string` | The long card number on the physical gift card you wish to cash out |
+| `cost_value` | `Object` |  |
+| `discount` | `number` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `Object` |  |
+| `float_balance` | `Object` |  |
+| `fulfilled_at` | `string` | The date for which this this gift card was fulfilled. |
+| `original_client_request_id` | `string` | This field will be the `client_request_id` provided in the original transaction. |
+| `pin` | `string` | The pin number (only applies to certain brands which provide pin) on the physical gift card |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `security_code` | `string` | Gift card security code (for code-delivery brands). |
+| `serial_number` | `string` | Gift card serial number. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+| `url` | `string` | Gift card URL (for URL-delivery brands) |
+
+#### Example: Create
+
+```ts
+const physical_gift_card = await client.PhysicalGiftCard().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  code: 'example_code',
+  cost_value: {},
+  discount: 1,
+  face_value: {},
+  float_balance: {},
+  original_client_request_id: 'example_original_client_request_id',
+  reference: 'example_reference',
+  sector: 'example_sector',
+})
+```
+
+
+### PhysicalOrderCard
+
+Create an instance: `const physical_order_card = client.PhysicalOrderCard()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `brand` | `string` | Brand identifier/slug (lowercase letters, numbers, hyphens only). |
+| `client_request_id` | `string` | Unique identifier for this request. |
+| `cost_value` | `Object` | The amount you actually paid (once the discount has been taken into consideration) |
+| `discount` | `number` | The discount percentage used on this transaction |
+| `expiration_date` | `string` | The expiration date for this gift card. |
+| `face_value` | `Object` | the face value amount of the gift card. |
+| `float_balance` | `Object` | Your remaining balance on the float used to make this transaction |
+| `fulfilment_by` | `string` | When ordering a physical gift card, this must be set to `rewardcloud` |
+| `fulfilment_parameters` | `Object` |  |
+| `personalisation` | `Object` |  |
+| `reference` | `string` | Unique reference for this transaction |
+| `sector` | `string` | Must match one of the sectors configured for your buyer account. |
+| `shipping_method` | `string` | Shipping method identifier. |
+| `tags` | `Array` | Optional meta data associated with the issuance. |
+
+#### Example: Create
+
+```ts
+const physical_order_card = await client.PhysicalOrderCard().create({
+  brand: 'example_brand',
+  client_request_id: 'example_client_request_id',
+  cost_value: {},
+  discount: 1,
+  face_value: {},
+  float_balance: {},
+  fulfilment_by: 'example_fulfilment_by',
+  fulfilment_parameters: {},
+  personalisation: {},
+  reference: 'example_reference',
+  sector: 'example_sector',
+  shipping_method: 'example_shipping_method',
+})
+```
+
+
+### PhysicalOrderStatus
+
+Create an instance: `const physical_order_status = client.PhysicalOrderStatus()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `create(data)` | Create a new entity with the given data. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `references` | `Array` | Array of order references to check. |
+
+#### Example: Create
+
+```ts
+const physical_order_status = await client.PhysicalOrderStatus().create({
+  references: [],
+})
+```
+
+
+### Promotion
+
+Create an instance: `const promotion = client.Promotion()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when promotion data was last refreshed. |
+| `standard` | `Object` | Standard promotions grouped by brand slug. |
+
+#### Example: Load
+
+```ts
+const promotion = await client.Promotion().load()
+```
+
+
+### Template
+
+Create an instance: `const template = client.Template()`
+
+#### Operations
+
+| Method | Description |
+| --- | --- |
+| `load(match)` | Load a single entity by match criteria. |
+
+#### Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `last_refreshed_at` | `string` | ISO 8601 timestamp of when the template data was last refreshed |
+| `templates` | `Object` | Object mapping brand slugs to their template variants and versions. |
+
+#### Example: Load
+
+```ts
+const template = await client.Template().load()
 ```
 
 ## Features
@@ -623,16 +1282,16 @@ const { TilloSDK } = require('@voxgig-sdk/tillo-js')
 
 ### Entity state
 
-Entity instances are stateful. After a successful `list`, the entity
+Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const brand = client.Brand()
-await brand.list()
+const promotion = client.Promotion()
+await promotion.load()
 
-// brand.data() now returns the brand data from the last `list`
-// brand.match() returns the last match criteria
+// promotion.data() now returns the promotion data from the last `load`
+// promotion.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -346,11 +346,59 @@ func (sdk *TilloSDK) Brand(data map[string]any) TilloEntity {
 }
 
 
-// Dgc returns a Dgc entity bound to this client.
-// Idiomatic usage: client.Dgc(nil).List(nil, nil) or
-// client.Dgc(nil).Load(map[string]any{"id": ...}, nil).
-func (sdk *TilloSDK) Dgc(data map[string]any) TilloEntity {
-	return NewDgcEntityFunc(sdk, data)
+// BrandTemplate returns a BrandTemplate entity bound to this client.
+// Idiomatic usage: client.BrandTemplate(nil).List(nil, nil) or
+// client.BrandTemplate(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) BrandTemplate(data map[string]any) TilloEntity {
+	return NewBrandTemplateEntityFunc(sdk, data)
+}
+
+
+// DigitalGiftCard returns a DigitalGiftCard entity bound to this client.
+// Idiomatic usage: client.DigitalGiftCard(nil).List(nil, nil) or
+// client.DigitalGiftCard(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalGiftCard(data map[string]any) TilloEntity {
+	return NewDigitalGiftCardEntityFunc(sdk, data)
+}
+
+
+// DigitalIssueDelete returns a DigitalIssueDelete entity bound to this client.
+// Idiomatic usage: client.DigitalIssueDelete(nil).List(nil, nil) or
+// client.DigitalIssueDelete(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalIssueDelete(data map[string]any) TilloEntity {
+	return NewDigitalIssueDeleteEntityFunc(sdk, data)
+}
+
+
+// DigitalIssuePost returns a DigitalIssuePost entity bound to this client.
+// Idiomatic usage: client.DigitalIssuePost(nil).List(nil, nil) or
+// client.DigitalIssuePost(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalIssuePost(data map[string]any) TilloEntity {
+	return NewDigitalIssuePostEntityFunc(sdk, data)
+}
+
+
+// DigitalOrderCard returns a DigitalOrderCard entity bound to this client.
+// Idiomatic usage: client.DigitalOrderCard(nil).List(nil, nil) or
+// client.DigitalOrderCard(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalOrderCard(data map[string]any) TilloEntity {
+	return NewDigitalOrderCardEntityFunc(sdk, data)
+}
+
+
+// DigitalOrderStatus returns a DigitalOrderStatus entity bound to this client.
+// Idiomatic usage: client.DigitalOrderStatus(nil).List(nil, nil) or
+// client.DigitalOrderStatus(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalOrderStatus(data map[string]any) TilloEntity {
+	return NewDigitalOrderStatusEntityFunc(sdk, data)
+}
+
+
+// DigitalTopUpPost returns a DigitalTopUpPost entity bound to this client.
+// Idiomatic usage: client.DigitalTopUpPost(nil).List(nil, nil) or
+// client.DigitalTopUpPost(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) DigitalTopUpPost(data map[string]any) TilloEntity {
+	return NewDigitalTopUpPostEntityFunc(sdk, data)
 }
 
 
@@ -359,6 +407,46 @@ func (sdk *TilloSDK) Dgc(data map[string]any) TilloEntity {
 // client.Float(nil).Load(map[string]any{"id": ...}, nil).
 func (sdk *TilloSDK) Float(data map[string]any) TilloEntity {
 	return NewFloatEntityFunc(sdk, data)
+}
+
+
+// PhysicalGiftCard returns a PhysicalGiftCard entity bound to this client.
+// Idiomatic usage: client.PhysicalGiftCard(nil).List(nil, nil) or
+// client.PhysicalGiftCard(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) PhysicalGiftCard(data map[string]any) TilloEntity {
+	return NewPhysicalGiftCardEntityFunc(sdk, data)
+}
+
+
+// PhysicalOrderCard returns a PhysicalOrderCard entity bound to this client.
+// Idiomatic usage: client.PhysicalOrderCard(nil).List(nil, nil) or
+// client.PhysicalOrderCard(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) PhysicalOrderCard(data map[string]any) TilloEntity {
+	return NewPhysicalOrderCardEntityFunc(sdk, data)
+}
+
+
+// PhysicalOrderStatus returns a PhysicalOrderStatus entity bound to this client.
+// Idiomatic usage: client.PhysicalOrderStatus(nil).List(nil, nil) or
+// client.PhysicalOrderStatus(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) PhysicalOrderStatus(data map[string]any) TilloEntity {
+	return NewPhysicalOrderStatusEntityFunc(sdk, data)
+}
+
+
+// Promotion returns a Promotion entity bound to this client.
+// Idiomatic usage: client.Promotion(nil).List(nil, nil) or
+// client.Promotion(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) Promotion(data map[string]any) TilloEntity {
+	return NewPromotionEntityFunc(sdk, data)
+}
+
+
+// Template returns a Template entity bound to this client.
+// Idiomatic usage: client.Template(nil).List(nil, nil) or
+// client.Template(nil).Load(map[string]any{"id": ...}, nil).
+func (sdk *TilloSDK) Template(data map[string]any) TilloEntity {
+	return NewTemplateEntityFunc(sdk, data)
 }
 
 

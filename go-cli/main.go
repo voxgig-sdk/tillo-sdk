@@ -20,7 +20,7 @@ import (
 const prompt = "tillo"
 
 // entitiesHelp is the space-separated entity list shown by /help.
-const entitiesHelp = "brand dgc float"
+const entitiesHelp = "brand brand_template digital_gift_card digital_issue_delete digital_issue_post digital_order_card digital_order_status digital_top_up_post float physical_gift_card physical_order_card physical_order_status promotion template"
 
 func main() {
 	os.Exit(run(os.Args[1:], os.Stdin, os.Stdout, os.Stderr))
