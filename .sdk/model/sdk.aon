@@ -7,7 +7,7 @@
 # SDK Details.
 name: 'tillo'
 origin: 'voxgig-sdk'
-def: 'tillo-brands-floats-dgc-only.json'
+def: 'tillo-v2-openapi.json'
 
 
 # API Information
