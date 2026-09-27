@@ -1,0 +1,305 @@
+# Entity: physical_gift_card
+
+main: kit: entity: physical_gift_card: {
+
+  alias: field: {}
+
+  fields: {
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    code: {
+      h: "Code"
+      n: "code"
+      op: {
+        create: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      sh: "The long card number on the physical gift card you wish to cash out"
+      t: "`$STRING`"
+    }
+    cost_value: {
+      h: "Cost Value"
+      n: "cost_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    discount: {
+      fo: "float"
+      h: "Discount"
+      n: "discount"
+      r: true
+      sh: "The discount percentage used on this transaction"
+      t: "`$NUMBER`"
+    }
+    expiration_date: {
+      fo: "date-time"
+      h: "Expiration Date"
+      n: "expiration_date"
+      r: false
+      sh: "The expiration date for this gift card."
+      t: "`$STRING`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    float_balance: {
+      h: "Float Balance"
+      n: "float_balance"
+      r: true
+      t: "`$OBJECT`"
+    }
+    fulfilled_at: {
+      fo: "date-time"
+      h: "Fulfilled At"
+      n: "fulfilled_at"
+      r: false
+      sh: "The date for which this this gift card was fulfilled."
+      t: "`$STRING`"
+    }
+    original_client_request_id: {
+      h: "Original Client Request Id"
+      n: "original_client_request_id"
+      r: true
+      sh: "This field will be the `client_request_id` provided in the original transaction."
+      t: "`$STRING`"
+    }
+    pin: {
+      h: "Pin"
+      n: "pin"
+      r: false
+      sh: "The pin number (only applies to certain brands which provide pin) on the physical gift card"
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: true
+      sh: "Unique reference for this transaction"
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    security_code: {
+      h: "Security Code"
+      n: "security_code"
+      r: false
+      sh: "Gift card security code (for code-delivery brands)."
+      t: "`$STRING`"
+    }
+    serial_number: {
+      h: "Serial Number"
+      n: "serial_number"
+      r: false
+      sh: "Gift card serial number."
+      t: "`$STRING`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "Optional meta data associated with the issuance."
+      t: "`$ARRAY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 1
+      }
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      sh: "Gift card URL (for URL-delivery brands)"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "physical_gift_card"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /physical/activate"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/activate"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "activate"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+        {
+          co: {
+            id: "POST /physical/cash-out-original-transaction"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/cash-out-original-transaction"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "cash-out-original-transaction"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+        {
+          co: {
+            id: "POST /physical/check-balance"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/check-balance"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "check-balance"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+        {
+          co: {
+            id: "POST /physical/fulfil-order"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/fulfil-order"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "fulfil-order"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+        {
+          co: {
+            id: "POST /physical/top-up"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/top-up"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "top-up"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /physical/activate"
+            source: "openapi3"
+            version: 2
+          }
+          m: "DELETE"
+          o: "/physical/activate"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "activate"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+        {
+          co: {
+            id: "DELETE /physical/top-up"
+            source: "openapi3"
+            version: 2
+          }
+          m: "DELETE"
+          o: "/physical/top-up"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "top-up"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

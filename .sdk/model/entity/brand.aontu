@@ -1,0 +1,110 @@
+# Entity: brand
+
+main: kit: entity: brand: {
+
+  alias: field: {}
+
+  fields: {
+    brands: {
+      h: "Brands"
+      n: "brands"
+      r: false
+      t: "`$ANY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 0
+      }
+    }
+    last_refreshed_at: {
+      fo: "date-time"
+      h: "Last Refreshed At"
+      n: "last_refreshed_at"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "brand"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /brands"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "mock-brand"
+                k: "query"
+                n: "brand"
+                or: "brand"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "food-and-drink"
+                k: "query"
+                n: "category"
+                or: "category"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "GB"
+                k: "query"
+                n: "country"
+                or: "country"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "GBP"
+                k: "query"
+                n: "currency"
+                or: "currency"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: true
+                k: "query"
+                n: "detail"
+                or: "detail"
+                r: false
+                t: "`$BOOLEAN`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/brands"
+          q: {
+            exist: [
+              "brand"
+              "category"
+              "country"
+              "currency"
+              "detail"
+            ]
+          }
+          s: [
+            {
+              lit: "brands"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

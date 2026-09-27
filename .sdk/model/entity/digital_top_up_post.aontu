@@ -1,0 +1,142 @@
+# Entity: digital_top_up_post
+
+main: kit: entity: digital_top_up_post: {
+
+  alias: field: {}
+
+  fields: {
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    code: {
+      h: "Code"
+      n: "code"
+      op: {
+        create: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      sh: "Gift card code"
+      t: "`$STRING`"
+    }
+    cost_value: {
+      h: "Cost Value"
+      n: "cost_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    discount: {
+      fo: "float"
+      h: "Discount"
+      n: "discount"
+      r: true
+      sh: "The discount percentage used on this transaction"
+      t: "`$NUMBER`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    float_balance: {
+      h: "Float Balance"
+      n: "float_balance"
+      r: true
+      t: "`$OBJECT`"
+    }
+    pin: {
+      h: "Pin"
+      n: "pin"
+      r: false
+      sh: "Gift card PIN."
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      op: {
+        create: {
+          req: false
+          type: "`$STRING`"
+        }
+      }
+      r: true
+      sh: "Unique reference for this transaction"
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    serial_number: {
+      h: "Serial Number"
+      n: "serial_number"
+      r: false
+      sh: "Gift card serial number."
+      t: "`$STRING`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "Optional meta data associated with the issuance."
+      t: "`$ARRAY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 1
+      }
+    }
+  }
+
+  name: "digital_top_up_post"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /digital/top-up"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/digital/top-up"
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "top-up"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

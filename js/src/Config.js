@@ -266,17 +266,14 @@ class Config {
       "fields": [
         {
           "name": "brands",
-          "type": "`$ANY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 0
-          }
+          "title": "Brands",
+          "type": "`$ANY`"
         },
         {
-          "format": "date-time",
           "name": "last_refreshed_at",
-          "type": "`$STRING`"
+          "title": "Last Refreshed At",
+          "type": "`$STRING`",
+          "format": "date-time"
         }
       ],
       "name": "brand",
@@ -286,45 +283,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "mock-brand",
-                    "kind": "query",
-                    "name": "brand",
-                    "orig": "brand",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "food-and-drink",
-                    "kind": "query",
-                    "name": "category",
-                    "orig": "category",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "GB",
-                    "kind": "query",
-                    "name": "country",
-                    "orig": "country",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "GBP",
-                    "kind": "query",
-                    "name": "currency",
-                    "orig": "currency",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": true,
-                    "kind": "query",
-                    "name": "detail",
-                    "orig": "detail",
-                    "type": "`$BOOLEAN`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/brands",
@@ -333,6 +291,53 @@ class Config {
                   "lit": "brands"
                 }
               ],
+              "parts": [
+                "brands"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "brand",
+                    "orig": "brand",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "mock-brand"
+                  },
+                  {
+                    "name": "category",
+                    "orig": "category",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "food-and-drink"
+                  },
+                  {
+                    "name": "country",
+                    "orig": "country",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "GB"
+                  },
+                  {
+                    "name": "currency",
+                    "orig": "currency",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "GBP"
+                  },
+                  {
+                    "name": "detail",
+                    "orig": "detail",
+                    "type": "`$BOOLEAN`",
+                    "kind": "query",
+                    "example": true
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "brand",
@@ -341,14 +346,7 @@ class Config {
                   "currency",
                   "detail"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.data`"
-              },
-              "parts": [
-                "brands"
-              ]
+              }
             }
           ]
         }
@@ -366,32 +364,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "fixed-async-uk",
-                    "kind": "query",
-                    "name": "brand",
-                    "orig": "brand",
-                    "reqd": true,
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "standard",
-                    "kind": "query",
-                    "name": "template",
-                    "orig": "template",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "2024-01-15",
-                    "kind": "query",
-                    "name": "version",
-                    "orig": "version",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/template",
@@ -400,20 +372,47 @@ class Config {
                   "lit": "template"
                 }
               ],
+              "parts": [
+                "template"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "brand",
+                    "orig": "brand",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "reqd": true,
+                    "example": "fixed-async-uk"
+                  },
+                  {
+                    "name": "template",
+                    "orig": "template",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "standard"
+                  },
+                  {
+                    "name": "version",
+                    "orig": "version",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "2024-01-15"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "brand",
                   "template",
                   "version"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body`"
-              },
-              "parts": [
-                "template"
-              ]
+              }
             }
           ]
         }
@@ -426,63 +425,75 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "code",
-          "short": "Gift card code",
-          "type": "`$STRING`"
+          "title": "Code",
+          "type": "`$STRING`",
+          "short": "Gift card code"
         },
         {
           "name": "data",
+          "title": "Data",
           "type": "`$OBJECT`"
         },
         {
           "name": "face_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Face Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "message",
+          "title": "Message",
           "type": "`$STRING`"
         },
         {
           "name": "original_client_request_id",
-          "short": "This field will be the `client_request_id` provided in the original transaction.",
-          "type": "`$STRING`"
+          "title": "Original Client Request Id",
+          "type": "`$STRING`",
+          "short": "This field will be the `client_request_id` provided in the original transaction."
         },
         {
           "name": "pin",
-          "short": "Gift card PIN.",
-          "type": "`$STRING`"
+          "title": "Pin",
+          "type": "`$STRING`",
+          "short": "Gift card PIN."
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "short": "This is the `reference` you received when making the original issuance request.",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "serial_number",
-          "short": "The serial number is a required parameter for any Sainsburys brand",
-          "type": "`$STRING`"
+          "title": "Serial Number",
+          "type": "`$STRING`",
+          "short": "The serial number is a required parameter for any Sainsburys brand"
         },
         {
           "name": "status",
+          "title": "Status",
           "type": "`$STRING`"
         }
       ],
@@ -493,7 +504,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/digital/check-balance",
@@ -505,15 +515,17 @@ class Config {
                   "lit": "check-balance"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "check-balance"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "check-balance"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -522,17 +534,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "example-brand",
-                    "kind": "query",
-                    "name": "brand",
-                    "orig": "brand",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/check-stock",
@@ -541,18 +542,30 @@ class Config {
                   "lit": "check-stock"
                 }
               ],
-              "select": {
-                "exist": [
-                  "brand"
-                ]
-              },
+              "parts": [
+                "check-stock"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "check-stock"
-              ]
+              "args": {
+                "query": [
+                  {
+                    "name": "brand",
+                    "orig": "brand",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "example-brand"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "brand"
+                ]
+              }
             }
           ]
         }
@@ -565,60 +578,58 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "face_value",
-          "req": true,
+          "title": "Face Value",
           "type": "`$OBJECT`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 2
-          }
+          "req": true
         },
         {
           "name": "float_balance",
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Your remaining balance on the float used for this cancellation transaction.",
-          "type": "`$OBJECT`"
+          "short": "Your remaining balance on the float used for this cancellation transaction."
         },
         {
           "name": "original_client_request_id",
+          "title": "Original Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "This field will be the `client_request_id` provided in the original transaction.",
-          "type": "`$STRING`"
+          "short": "This field will be the `client_request_id` provided in the original transaction."
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference (UUID) for the cancellation transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         }
       ],
       "name": "digital_issue_delete",
@@ -628,7 +639,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/digital/reverse",
@@ -640,15 +650,17 @@ class Config {
                   "lit": "reverse"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "reverse"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "reverse"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -657,7 +669,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "DELETE",
               "orig": "/digital/issue",
@@ -669,15 +680,17 @@ class Config {
                   "lit": "issue"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "issue"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "issue"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -690,120 +703,135 @@ class Config {
       "fields": [
         {
           "name": "barcode",
+          "title": "Barcode",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Some brands provide a barcode alongside a code delivery.",
-          "type": "`$OBJECT`"
+          "short": "Some brands provide a barcode alongside a code delivery."
         },
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "code",
-          "short": "Gift card code (for code-delivery brands)",
-          "type": "`$STRING`"
+          "title": "Code",
+          "type": "`$STRING`",
+          "short": "Gift card code (for code-delivery brands)"
         },
         {
           "name": "cost_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "delivery_method",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Delivery Method",
+          "type": "`$STRING`",
+          "req": true
         },
         {
-          "format": "float",
           "name": "discount",
+          "title": "Discount",
+          "type": "`$NUMBER`",
           "req": true,
           "short": "The discount percentage used on this transaction",
-          "type": "`$NUMBER`"
+          "format": "float"
         },
         {
-          "format": "date-time",
           "name": "expiration_date",
+          "title": "Expiration Date",
+          "type": "`$STRING`",
           "short": "The expiration date for this gift card.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "face_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Face Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "float_balance",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "fulfilment_by",
+          "title": "Fulfilment By",
+          "type": "`$STRING`",
           "req": true,
-          "short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued.",
-          "type": "`$STRING`"
+          "short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued."
         },
         {
           "name": "fulfilment_parameters",
+          "title": "Fulfilment Parameters",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf",
-          "type": "`$OBJECT`"
+          "short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf"
         },
         {
           "name": "personalisation",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Personalisation",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "pin",
-          "short": "Gift card PIN (for code-delivery brands).",
-          "type": "`$STRING`"
+          "title": "Pin",
+          "type": "`$STRING`",
+          "short": "Gift card PIN (for code-delivery brands)."
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "security_code",
-          "short": "Gift card security code (for code-delivery brands).",
-          "type": "`$STRING`"
+          "title": "Security Code",
+          "type": "`$STRING`",
+          "short": "Gift card security code (for code-delivery brands)."
         },
         {
           "name": "serial_number",
-          "short": "Gift card serial number.",
-          "type": "`$STRING`"
+          "title": "Serial Number",
+          "type": "`$STRING`",
+          "short": "Gift card serial number."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         },
         {
-          "format": "uri",
           "name": "url",
+          "title": "Url",
+          "type": "`$STRING`",
           "short": "Gift card URL (for URL-delivery brands)",
-          "type": "`$STRING`"
+          "format": "uri"
         }
       ],
       "name": "digital_issue_post",
@@ -813,7 +841,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/digital/issue",
@@ -825,15 +852,17 @@ class Config {
                   "lit": "issue"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "issue"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "issue"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -846,75 +875,82 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "cost_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "delivery_method",
-          "req": true,
-          "type": "`$STRING`"
+          "title": "Delivery Method",
+          "type": "`$STRING`",
+          "req": true
         },
         {
           "name": "face_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Face Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "float_balance",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "fulfilment_by",
+          "title": "Fulfilment By",
+          "type": "`$STRING`",
           "req": true,
-          "short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued.",
-          "type": "`$STRING`"
+          "short": "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued."
         },
         {
           "name": "fulfilment_parameters",
+          "title": "Fulfilment Parameters",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf",
-          "type": "`$OBJECT`"
+          "short": "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf"
         },
         {
           "name": "personalisation",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Personalisation",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         }
       ],
       "name": "digital_order_card",
@@ -924,7 +960,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/digital/order-card",
@@ -936,15 +971,17 @@ class Config {
                   "lit": "order-card"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "order-card"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "order-card"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -957,77 +994,90 @@ class Config {
       "fields": [
         {
           "name": "barcode",
+          "title": "Barcode",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS')",
-          "type": "`$OBJECT`"
+          "short": "Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS')"
         },
         {
           "name": "brand",
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "title": "Brand",
+          "type": "`$STRING`",
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "code",
-          "short": "Gift card code (for code-delivery brands, only present when status is 'SUCCESS')",
-          "type": "`$STRING`"
+          "title": "Code",
+          "type": "`$STRING`",
+          "short": "Gift card code (for code-delivery brands, only present when status is 'SUCCESS')"
         },
         {
           "name": "cost_value",
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Cost value of the gift card (only present when status is 'SUCCESS')",
-          "type": "`$OBJECT`"
+          "short": "Cost value of the gift card (only present when status is 'SUCCESS')"
         },
         {
-          "format": "float",
           "name": "discount",
+          "title": "Discount",
+          "type": "`$NUMBER`",
           "short": "The discount percentage used on this transaction",
-          "type": "`$NUMBER`"
+          "format": "float"
         },
         {
-          "format": "date-time",
           "name": "expiration_date",
+          "title": "Expiration Date",
+          "type": "`$STRING`",
           "short": "The expiration date for this gift card.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "face_value",
+          "title": "Face Value",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Face value of the gift card (only present when status is 'SUCCESS')",
-          "type": "`$OBJECT`"
+          "short": "Face value of the gift card (only present when status is 'SUCCESS')"
         },
         {
           "name": "pin",
-          "short": "Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
-          "type": "`$STRING`"
+          "title": "Pin",
+          "type": "`$STRING`",
+          "short": "Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)"
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "security_code",
-          "short": "Gift card security code (only present when status is 'SUCCESS' and brand provides one)",
-          "type": "`$STRING`"
+          "title": "Security Code",
+          "type": "`$STRING`",
+          "short": "Gift card security code (only present when status is 'SUCCESS' and brand provides one)"
         },
         {
           "name": "serial_number",
-          "short": "Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)",
-          "type": "`$STRING`"
+          "title": "Serial Number",
+          "type": "`$STRING`",
+          "short": "Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)"
         },
         {
           "name": "status",
+          "title": "Status",
+          "type": "`$STRING`",
           "req": true,
-          "short": "The current status of the order",
-          "type": "`$STRING`"
+          "short": "The current status of the order"
         },
         {
-          "format": "uri",
           "name": "url",
+          "title": "Url",
+          "type": "`$STRING`",
           "short": "Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS')",
-          "type": "`$STRING`"
+          "format": "uri"
         }
       ],
       "name": "digital_order_status",
@@ -1037,24 +1087,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "req-12345-67890",
-                    "kind": "query",
-                    "name": "original_client_request_id",
-                    "orig": "original_client_request_id",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "019ade93-d513-776b-92a2-b6323329b661",
-                    "kind": "query",
-                    "name": "reference",
-                    "orig": "reference",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/digital/order-status",
@@ -1066,20 +1098,39 @@ class Config {
                   "lit": "order-status"
                 }
               ],
+              "parts": [
+                "digital",
+                "order-status"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "original_client_request_id",
+                    "orig": "original_client_request_id",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "req-12345-67890"
+                  },
+                  {
+                    "name": "reference",
+                    "orig": "reference",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "019ade93-d513-776b-92a2-b6323329b661"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "original_client_request_id",
                   "reference"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.data`"
-              },
-              "parts": [
-                "digital",
-                "order-status"
-              ]
+              }
             }
           ]
         }
@@ -1092,86 +1143,93 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "code",
+          "title": "Code",
+          "type": "`$STRING`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$STRING`"
             }
           },
-          "req": true,
-          "short": "Gift card code",
-          "type": "`$STRING`"
+          "short": "Gift card code"
         },
         {
           "name": "cost_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "float",
           "name": "discount",
+          "title": "Discount",
+          "type": "`$NUMBER`",
           "req": true,
           "short": "The discount percentage used on this transaction",
-          "type": "`$NUMBER`"
+          "format": "float"
         },
         {
           "name": "face_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Face Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "float_balance",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "pin",
-          "short": "Gift card PIN.",
-          "type": "`$STRING`"
+          "title": "Pin",
+          "type": "`$STRING`",
+          "short": "Gift card PIN."
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$STRING`"
             }
           },
-          "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "serial_number",
-          "short": "Gift card serial number.",
-          "type": "`$STRING`"
+          "title": "Serial Number",
+          "type": "`$STRING`",
+          "short": "Gift card serial number."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         }
       ],
       "name": "digital_top_up_post",
@@ -1181,7 +1239,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/digital/top-up",
@@ -1193,15 +1250,17 @@ class Config {
                   "lit": "top-up"
                 }
               ],
-              "select": {},
+              "parts": [
+                "digital",
+                "top-up"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "digital",
-                "top-up"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1214,16 +1273,18 @@ class Config {
       "fields": [
         {
           "name": "floats",
+          "title": "Floats",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Float balances grouped by currency code",
-          "type": "`$OBJECT`"
+          "short": "Float balances grouped by currency code"
         },
         {
-          "format": "date-time",
           "name": "last_refreshed_at",
+          "title": "Last Refreshed At",
+          "type": "`$STRING`",
           "req": true,
           "short": "ISO 8601 timestamp of when the float data was last refreshed",
-          "type": "`$STRING`"
+          "format": "date-time"
         }
       ],
       "name": "float",
@@ -1233,7 +1294,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/float/request-payment-transfer",
@@ -1245,19 +1305,21 @@ class Config {
                   "lit": "request-payment-transfer"
                 }
               ],
-              "select": {
-                "$action": "request_payment_transfer"
-              },
+              "parts": [
+                "float",
+                "request-payment-transfer"
+              ],
+              "rename": {},
               "transform": {
                 "req": {
                   "float": "`reqdata`"
                 },
                 "res": "`body.data`"
               },
-              "parts": [
-                "float",
-                "request-payment-transfer"
-              ]
+              "args": {},
+              "select": {
+                "$action": "request_payment_transfer"
+              }
             }
           ]
         },
@@ -1266,52 +1328,6 @@ class Config {
           "name": "list",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "GBP",
-                    "kind": "query",
-                    "name": "currency",
-                    "orig": "currency",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "2025-10-16",
-                    "kind": "query",
-                    "name": "end_date",
-                    "orig": "end_date",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "universal-float",
-                    "kind": "query",
-                    "name": "float",
-                    "orig": "float",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "BUYER-PROVIDED-REF",
-                    "kind": "query",
-                    "name": "payment_reference",
-                    "orig": "payment_reference",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "2025-10-12",
-                    "kind": "query",
-                    "name": "start_date",
-                    "orig": "start_date",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "pending",
-                    "kind": "query",
-                    "name": "status",
-                    "orig": "status",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/float/transfer-requests",
@@ -1323,6 +1339,61 @@ class Config {
                   "lit": "transfer-requests"
                 }
               ],
+              "parts": [
+                "float",
+                "transfer-requests"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "currency",
+                    "orig": "currency",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "GBP"
+                  },
+                  {
+                    "name": "end_date",
+                    "orig": "end_date",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "2025-10-16"
+                  },
+                  {
+                    "name": "float",
+                    "orig": "float",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "universal-float"
+                  },
+                  {
+                    "name": "payment_reference",
+                    "orig": "payment_reference",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "BUYER-PROVIDED-REF"
+                  },
+                  {
+                    "name": "start_date",
+                    "orig": "start_date",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "2025-10-12"
+                  },
+                  {
+                    "name": "status",
+                    "orig": "status",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "pending"
+                  }
+                ]
+              },
               "select": {
                 "$action": "transfer_request",
                 "exist": [
@@ -1333,15 +1404,7 @@ class Config {
                   "start_date",
                   "status"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.data`"
-              },
-              "parts": [
-                "float",
-                "transfer-requests"
-              ]
+              }
             }
           ]
         },
@@ -1350,17 +1413,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "GBP",
-                    "kind": "query",
-                    "name": "currency",
-                    "orig": "currency",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/check-floats",
@@ -1369,18 +1421,30 @@ class Config {
                   "lit": "check-floats"
                 }
               ],
-              "select": {
-                "exist": [
-                  "currency"
-                ]
-              },
+              "parts": [
+                "check-floats"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "check-floats"
-              ]
+              "args": {
+                "query": [
+                  {
+                    "name": "currency",
+                    "orig": "currency",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "GBP"
+                  }
+                ]
+              },
+              "select": {
+                "exist": [
+                  "currency"
+                ]
+              }
             }
           ]
         }
@@ -1393,110 +1457,122 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "code",
+          "title": "Code",
+          "type": "`$STRING`",
+          "req": true,
           "op": {
             "create": {
               "type": "`$STRING`"
             }
           },
-          "req": true,
-          "short": "The long card number on the physical gift card you wish to cash out",
-          "type": "`$STRING`"
+          "short": "The long card number on the physical gift card you wish to cash out"
         },
         {
           "name": "cost_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "float",
           "name": "discount",
+          "title": "Discount",
+          "type": "`$NUMBER`",
           "req": true,
           "short": "The discount percentage used on this transaction",
-          "type": "`$NUMBER`"
+          "format": "float"
         },
         {
-          "format": "date-time",
           "name": "expiration_date",
+          "title": "Expiration Date",
+          "type": "`$STRING`",
           "short": "The expiration date for this gift card.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "face_value",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Face Value",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "float_balance",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "date-time",
           "name": "fulfilled_at",
+          "title": "Fulfilled At",
+          "type": "`$STRING`",
           "short": "The date for which this this gift card was fulfilled.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "original_client_request_id",
+          "title": "Original Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "This field will be the `client_request_id` provided in the original transaction.",
-          "type": "`$STRING`"
+          "short": "This field will be the `client_request_id` provided in the original transaction."
         },
         {
           "name": "pin",
-          "short": "The pin number (only applies to certain brands which provide pin) on the physical gift card",
-          "type": "`$STRING`"
+          "title": "Pin",
+          "type": "`$STRING`",
+          "short": "The pin number (only applies to certain brands which provide pin) on the physical gift card"
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "security_code",
-          "short": "Gift card security code (for code-delivery brands).",
-          "type": "`$STRING`"
+          "title": "Security Code",
+          "type": "`$STRING`",
+          "short": "Gift card security code (for code-delivery brands)."
         },
         {
           "name": "serial_number",
-          "short": "Gift card serial number.",
-          "type": "`$STRING`"
+          "title": "Serial Number",
+          "type": "`$STRING`",
+          "short": "Gift card serial number."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         },
         {
-          "format": "uri",
           "name": "url",
+          "title": "Url",
+          "type": "`$STRING`",
           "short": "Gift card URL (for URL-delivery brands)",
-          "type": "`$STRING`"
+          "format": "uri"
         }
       ],
       "name": "physical_gift_card",
@@ -1506,7 +1582,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/activate",
@@ -1518,18 +1593,19 @@ class Config {
                   "lit": "activate"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "activate"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "activate"
-              ]
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/cash-out-original-transaction",
@@ -1541,18 +1617,19 @@ class Config {
                   "lit": "cash-out-original-transaction"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "cash-out-original-transaction"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "cash-out-original-transaction"
-              ]
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/check-balance",
@@ -1564,18 +1641,19 @@ class Config {
                   "lit": "check-balance"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "check-balance"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "check-balance"
-              ]
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/fulfil-order",
@@ -1587,18 +1665,19 @@ class Config {
                   "lit": "fulfil-order"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "fulfil-order"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "fulfil-order"
-              ]
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/top-up",
@@ -1610,15 +1689,17 @@ class Config {
                   "lit": "top-up"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "top-up"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "top-up"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         },
@@ -1627,7 +1708,6 @@ class Config {
           "name": "remove",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "DELETE",
               "orig": "/physical/activate",
@@ -1639,18 +1719,19 @@ class Config {
                   "lit": "activate"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "activate"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "activate"
-              ]
+              "args": {},
+              "select": {}
             },
             {
-              "args": {},
               "kind": "http",
               "method": "DELETE",
               "orig": "/physical/top-up",
@@ -1662,15 +1743,17 @@ class Config {
                   "lit": "top-up"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "top-up"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "top-up"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1683,91 +1766,100 @@ class Config {
       "fields": [
         {
           "name": "brand",
+          "title": "Brand",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only).",
-          "type": "`$STRING`"
+          "short": "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
         },
         {
           "name": "client_request_id",
+          "title": "Client Request Id",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Unique identifier for this request.",
-          "type": "`$STRING`"
+          "short": "Unique identifier for this request."
         },
         {
           "name": "cost_value",
+          "title": "Cost Value",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "The amount you actually paid (once the discount has been taken into consideration)",
-          "type": "`$OBJECT`"
+          "short": "The amount you actually paid (once the discount has been taken into consideration)"
         },
         {
-          "format": "float",
           "name": "discount",
+          "title": "Discount",
+          "type": "`$NUMBER`",
           "req": true,
           "short": "The discount percentage used on this transaction",
-          "type": "`$NUMBER`"
+          "format": "float"
         },
         {
-          "format": "date-time",
           "name": "expiration_date",
+          "title": "Expiration Date",
+          "type": "`$STRING`",
           "short": "The expiration date for this gift card.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "face_value",
+          "title": "Face Value",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "the face value amount of the gift card.",
-          "type": "`$OBJECT`"
+          "short": "the face value amount of the gift card."
         },
         {
           "name": "float_balance",
+          "title": "Float Balance",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Your remaining balance on the float used to make this transaction",
-          "type": "`$OBJECT`"
+          "short": "Your remaining balance on the float used to make this transaction"
         },
         {
           "name": "fulfilment_by",
+          "title": "Fulfilment By",
+          "type": "`$STRING`",
           "req": true,
-          "short": "When ordering a physical gift card, this must be set to `rewardcloud`",
-          "type": "`$STRING`"
+          "short": "When ordering a physical gift card, this must be set to `rewardcloud`"
         },
         {
           "name": "fulfilment_parameters",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Fulfilment Parameters",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
           "name": "personalisation",
-          "req": true,
-          "type": "`$OBJECT`"
+          "title": "Personalisation",
+          "type": "`$OBJECT`",
+          "req": true
         },
         {
-          "format": "uuid",
           "name": "reference",
+          "title": "Reference",
+          "type": "`$STRING`",
           "req": true,
           "short": "Unique reference for this transaction",
-          "type": "`$STRING`"
+          "format": "uuid"
         },
         {
           "name": "sector",
+          "title": "Sector",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Must match one of the sectors configured for your buyer account.",
-          "type": "`$STRING`"
+          "short": "Must match one of the sectors configured for your buyer account."
         },
         {
           "name": "shipping_method",
+          "title": "Shipping Method",
+          "type": "`$STRING`",
           "req": true,
-          "short": "Shipping method identifier.",
-          "type": "`$STRING`"
+          "short": "Shipping method identifier."
         },
         {
           "name": "tags",
-          "short": "Optional meta data associated with the issuance.",
+          "title": "Tags",
           "type": "`$ARRAY`",
-          "union": {
-            "branches": 2,
-            "count": 1,
-            "depth": 1
-          }
+          "short": "Optional meta data associated with the issuance."
         }
       ],
       "name": "physical_order_card",
@@ -1777,7 +1869,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/order-card",
@@ -1789,15 +1880,17 @@ class Config {
                   "lit": "order-card"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "order-card"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "order-card"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1810,9 +1903,10 @@ class Config {
       "fields": [
         {
           "name": "references",
+          "title": "References",
+          "type": "`$ARRAY`",
           "req": true,
-          "short": "Array of order references to check.",
-          "type": "`$ARRAY`"
+          "short": "Array of order references to check."
         }
       ],
       "name": "physical_order_status",
@@ -1822,7 +1916,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "POST",
               "orig": "/physical/order-status",
@@ -1834,15 +1927,17 @@ class Config {
                   "lit": "order-status"
                 }
               ],
-              "select": {},
+              "parts": [
+                "physical",
+                "order-status"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "physical",
-                "order-status"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1854,17 +1949,19 @@ class Config {
     "promotion": {
       "fields": [
         {
-          "format": "date-time",
           "name": "last_refreshed_at",
+          "title": "Last Refreshed At",
+          "type": "`$STRING`",
           "req": true,
           "short": "ISO 8601 timestamp of when promotion data was last refreshed.",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "standard",
+          "title": "Standard",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Standard promotions grouped by brand slug.",
-          "type": "`$OBJECT`"
+          "short": "Standard promotions grouped by brand slug."
         }
       ],
       "name": "promotion",
@@ -1874,7 +1971,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {},
               "kind": "http",
               "method": "GET",
               "orig": "/promotions",
@@ -1883,14 +1979,16 @@ class Config {
                   "lit": "promotions"
                 }
               ],
-              "select": {},
+              "parts": [
+                "promotions"
+              ],
+              "rename": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.data`"
               },
-              "parts": [
-                "promotions"
-              ]
+              "args": {},
+              "select": {}
             }
           ]
         }
@@ -1902,17 +2000,19 @@ class Config {
     "template": {
       "fields": [
         {
-          "format": "date-time",
           "name": "last_refreshed_at",
+          "title": "Last Refreshed At",
+          "type": "`$STRING`",
           "req": true,
           "short": "ISO 8601 timestamp of when the template data was last refreshed",
-          "type": "`$STRING`"
+          "format": "date-time"
         },
         {
           "name": "templates",
+          "title": "Templates",
+          "type": "`$OBJECT`",
           "req": true,
-          "short": "Object mapping brand slugs to their template variants and versions.",
-          "type": "`$OBJECT`"
+          "short": "Object mapping brand slugs to their template variants and versions."
         }
       ],
       "name": "template",
@@ -1922,24 +2022,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "args": {
-                "query": [
-                  {
-                    "example": "fixed-async-uk",
-                    "kind": "query",
-                    "name": "brand",
-                    "orig": "brand",
-                    "type": "`$STRING`"
-                  },
-                  {
-                    "example": "standard",
-                    "kind": "query",
-                    "name": "template",
-                    "orig": "template",
-                    "type": "`$STRING`"
-                  }
-                ]
-              },
               "kind": "http",
               "method": "GET",
               "orig": "/templates",
@@ -1948,19 +2030,38 @@ class Config {
                   "lit": "templates"
                 }
               ],
+              "parts": [
+                "templates"
+              ],
+              "rename": {},
+              "transform": {
+                "req": "`reqdata`",
+                "res": "`body.data`"
+              },
+              "args": {
+                "query": [
+                  {
+                    "name": "brand",
+                    "orig": "brand",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "fixed-async-uk"
+                  },
+                  {
+                    "name": "template",
+                    "orig": "template",
+                    "type": "`$STRING`",
+                    "kind": "query",
+                    "example": "standard"
+                  }
+                ]
+              },
               "select": {
                 "exist": [
                   "brand",
                   "template"
                 ]
-              },
-              "transform": {
-                "req": "`reqdata`",
-                "res": "`body.data`"
-              },
-              "parts": [
-                "templates"
-              ]
+              }
             }
           ]
         }

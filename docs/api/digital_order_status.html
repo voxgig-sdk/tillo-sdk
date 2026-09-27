@@ -32,14 +32,14 @@
 <a href="../sdks/ts.html">TypeScript</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="digitalorderstatus">DigitalOrderStatus</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="digitalorderstatus">DigitalOrderStatus</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -60,6 +60,36 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">digital_order_status, err := client.DigitalOrderStatus(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(digital_order_status)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const digital_order_status = await client.DigitalOrderStatus().load()
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local digital_order_status, err = client:DigitalOrderStatus():load()
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$digital_order_status = $client-&gt;DigitalOrderStatus()-&gt;load();
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">digital_order_status = client.DigitalOrderStatus().load()
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const digital_order_status = await client.DigitalOrderStatus().load()
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -158,8 +188,8 @@
 <h4 id="parameters">Parameters</h4>
 <p>| Parameter | In | Type | Required | Description |
 | --- | --- | --- | --- |
-| <code>reference</code> | <code>query</code> | <code>string (uuid)</code> | No | The unique reference (UUID) returned when the order was created. Cannot be used together with original_client_request_id. |
-| <code>original_client_request_id</code> | <code>query</code> | <code>string</code> | No | The unique identifier (client_request_id) that you provided when creating the order. Cannot be used together with reference. |</p>
+| <code>reference</code> | <code>query</code> | <code>string (uuid)</code> | No | The unique reference (UUID) returned when the order was created. Cannot be used together with <code>original_client_request_id</code>. |
+| <code>original_client_request_id</code> | <code>query</code> | <code>string</code> | No | The unique identifier (<code>client_request_id</code>) that you provided when creating the order. Cannot be used together with reference. |</p>
 <h4 id="responses">Responses</h4>
 <h5 id="200-order-status-retrieved-successfully" class="status" data-status="2xx">200: Order status retrieved successfully</h5>
 <p><code>application/json</code></p>
@@ -265,7 +295,7 @@
 </tr>
 <tr>
 <td><code>data.face_value.currency</code></td>
-<td><code>string</code></td>
+<td><code>enum: AED, AUD, BHD, BRL, CAD, CHF, ...</code></td>
 <td>Yes</td>
 <td></td>
 </tr>

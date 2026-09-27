@@ -1,0 +1,80 @@
+# Entity: template
+
+main: kit: entity: template: {
+
+  alias: field: {}
+
+  fields: {
+    last_refreshed_at: {
+      fo: "date-time"
+      h: "Last Refreshed At"
+      n: "last_refreshed_at"
+      r: true
+      sh: "ISO 8601 timestamp of when the template data was last refreshed"
+      t: "`$STRING`"
+    }
+    templates: {
+      h: "Templates"
+      n: "templates"
+      r: true
+      sh: "Object mapping brand slugs to their template variants and versions."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "template"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /templates"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "fixed-async-uk"
+                k: "query"
+                n: "brand"
+                or: "brand"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "standard"
+                k: "query"
+                n: "template"
+                or: "template"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/templates"
+          q: {
+            exist: [
+              "brand"
+              "template"
+            ]
+          }
+          s: [
+            {
+              lit: "templates"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,146 @@
+# Entity: physical_order_card
+
+main: kit: entity: physical_order_card: {
+
+  alias: field: {}
+
+  fields: {
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    cost_value: {
+      h: "Cost Value"
+      n: "cost_value"
+      r: true
+      sh: "The amount you actually paid (once the discount has been taken into consideration)"
+      t: "`$OBJECT`"
+    }
+    discount: {
+      fo: "float"
+      h: "Discount"
+      n: "discount"
+      r: true
+      sh: "The discount percentage used on this transaction"
+      t: "`$NUMBER`"
+    }
+    expiration_date: {
+      fo: "date-time"
+      h: "Expiration Date"
+      n: "expiration_date"
+      r: false
+      sh: "The expiration date for this gift card."
+      t: "`$STRING`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      sh: "the face value amount of the gift card."
+      t: "`$OBJECT`"
+    }
+    float_balance: {
+      h: "Float Balance"
+      n: "float_balance"
+      r: true
+      sh: "Your remaining balance on the float used to make this transaction"
+      t: "`$OBJECT`"
+    }
+    fulfilment_by: {
+      h: "Fulfilment By"
+      n: "fulfilment_by"
+      r: true
+      sh: "When ordering a physical gift card, this must be set to `rewardcloud`"
+      t: "`$STRING`"
+    }
+    fulfilment_parameters: {
+      h: "Fulfilment Parameters"
+      n: "fulfilment_parameters"
+      r: true
+      t: "`$OBJECT`"
+    }
+    personalisation: {
+      h: "Personalisation"
+      n: "personalisation"
+      r: true
+      t: "`$OBJECT`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: true
+      sh: "Unique reference for this transaction"
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    shipping_method: {
+      h: "Shipping Method"
+      n: "shipping_method"
+      r: true
+      sh: "Shipping method identifier."
+      t: "`$STRING`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "Optional meta data associated with the issuance."
+      t: "`$ARRAY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 1
+      }
+    }
+  }
+
+  name: "physical_order_card"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /physical/order-card"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/order-card"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "order-card"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

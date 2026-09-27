@@ -33,14 +33,14 @@
 <a href="../sdks/ts.html">TypeScript</a></details>
 <details><summary>Tools</summary><a href="../tools/go-cli.html">Go CLI</a>
 <a href="../tools/go-mcp.html">Go MCP server</a></details>
-<details><summary>Features</summary><a href="../features/debug.html">Request/response capture ring buffer for debugging</a>
-<a href="../features/idempotency.html">Idempotency keys for safe retries of mutating operations</a>
-<a href="../features/metrics.html">Statistics capture: per-operation counters and latency</a>
-<a href="../features/paging.html">Pagination signals for list operations</a>
-<a href="../features/ratelimit.html">Client-side rate limiting via a token bucket</a>
-<a href="../features/retry.html">Automatic retry of transient failures with exponential backoff</a>
-<a href="../features/test.html">In-memory mock transport for testing without a live server</a>
-<a href="../features/timeout.html">Per-request timeout with transport abort</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="digitalgiftcard">DigitalGiftCard</h1>
+<details><summary>Features</summary><a href="../features/debug.html">Debug capture</a>
+<a href="../features/idempotency.html">Idempotency</a>
+<a href="../features/metrics.html">Metrics</a>
+<a href="../features/paging.html">Paging</a>
+<a href="../features/ratelimit.html">Rate limiting</a>
+<a href="../features/retry.html">Retry</a>
+<a href="../features/test.html">Test transport</a>
+<a href="../features/timeout.html">Timeout</a></details></nav><main id="content"><div class="page-context"><span class="section-dot" aria-hidden="true"></span>API</div><h1 id="digitalgiftcard">DigitalGiftCard</h1>
 <h2 id="operations">Operations</h2>
 <p>Every route this entity exposes. Each route links to its own reference on this page.</p>
 <table>
@@ -67,6 +67,46 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<p>One example per SDK, generated from the API model. The argument names are the parameters and fields of this entity, and the values are placeholders. The examples are not compiled or executed.</p>
+<h3 id="golang">Golang</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/go.html#set-up-the-client">Golang setup</a>, then call the operations:</p>
+<pre><code class="language-go">digital_gift_card, err := client.DigitalGiftCard(nil).Load(nil, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(digital_gift_card)
+created, err := client.DigitalGiftCard(nil).Create(map[string]any{&quot;brand&quot;: &quot;example&quot;, &quot;client_request_id&quot;: &quot;example&quot;, &quot;face_value&quot;: map[string]any{}, &quot;sector&quot;: &quot;example&quot;}, nil)
+if err != nil {
+    panic(err)
+}
+fmt.Println(created)
+</code></pre>
+<h3 id="javascript">JavaScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/js.html#set-up-the-client">JavaScript setup</a>, then call the operations:</p>
+<pre><code class="language-js">const digital_gift_card = await client.DigitalGiftCard().load()
+const created = await client.DigitalGiftCard().create({ brand: &quot;example&quot;, client_request_id: &quot;example&quot;, face_value: {}, sector: &quot;example&quot; })
+</code></pre>
+<h3 id="lua">Lua</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/lua.html#set-up-the-client">Lua setup</a>, then call the operations:</p>
+<pre><code class="language-lua">local digital_gift_card, err = client:DigitalGiftCard():load()
+local created, err = client:DigitalGiftCard():create({ brand = &quot;example&quot;, client_request_id = &quot;example&quot;, face_value = {}, sector = &quot;example&quot; })
+</code></pre>
+<h3 id="php">PHP</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/php.html#set-up-the-client">PHP setup</a>, then call the operations:</p>
+<pre><code class="language-php">$digital_gift_card = $client-&gt;DigitalGiftCard()-&gt;load();
+$created = $client-&gt;DigitalGiftCard()-&gt;create([&quot;brand&quot; =&gt; &quot;example&quot;, &quot;client_request_id&quot; =&gt; &quot;example&quot;, &quot;face_value&quot; =&gt; [], &quot;sector&quot; =&gt; &quot;example&quot;]);
+</code></pre>
+<h3 id="python">Python</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/py.html#set-up-the-client">Python setup</a>, then call the operations:</p>
+<pre><code class="language-py">digital_gift_card = client.DigitalGiftCard().load()
+created = client.DigitalGiftCard().create({ &quot;brand&quot;: &quot;example&quot;, &quot;client_request_id&quot;: &quot;example&quot;, &quot;face_value&quot;: {}, &quot;sector&quot;: &quot;example&quot; })
+</code></pre>
+<h3 id="typescript">TypeScript</h3>
+<p>Construct <code>client</code> as shown in the <a href="../sdks/ts.html#set-up-the-client">TypeScript setup</a>, then call the operations:</p>
+<pre><code class="language-ts">const digital_gift_card = await client.DigitalGiftCard().load()
+const created = await client.DigitalGiftCard().create({ brand: &quot;example&quot;, client_request_id: &quot;example&quot;, face_value: {}, sector: &quot;example&quot; })
+</code></pre>
 <h2 id="fields">Fields</h2>
 <table>
 <thead>
@@ -100,19 +140,19 @@
 <td><code>data</code></td>
 <td><code>object</code></td>
 <td>No</td>
-<td></td>
+<td>Data</td>
 </tr>
 <tr>
 <td><code>face_value</code></td>
 <td><code>object</code></td>
 <td>Yes</td>
-<td></td>
+<td>Face Value</td>
 </tr>
 <tr>
 <td><code>message</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Message</td>
 </tr>
 <tr>
 <td><code>original_client_request_id</code></td>
@@ -148,7 +188,7 @@
 <td><code>status</code></td>
 <td><code>string</code></td>
 <td>No</td>
-<td></td>
+<td>Status</td>
 </tr>
 </tbody>
 </table>
@@ -440,10 +480,28 @@
 </thead>
 <tbody>
 <tr>
-<td><code>$ref</code></td>
-<td><code>any</code></td>
+<td><code>code</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Internal error code (3-digit string)</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td><code>object</code></td>
 <td>No</td>
-<td></td>
+<td>Optional additional error details</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Human-readable error message</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td><code>string</code></td>
+<td>Yes</td>
+<td>Status of the response</td>
 </tr>
 </tbody>
 </table>

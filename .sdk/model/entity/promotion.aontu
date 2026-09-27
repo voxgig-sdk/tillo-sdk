@@ -1,0 +1,54 @@
+# Entity: promotion
+
+main: kit: entity: promotion: {
+
+  alias: field: {}
+
+  fields: {
+    last_refreshed_at: {
+      fo: "date-time"
+      h: "Last Refreshed At"
+      n: "last_refreshed_at"
+      r: true
+      sh: "ISO 8601 timestamp of when promotion data was last refreshed."
+      t: "`$STRING`"
+    }
+    standard: {
+      h: "Standard"
+      n: "standard"
+      r: true
+      sh: "Standard promotions grouped by brand slug."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "promotion"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /promotions"
+            source: "openapi3"
+            version: 2
+          }
+          m: "GET"
+          o: "/promotions"
+          s: [
+            {
+              lit: "promotions"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

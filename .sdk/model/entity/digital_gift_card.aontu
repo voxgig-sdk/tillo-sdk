@@ -1,0 +1,163 @@
+# Entity: digital_gift_card
+
+main: kit: entity: digital_gift_card: {
+
+  alias: field: {}
+
+  fields: {
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    code: {
+      h: "Code"
+      n: "code"
+      r: false
+      sh: "Gift card code"
+      t: "`$STRING`"
+    }
+    data: {
+      h: "Data"
+      n: "data"
+      r: false
+      t: "`$OBJECT`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    message: {
+      h: "Message"
+      n: "message"
+      r: false
+      t: "`$STRING`"
+    }
+    original_client_request_id: {
+      h: "Original Client Request Id"
+      n: "original_client_request_id"
+      r: false
+      sh: "This field will be the `client_request_id` provided in the original transaction."
+      t: "`$STRING`"
+    }
+    pin: {
+      h: "Pin"
+      n: "pin"
+      r: false
+      sh: "Gift card PIN."
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: false
+      sh: "This is the `reference` you received when making the original issuance request."
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    serial_number: {
+      h: "Serial Number"
+      n: "serial_number"
+      r: false
+      sh: "The serial number is a required parameter for any Sainsburys brand"
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "digital_gift_card"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /digital/check-balance"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/digital/check-balance"
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "check-balance"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /check-stock"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "example-brand"
+                k: "query"
+                n: "brand"
+                or: "brand"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/check-stock"
+          q: {
+            exist: [
+              "brand"
+            ]
+          }
+          s: [
+            {
+              lit: "check-stock"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

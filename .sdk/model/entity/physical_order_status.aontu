@@ -1,0 +1,49 @@
+# Entity: physical_order_status
+
+main: kit: entity: physical_order_status: {
+
+  alias: field: {}
+
+  fields: {
+    references: {
+      h: "References"
+      n: "references"
+      r: true
+      sh: "Array of order references to check."
+      t: "`$ARRAY`"
+    }
+  }
+
+  name: "physical_order_status"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /physical/order-status"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/physical/order-status"
+          s: [
+            {
+              lit: "physical"
+            }
+            {
+              lit: "order-status"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

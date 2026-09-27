@@ -1,0 +1,74 @@
+# Entity: brand_template
+
+main: kit: entity: brand_template: {
+
+  alias: field: {}
+
+  name: "brand_template"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /template"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "fixed-async-uk"
+                k: "query"
+                n: "brand"
+                or: "brand"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "standard"
+                k: "query"
+                n: "template"
+                or: "template"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "2024-01-15"
+                k: "query"
+                n: "version"
+                or: "version"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/template"
+          q: {
+            exist: [
+              "brand"
+              "template"
+              "version"
+            ]
+          }
+          s: [
+            {
+              lit: "template"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+
+}

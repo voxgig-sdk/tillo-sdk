@@ -35,8 +35,8 @@ Key fields to recognise:
 - `brand`: Brand identifier/slug (lowercase letters, numbers, hyphens only).
 - `client_request_id`: Unique identifier for this request.
 - `code`: Internal error code (3-digit string)
-- `original_client_request_id`: This field will be the `client_request_id` provided in the original transaction.
-- `pin`: Gift card PIN.
+- `data`: Optional additional error details
+- `message`: Human-readable error message
 
 ### [DigitalIssueDelete](docs/api/digital_issue_delete.html)
 
@@ -216,9 +216,9 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 
 The default credential is sent in the `API-Key` header.
 
-Your API key
-
 HMAC-SHA256 signature of the request
+
+Your API key
 
 Unix timestamp in milliseconds
 

@@ -1,0 +1,134 @@
+# Entity: digital_issue_delete
+
+main: kit: entity: digital_issue_delete: {
+
+  alias: field: {}
+
+  fields: {
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      t: "`$OBJECT`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 2
+      }
+    }
+    float_balance: {
+      h: "Float Balance"
+      n: "float_balance"
+      r: true
+      sh: "Your remaining balance on the float used for this cancellation transaction."
+      t: "`$OBJECT`"
+    }
+    original_client_request_id: {
+      h: "Original Client Request Id"
+      n: "original_client_request_id"
+      r: true
+      sh: "This field will be the `client_request_id` provided in the original transaction."
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: true
+      sh: "Unique reference (UUID) for the cancellation transaction"
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "Optional meta data associated with the issuance."
+      t: "`$ARRAY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 1
+      }
+    }
+  }
+
+  name: "digital_issue_delete"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /digital/reverse"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/digital/reverse"
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "reverse"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    remove: {
+      name: "remove"
+      points: [
+        {
+          co: {
+            id: "DELETE /digital/issue"
+            source: "openapi3"
+            version: 2
+          }
+          m: "DELETE"
+          o: "/digital/issue"
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "issue"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

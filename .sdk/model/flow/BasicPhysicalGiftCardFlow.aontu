@@ -1,0 +1,27 @@
+# BasicPhysicalGiftCardFlow
+
+main: kit: flow: BasicPhysicalGiftCardFlow:
+{
+  entity: "physical_gift_card",
+  kind: "basic",
+  name: "BasicPhysicalGiftCardFlow",
+  step: [
+    {
+      i: {
+        ref: "physical_gift_card_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      i: {
+        ref: "physical_gift_card_ref01",
+        suffix: "_rm0"
+      }
+
+      o: "remove"
+    }
+  ],
+  "key$": "BasicPhysicalGiftCardFlow"
+}

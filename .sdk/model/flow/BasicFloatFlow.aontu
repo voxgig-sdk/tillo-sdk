@@ -1,0 +1,48 @@
+# BasicFloatFlow
+
+main: kit: flow: BasicFloatFlow:
+{
+  entity: "float",
+  kind: "basic",
+  name: "BasicFloatFlow",
+  step: [
+    {
+      i: {
+        ref: "float_ref01"
+      }
+
+      o: "create"
+    }
+
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "float_ref01"
+          }
+        }
+      ]
+    }
+
+    {
+      i: {
+        ref: "float_ref01",
+        srcdatavar: "float_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-float_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFloatFlow"
+}

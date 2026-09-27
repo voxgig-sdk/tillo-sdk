@@ -1,0 +1,191 @@
+# Entity: float
+
+main: kit: entity: float: {
+
+  alias: field: {}
+
+  fields: {
+    floats: {
+      h: "Floats"
+      n: "floats"
+      r: true
+      sh: "Float balances grouped by currency code"
+      t: "`$OBJECT`"
+    }
+    last_refreshed_at: {
+      fo: "date-time"
+      h: "Last Refreshed At"
+      n: "last_refreshed_at"
+      r: true
+      sh: "ISO 8601 timestamp of when the float data was last refreshed"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "float"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /float/request-payment-transfer"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/float/request-payment-transfer"
+          q: {
+            "$action": "request_payment_transfer"
+          }
+          s: [
+            {
+              lit: "float"
+            }
+            {
+              lit: "request-payment-transfer"
+            }
+          ]
+          t: {
+            req: {
+              float: "`reqdata`"
+            }
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /float/transfer-requests"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "GBP"
+                k: "query"
+                n: "currency"
+                or: "currency"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "2025-10-16"
+                k: "query"
+                n: "end_date"
+                or: "end_date"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "universal-float"
+                k: "query"
+                n: "float"
+                or: "float"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "BUYER-PROVIDED-REF"
+                k: "query"
+                n: "payment_reference"
+                or: "payment_reference"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "2025-10-12"
+                k: "query"
+                n: "start_date"
+                or: "start_date"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "pending"
+                k: "query"
+                n: "status"
+                or: "status"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/float/transfer-requests"
+          q: {
+            "$action": "transfer_request"
+            exist: [
+              "currency"
+              "end_date"
+              "float"
+              "payment_reference"
+              "start_date"
+              "status"
+            ]
+          }
+          s: [
+            {
+              lit: "float"
+            }
+            {
+              lit: "transfer-requests"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /check-floats"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "GBP"
+                k: "query"
+                n: "currency"
+                or: "currency"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/check-floats"
+          q: {
+            exist: [
+              "currency"
+            ]
+          }
+          s: [
+            {
+              lit: "check-floats"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

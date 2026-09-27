@@ -1,0 +1,163 @@
+# Entity: digital_order_status
+
+main: kit: entity: digital_order_status: {
+
+  alias: field: {}
+
+  fields: {
+    barcode: {
+      h: "Barcode"
+      n: "barcode"
+      r: true
+      sh: "Some brands provide a barcode alongside a code delivery (only present when status is 'SUCCESS')"
+      t: "`$OBJECT`"
+    }
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: false
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    code: {
+      h: "Code"
+      n: "code"
+      r: false
+      sh: "Gift card code (for code-delivery brands, only present when status is 'SUCCESS')"
+      t: "`$STRING`"
+    }
+    cost_value: {
+      h: "Cost Value"
+      n: "cost_value"
+      r: true
+      sh: "Cost value of the gift card (only present when status is 'SUCCESS')"
+      t: "`$OBJECT`"
+    }
+    discount: {
+      fo: "float"
+      h: "Discount"
+      n: "discount"
+      r: false
+      sh: "The discount percentage used on this transaction"
+      t: "`$NUMBER`"
+    }
+    expiration_date: {
+      fo: "date-time"
+      h: "Expiration Date"
+      n: "expiration_date"
+      r: false
+      sh: "The expiration date for this gift card."
+      t: "`$STRING`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      sh: "Face value of the gift card (only present when status is 'SUCCESS')"
+      t: "`$OBJECT`"
+    }
+    pin: {
+      h: "Pin"
+      n: "pin"
+      r: false
+      sh: "Gift card PIN (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)"
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: true
+      sh: "Unique reference for this transaction"
+      t: "`$STRING`"
+    }
+    security_code: {
+      h: "Security Code"
+      n: "security_code"
+      r: false
+      sh: "Gift card security code (only present when status is 'SUCCESS' and brand provides one)"
+      t: "`$STRING`"
+    }
+    serial_number: {
+      h: "Serial Number"
+      n: "serial_number"
+      r: false
+      sh: "Gift card serial number (for code-delivery brands, only present when status is 'SUCCESS' and brand provides one)"
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: true
+      sh: "The current status of the order"
+      t: "`$STRING`"
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      sh: "Gift card URL (for URL-delivery brands, only present when status is 'SUCCESS')"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "digital_order_status"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /digital/order-status"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "req-12345-67890"
+                k: "query"
+                n: "original_client_request_id"
+                or: "original_client_request_id"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "019ade93-d513-776b-92a2-b6323329b661"
+                k: "query"
+                n: "reference"
+                or: "reference"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/digital/order-status"
+          q: {
+            exist: [
+              "original_client_request_id"
+              "reference"
+            ]
+          }
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "order-status"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

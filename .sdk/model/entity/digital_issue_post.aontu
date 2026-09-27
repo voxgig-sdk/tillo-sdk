@@ -1,0 +1,186 @@
+# Entity: digital_issue_post
+
+main: kit: entity: digital_issue_post: {
+
+  alias: field: {}
+
+  fields: {
+    barcode: {
+      h: "Barcode"
+      n: "barcode"
+      r: true
+      sh: "Some brands provide a barcode alongside a code delivery."
+      t: "`$OBJECT`"
+    }
+    brand: {
+      h: "Brand"
+      n: "brand"
+      r: true
+      sh: "Brand identifier/slug (lowercase letters, numbers, hyphens only)."
+      t: "`$STRING`"
+    }
+    client_request_id: {
+      h: "Client Request Id"
+      n: "client_request_id"
+      r: true
+      sh: "Unique identifier for this request."
+      t: "`$STRING`"
+    }
+    code: {
+      h: "Code"
+      n: "code"
+      r: false
+      sh: "Gift card code (for code-delivery brands)"
+      t: "`$STRING`"
+    }
+    cost_value: {
+      h: "Cost Value"
+      n: "cost_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    delivery_method: {
+      h: "Delivery Method"
+      n: "delivery_method"
+      r: true
+      t: "`$STRING`"
+    }
+    discount: {
+      fo: "float"
+      h: "Discount"
+      n: "discount"
+      r: true
+      sh: "The discount percentage used on this transaction"
+      t: "`$NUMBER`"
+    }
+    expiration_date: {
+      fo: "date-time"
+      h: "Expiration Date"
+      n: "expiration_date"
+      r: false
+      sh: "The expiration date for this gift card."
+      t: "`$STRING`"
+    }
+    face_value: {
+      h: "Face Value"
+      n: "face_value"
+      r: true
+      t: "`$OBJECT`"
+    }
+    float_balance: {
+      h: "Float Balance"
+      n: "float_balance"
+      r: true
+      t: "`$OBJECT`"
+    }
+    fulfilment_by: {
+      h: "Fulfilment By"
+      n: "fulfilment_by"
+      r: true
+      sh: "This parameter dictates who will be responsible for sending out the confirmation email once a gift card has been issued."
+      t: "`$STRING`"
+    }
+    fulfilment_parameters: {
+      h: "Fulfilment Parameters"
+      n: "fulfilment_parameters"
+      r: true
+      sh: "Fulfilment parameters are required when you want Tillo to send the issuance email on your behalf"
+      t: "`$OBJECT`"
+    }
+    personalisation: {
+      h: "Personalisation"
+      n: "personalisation"
+      r: true
+      t: "`$OBJECT`"
+    }
+    pin: {
+      h: "Pin"
+      n: "pin"
+      r: false
+      sh: "Gift card PIN (for code-delivery brands)."
+      t: "`$STRING`"
+    }
+    reference: {
+      fo: "uuid"
+      h: "Reference"
+      n: "reference"
+      r: true
+      sh: "Unique reference for this transaction"
+      t: "`$STRING`"
+    }
+    sector: {
+      h: "Sector"
+      n: "sector"
+      r: true
+      sh: "Must match one of the sectors configured for your buyer account."
+      t: "`$STRING`"
+    }
+    security_code: {
+      h: "Security Code"
+      n: "security_code"
+      r: false
+      sh: "Gift card security code (for code-delivery brands)."
+      t: "`$STRING`"
+    }
+    serial_number: {
+      h: "Serial Number"
+      n: "serial_number"
+      r: false
+      sh: "Gift card serial number."
+      t: "`$STRING`"
+    }
+    tags: {
+      h: "Tags"
+      n: "tags"
+      r: false
+      sh: "Optional meta data associated with the issuance."
+      t: "`$ARRAY`"
+      union: {
+        branches: 2
+        count: 1
+        depth: 1
+      }
+    }
+    url: {
+      fo: "uri"
+      h: "Url"
+      n: "url"
+      r: false
+      sh: "Gift card URL (for URL-delivery brands)"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "digital_issue_post"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /digital/issue"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/digital/issue"
+          s: [
+            {
+              lit: "digital"
+            }
+            {
+              lit: "issue"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.data`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

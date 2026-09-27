@@ -1,7 +1,7 @@
 // Typed models for the Tillo SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
@@ -14,8 +14,6 @@ import (
 
 // Brand is the typed data model for the brand entity.
 type Brand struct {
-	Brands *any `json:"brands,omitempty"`
-	LastRefreshedAt *string `json:"last_refreshed_at,omitempty"`
 }
 
 // BrandLoadMatch is the typed request payload for Brand.LoadTyped.
@@ -40,18 +38,6 @@ type BrandTemplateLoadMatch struct {
 
 // DigitalGiftCard is the typed data model for the digital_gift_card entity.
 type DigitalGiftCard struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	Code *string `json:"code,omitempty"`
-	Data *map[string]any `json:"data,omitempty"`
-	FaceValue map[string]any `json:"face_value"`
-	Message *string `json:"message,omitempty"`
-	OriginalClientRequestId *string `json:"original_client_request_id,omitempty"`
-	Pin *string `json:"pin,omitempty"`
-	Reference *string `json:"reference,omitempty"`
-	Sector string `json:"sector"`
-	SerialNumber *string `json:"serial_number,omitempty"`
-	Status *string `json:"status,omitempty"`
 }
 
 // DigitalGiftCardLoadMatch is the typed request payload for DigitalGiftCard.LoadTyped.
@@ -77,14 +63,6 @@ type DigitalGiftCardCreateData struct {
 
 // DigitalIssueDelete is the typed data model for the digital_issue_delete entity.
 type DigitalIssueDelete struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	OriginalClientRequestId string `json:"original_client_request_id"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	Tags *[]any `json:"tags,omitempty"`
 }
 
 // DigitalIssueDeleteCreateData is the typed request payload for DigitalIssueDelete.CreateTyped.
@@ -113,26 +91,6 @@ type DigitalIssueDeleteRemoveMatch struct {
 
 // DigitalIssuePost is the typed data model for the digital_issue_post entity.
 type DigitalIssuePost struct {
-	Barcode map[string]any `json:"barcode"`
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	Code *string `json:"code,omitempty"`
-	CostValue map[string]any `json:"cost_value"`
-	DeliveryMethod string `json:"delivery_method"`
-	Discount float64 `json:"discount"`
-	ExpirationDate *string `json:"expiration_date,omitempty"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	FulfilmentBy string `json:"fulfilment_by"`
-	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
-	Personalisation map[string]any `json:"personalisation"`
-	Pin *string `json:"pin,omitempty"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	SecurityCode *string `json:"security_code,omitempty"`
-	SerialNumber *string `json:"serial_number,omitempty"`
-	Tags *[]any `json:"tags,omitempty"`
-	Url *string `json:"url,omitempty"`
 }
 
 // DigitalIssuePostCreateData is the typed request payload for DigitalIssuePost.CreateTyped.
@@ -161,18 +119,6 @@ type DigitalIssuePostCreateData struct {
 
 // DigitalOrderCard is the typed data model for the digital_order_card entity.
 type DigitalOrderCard struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	CostValue map[string]any `json:"cost_value"`
-	DeliveryMethod string `json:"delivery_method"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	FulfilmentBy string `json:"fulfilment_by"`
-	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
-	Personalisation map[string]any `json:"personalisation"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	Tags *[]any `json:"tags,omitempty"`
 }
 
 // DigitalOrderCardCreateData is the typed request payload for DigitalOrderCard.CreateTyped.
@@ -193,19 +139,6 @@ type DigitalOrderCardCreateData struct {
 
 // DigitalOrderStatus is the typed data model for the digital_order_status entity.
 type DigitalOrderStatus struct {
-	Barcode map[string]any `json:"barcode"`
-	Brand *string `json:"brand,omitempty"`
-	Code *string `json:"code,omitempty"`
-	CostValue map[string]any `json:"cost_value"`
-	Discount *float64 `json:"discount,omitempty"`
-	ExpirationDate *string `json:"expiration_date,omitempty"`
-	FaceValue map[string]any `json:"face_value"`
-	Pin *string `json:"pin,omitempty"`
-	Reference string `json:"reference"`
-	SecurityCode *string `json:"security_code,omitempty"`
-	SerialNumber *string `json:"serial_number,omitempty"`
-	Status string `json:"status"`
-	Url *string `json:"url,omitempty"`
 }
 
 // DigitalOrderStatusLoadMatch is the typed request payload for DigitalOrderStatus.LoadTyped.
@@ -216,18 +149,6 @@ type DigitalOrderStatusLoadMatch struct {
 
 // DigitalTopUpPost is the typed data model for the digital_top_up_post entity.
 type DigitalTopUpPost struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	Code string `json:"code"`
-	CostValue map[string]any `json:"cost_value"`
-	Discount float64 `json:"discount"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	Pin *string `json:"pin,omitempty"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	SerialNumber *string `json:"serial_number,omitempty"`
-	Tags *[]any `json:"tags,omitempty"`
 }
 
 // DigitalTopUpPostCreateData is the typed request payload for DigitalTopUpPost.CreateTyped.
@@ -248,8 +169,6 @@ type DigitalTopUpPostCreateData struct {
 
 // Float is the typed data model for the float entity.
 type Float struct {
-	Floats map[string]any `json:"floats"`
-	LastRefreshedAt string `json:"last_refreshed_at"`
 }
 
 // FloatLoadMatch is the typed request payload for Float.LoadTyped.
@@ -275,23 +194,6 @@ type FloatCreateData struct {
 
 // PhysicalGiftCard is the typed data model for the physical_gift_card entity.
 type PhysicalGiftCard struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	Code string `json:"code"`
-	CostValue map[string]any `json:"cost_value"`
-	Discount float64 `json:"discount"`
-	ExpirationDate *string `json:"expiration_date,omitempty"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	FulfilledAt *string `json:"fulfilled_at,omitempty"`
-	OriginalClientRequestId string `json:"original_client_request_id"`
-	Pin *string `json:"pin,omitempty"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	SecurityCode *string `json:"security_code,omitempty"`
-	SerialNumber *string `json:"serial_number,omitempty"`
-	Tags *[]any `json:"tags,omitempty"`
-	Url *string `json:"url,omitempty"`
 }
 
 // PhysicalGiftCardCreateData is the typed request payload for PhysicalGiftCard.CreateTyped.
@@ -338,20 +240,6 @@ type PhysicalGiftCardRemoveMatch struct {
 
 // PhysicalOrderCard is the typed data model for the physical_order_card entity.
 type PhysicalOrderCard struct {
-	Brand string `json:"brand"`
-	ClientRequestId string `json:"client_request_id"`
-	CostValue map[string]any `json:"cost_value"`
-	Discount float64 `json:"discount"`
-	ExpirationDate *string `json:"expiration_date,omitempty"`
-	FaceValue map[string]any `json:"face_value"`
-	FloatBalance map[string]any `json:"float_balance"`
-	FulfilmentBy string `json:"fulfilment_by"`
-	FulfilmentParameters map[string]any `json:"fulfilment_parameters"`
-	Personalisation map[string]any `json:"personalisation"`
-	Reference string `json:"reference"`
-	Sector string `json:"sector"`
-	ShippingMethod string `json:"shipping_method"`
-	Tags *[]any `json:"tags,omitempty"`
 }
 
 // PhysicalOrderCardCreateData is the typed request payload for PhysicalOrderCard.CreateTyped.
@@ -374,7 +262,6 @@ type PhysicalOrderCardCreateData struct {
 
 // PhysicalOrderStatus is the typed data model for the physical_order_status entity.
 type PhysicalOrderStatus struct {
-	References []any `json:"references"`
 }
 
 // PhysicalOrderStatusCreateData is the typed request payload for PhysicalOrderStatus.CreateTyped.
@@ -384,8 +271,6 @@ type PhysicalOrderStatusCreateData struct {
 
 // Promotion is the typed data model for the promotion entity.
 type Promotion struct {
-	LastRefreshedAt string `json:"last_refreshed_at"`
-	Standard map[string]any `json:"standard"`
 }
 
 // PromotionLoadMatch is the typed request payload for Promotion.LoadTyped.
@@ -396,8 +281,6 @@ type PromotionLoadMatch struct {
 
 // Template is the typed data model for the template entity.
 type Template struct {
-	LastRefreshedAt string `json:"last_refreshed_at"`
-	Templates map[string]any `json:"templates"`
 }
 
 // TemplateLoadMatch is the typed request payload for Template.LoadTyped.

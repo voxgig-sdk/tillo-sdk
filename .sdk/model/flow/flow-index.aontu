@@ -1,0 +1,16 @@
+# Flows
+
+@"./BasicBrandFlow.aontu"
+@"./BasicBrandTemplateFlow.aontu"
+@"./BasicDigitalGiftCardFlow.aontu"
+@"./BasicDigitalIssueDeleteFlow.aontu"
+@"./BasicDigitalIssuePostFlow.aontu"
+@"./BasicDigitalOrderCardFlow.aontu"
+@"./BasicDigitalOrderStatusFlow.aontu"
+@"./BasicDigitalTopUpPostFlow.aontu"
+@"./BasicFloatFlow.aontu"
+@"./BasicPhysicalGiftCardFlow.aontu"
+@"./BasicPhysicalOrderCardFlow.aontu"
+@"./BasicPhysicalOrderStatusFlow.aontu"
+@"./BasicPromotionFlow.aontu"
+@"./BasicTemplateFlow.aontu"

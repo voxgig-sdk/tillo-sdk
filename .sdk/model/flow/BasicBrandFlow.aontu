@@ -1,0 +1,28 @@
+# BasicBrandFlow
+
+main: kit: flow: BasicBrandFlow:
+{
+  entity: "brand",
+  kind: "basic",
+  name: "BasicBrandFlow",
+  step: [
+    {
+      i: {
+        ref: "brand_ref01",
+        srcdatavar: "brand_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-brand_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicBrandFlow"
+}
